@@ -9,15 +9,15 @@ Omni is a cross-platform hardware abstraction library for embedded systems. It i
 
 | Directory                          | Content                                          |
 | :--------------------------------- | :----------------------------------------------- |
-| [omni/cmsis](./omni/cmsis)         | CMSIS headers and startup files                  |
-| [omni/docs](./omni/docs)           | User guide                                       |
-| [omni/drivers](./omni/drivers)     | Peripheral drivers                               |
-| [omni/hal](./omni/hal)             | Hardware abstraction layer                       |
-| [omni/libraries](./omni/libraries) | Third-party libraries                            |
-| [omni/platform](./omni/platform)   | Platform common files                            |
-| [omni/targets](./omni/targets)     | Target device HAL drivers, startup files, and linker scripts |
-| [omni/tools](./omni/tools)         | Tools for building and flashing                  |
-| [omni/utilities](./omni/utilities) | Utility functions                                |
+| [omni/cmsis](./cmsis)         | CMSIS headers and startup files                  |
+| [omni/docs](./docs)           | User guide                                       |
+| [omni/drivers](./drivers)     | Peripheral drivers                               |
+| [omni/hal](./hal)             | Hardware abstraction layer                       |
+| [omni/libraries](./libraries) | Third-party libraries                            |
+| [omni/platform](./platform)   | Platform common files                            |
+| [omni/targets](./targets)     | Target device HAL drivers, startup files, and linker scripts |
+| [omni/tools](./tools)         | Tools for building and flashing                  |
+| [omni/utilities](./utilities) | Utility functions                                |
 
 ## Getting Started
 
