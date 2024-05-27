@@ -13,22 +13,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-project(OmniOS)
+project(omni)
 
 message(STATUS "Platform: ${OMNI_PLATFORM}")
 message(STATUS "CPU: ${OMNI_CPU}")
 message(STATUS "Board: ${OMNI_BOARD}")
+message(STATUS "RTOS: ${OMNI_RTOS}")
 
-add_library(omni-os INTERFACE)
+add_library(omni INTERFACE)
 
 add_library(omni-core INTERFACE)
+add_library(omni-rtos INTERFACE)
 
-target_link_libraries(omni-os INTERFACE
-        #        omni-rtos
+target_link_libraries(omni INTERFACE
+        omni-rtos
         omni-core
 )
 
-target_include_directories(omni-os INTERFACE
+target_include_directories(omni INTERFACE
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
@@ -37,6 +39,7 @@ add_subdirectory(drivers)
 add_subdirectory(hal)
 add_subdirectory(targets)
 add_subdirectory(utilities)
+add_subdirectory(libraries)
 
 target_link_libraries(omni-core INTERFACE
         omni-cmsis
@@ -45,6 +48,12 @@ target_link_libraries(omni-core INTERFACE
         omni-targets
         omni-utilities
 )
+
+if(OMNI_RTOS STREQUAL "freertos")
+    target_link_libraries(omni-rtos INTERFACE
+            omni-cmsis-freertos
+    )
+endif()
 
 #add_subdirectory(tools)
 #add_subdirectory(utils)
