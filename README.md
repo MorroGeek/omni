@@ -21,6 +21,18 @@ Omni is a cross-platform hardware abstraction library for embedded systems. It i
 
 ## Getting Started
 
+Clone the repository and initialize the submodules. Then build the project using the make command.
+
+```bash
+git clone
+
+cd omni
+
+git submodule update --init --recursive
+
+make
+```
+
 ## Other rlated Github repositories
 
 ## License
