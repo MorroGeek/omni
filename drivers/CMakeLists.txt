@@ -13,8 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_subdirectory(usbd)
-
 add_library(omni-drivers INTERFACE)
 
 file(GLOB OMNI_DRIVER_SOURCES "source/*.cpp")
@@ -25,8 +23,4 @@ target_sources(omni-drivers INTERFACE
 
 target_include_directories(omni-drivers INTERFACE
     include
-)
-
-target_link_libraries(omni-drivers INTERFACE
-    omni-drivers-usbd
 )
