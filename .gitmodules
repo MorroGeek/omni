@@ -1,0 +1,3 @@
+[submodule "libraries/freertos"]
+	path = libraries/freertos
+	url = https://github.com/MorroGeek/freertos
