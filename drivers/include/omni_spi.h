@@ -48,7 +48,7 @@ namespace omni {
         /**
          * @brief Destroy the SPI object
          */
-        ~SPI() {}
+        virtual ~SPI() {}
 
         void *get_handle() { return _spi.spi.handle; }
 
@@ -57,6 +57,7 @@ namespace omni {
         bool write(uint8_t *data, uint16_t size, uint32_t timeout);
         bool read(uint8_t *data, uint16_t size, uint32_t timeout);
         bool transfer(uint8_t *txData, uint8_t *rxData, uint16_t size, uint32_t timeout);
+        void attach(void (*func)(void), uint32_t id);
 
     private:
         spi_t _spi{};

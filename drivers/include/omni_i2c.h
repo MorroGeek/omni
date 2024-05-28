@@ -46,7 +46,7 @@ namespace omni {
         /**
          * @brief Destroy the I2C object
          */
-        ~I2C() {}
+        virtual ~I2C() {}
 
         /*
         * @brief  I2C EEPROM structure
@@ -79,6 +79,7 @@ namespace omni {
         bool read(uint16_t address, uint8_t *data, uint16_t size, uint32_t timeout);
         bool listen(uint16_t size);
         bool listen_stop();
+        void attach(void (*func)(void), uint32_t id);
 
     protected:
 

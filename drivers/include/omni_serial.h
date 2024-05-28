@@ -32,21 +32,14 @@ namespace omni {
     class Serial {
 
     public:
-        /**
-         * @brief Construct a new Serial object
-         *
-         * @param serial
-         */
+
         Serial(pin_name_t tx,
                pin_name_t rx,
                int baud_rate = 115200);
 
         Serial(serial_t obj) : _serial(obj) {}
 
-        /**
-         * @brief Destroy the Serial object
-         */
-        ~Serial() {}
+        virtual ~Serial() {}
 
         void *get_handle() { return _serial.serial.handle; }
 
@@ -54,6 +47,7 @@ namespace omni {
         bool free();
         bool write(uint8_t *data, uint16_t size, uint32_t timeout);
         bool read(uint8_t *data, uint16_t size, uint32_t timeout);
+        void attach(void (*func)(void), uint32_t id);
 
     private:
         serial_t _serial; // Serial handle structure
