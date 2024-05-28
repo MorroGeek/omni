@@ -15,7 +15,7 @@
 
 add_library(omni-stm32f4 INTERFACE)
 
-add_subdirectory(stm32cubef4_fw)
+add_subdirectory(stm32cube_fw)
 
 add_subdirectory(stm32f405xg EXCLUDE_FROM_ALL)
 add_subdirectory(stm32f407xg EXCLUDE_FROM_ALL)
@@ -32,5 +32,5 @@ endif()
 
 target_link_libraries(omni-stm32f4 INTERFACE
     ${CPU_TYPE}
-    omni-stm32cubef4-fw
+    omni-stm32f4cube-fw
 )
