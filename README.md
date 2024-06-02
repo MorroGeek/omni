@@ -41,6 +41,7 @@ make
 ## Other rlated Github repositories
 
 - [Omni-FreeRTOS](https://github.com/MorroGeek/freertos) - FreeRTOS library for Omni
+- [Omni-CherryUSB](https://github.com/MorroGeek/cherryusb) - CherryUSB library for Omni
 
 ## License
 

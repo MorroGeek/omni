@@ -1,3 +1,6 @@
 [submodule "libraries/freertos"]
 	path = libraries/freertos
 	url = https://github.com/MorroGeek/freertos.git
+[submodule "libraries/cherryusb"]
+	path = libraries/cherryusb
+	url = https://github.com/MorroGeek/cherryusb

@@ -19,6 +19,7 @@ message(STATUS "Platform: ${OMNI_PLATFORM}")
 message(STATUS "CPU: ${OMNI_CPU}")
 message(STATUS "Board: ${OMNI_BOARD}")
 message(STATUS "RTOS: ${OMNI_RTOS}")
+message(STATUS "USB: ${OMNI_USB}")
 
 add_library(omni INTERFACE)
 
@@ -52,6 +53,12 @@ target_link_libraries(omni-core INTERFACE
 if(OMNI_RTOS STREQUAL "freertos")
     target_link_libraries(omni-rtos INTERFACE
             omni-cmsis-freertos
+    )
+endif()
+
+if(OMNI_USB STREQUAL "cherryusb")
+    target_link_libraries(omni-core INTERFACE
+            omni-cherryusb
     )
 endif()
 
