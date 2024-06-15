@@ -40,7 +40,9 @@ target_sources(omni-stm32f405xg INTERFACE
 # )
 
 if(${OMNI_CPU} STREQUAL "stm32f405xg")
-    omni_set_linker_script(omni-stm32f405xg ${CMAKE_CURRENT_SOURCE_DIR}/${LINKER_FILE})
+    if(NOT ${OMNI_LINKER_SCRIPT} STREQUAL "custom")
+        omni_set_linker_script(omni-stm32f405xg ${CMAKE_CURRENT_SOURCE_DIR}/${LINKER_FILE})
+    endif()
 
     # 获取所有子目录
     omni_get_subdirectories(${CMAKE_CURRENT_SOURCE_DIR} OMNI_BOARDS)
