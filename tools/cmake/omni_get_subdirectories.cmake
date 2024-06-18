@@ -1,4 +1,4 @@
-# 创建一个函数来获取所有子目录
+# Get all subdirectories of a directory
 function(omni_get_subdirectories parent_dir output_var)
     file(GLOB children RELATIVE ${parent_dir} ${parent_dir}/*)
     set(dirlist "")
