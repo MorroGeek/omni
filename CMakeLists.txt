@@ -13,6 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+include(tools/cmake/omni_get_arm_gcc_version.cmake)
+
 project(omni)
 
 message(STATUS "Platform: ${OMNI_PLATFORM}")
@@ -20,6 +22,8 @@ message(STATUS "CPU: ${OMNI_CPU}")
 message(STATUS "Board: ${OMNI_BOARD}")
 message(STATUS "RTOS: ${OMNI_RTOS}")
 message(STATUS "USB: ${OMNI_USB}")
+
+check_arm_gcc_version(${ARM_GCC_VERSION})
 
 add_library(omni INTERFACE)
 
