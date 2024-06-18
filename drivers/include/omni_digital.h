@@ -77,7 +77,7 @@ namespace omni {
         /**
          * @brief Destroy the Digital object
          */
-        ~Digital() {}
+        virtual ~Digital() {}
 
         /**
          * @brief Write a value to the digital pin

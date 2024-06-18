@@ -32,5 +32,5 @@ endif()
 
 target_link_libraries(omni-stm32f4 INTERFACE
     ${CPU_TYPE}
-#    omni-stm32cube-fw
+    omni-stm32f4cube-fw
 )

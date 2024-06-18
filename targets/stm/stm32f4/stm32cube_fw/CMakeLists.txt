@@ -13,4 +13,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#add_library(omni-stm32cube-fw)
+add_library(omni-stm32f4cube-fw INTERFACE)
+
+file(GLOB SOURCES
+    "STM32F4xx_HAL_Driver/Src/*.c"
+)
+
+target_sources(omni-stm32f4cube-fw INTERFACE
+        ${SOURCES}
+)
+
+target_include_directories(omni-stm32f4cube-fw INTERFACE
+        STM32F4xx_HAL_Driver/Inc
+        STM32F4xx_HAL_Driver/Inc/Legacy
+        CMSIS/Device/ST/STM32F4xx/Include
+        CMSIS/Include
+)

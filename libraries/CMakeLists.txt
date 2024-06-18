@@ -14,3 +14,4 @@
 # limitations under the License.
 
 add_subdirectory(freertos)
+add_subdirectory(cherryusb)
