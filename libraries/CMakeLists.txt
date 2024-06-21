@@ -13,5 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_subdirectory(freertos)
-add_subdirectory(cherryusb)
+if(OMNI_RTOS STREQUAL "freertos")
+    add_subdirectory(freertos)
+endif()
+
+if(OMNI_USB STREQUAL "cherryusb")
+    add_subdirectory(cherryusb)
+endif()
