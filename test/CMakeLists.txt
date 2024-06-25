@@ -1,0 +1,83 @@
+cmake_minimum_required(VERSION 3.26)
+
+project(omni_test)
+
+# Find ceedling
+find_program(CEEDLING_COMMAND ceedling)
+
+if(NOT CEEDLING_COMMAND)
+    # Ceedling not found
+    message(STATUS "Ceedling not found. Attempting to install...")
+    
+    # Install ceedling
+    execute_process(COMMAND gem install ceedling
+                    RESULT_VARIABLE CEEDLING_INSTALL_RESULT
+                    OUTPUT_VARIABLE CEEDLING_INSTALL_OUTPUT
+                    ERROR_VARIABLE CEEDLING_INSTALL_ERROR)
+    
+    # Check if installation was successful
+    if(CEEDLING_INSTALL_RESULT EQUAL 0)
+        message(STATUS "Ceedling installed successfully.")
+    else()
+        message(FATAL_ERROR "Failed to install Ceedling: ${CEEDLING_INSTALL_ERROR}")
+    endif()
+else()
+    # Get Ruby executable
+    find_program(RUBY_EXECUTABLE NAMES ruby)
+
+    if(NOT RUBY_EXECUTABLE)
+        message(FATAL_ERROR "Ruby executable not found.")
+    endif()
+
+    # Build full ceedling command
+    set(CEEDLING_FULL_COMMAND "${RUBY_EXECUTABLE}" "${CEEDLING_COMMAND}")
+
+    # Get Ceedling version
+    execute_process(COMMAND ${CEEDLING_FULL_COMMAND} version
+                    RESULT_VARIABLE CEEDLING_VERSION_RESULT
+                    OUTPUT_VARIABLE CEEDLING_VERSION_OUTPUT
+                    ERROR_VARIABLE CEEDLING_VERSION_ERROR)
+
+    if(CEEDLING_VERSION_RESULT EQUAL 0)
+        message(STATUS "Found Ceedling: ${CEEDLING_VERSION_OUTPUT}")
+    else()
+        message(FATAL_ERROR "Failed to get Ceedling version: ${CEEDLING_VERSION_ERROR}")
+    endif()
+endif()
+
+# ceedling clean
+add_custom_target(omni-test-clean
+    COMMAND ceedling clobber
+    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_SOURCE_DIR}/omni/test/test.map
+    COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_SOURCE_DIR}/omni/test/build
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/omni/test
+    COMMENT "Removing all build artifacts"
+)
+
+# ceedling release and test:all
+add_custom_target(omni-test-release
+    COMMAND ceedling verbosity[4] test:all release
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/omni/test
+    COMMENT "Running all unit tests and building release image"
+)
+
+# ceedling test:all
+add_custom_target(omni-test-all
+    COMMAND ceedling test:all
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/omni/test
+    COMMENT "Running all unit tests"
+)
+
+# ceedling release
+add_custom_target(omni-test-build
+    COMMAND ceedling release
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/omni/test
+    COMMENT "Building release image only"
+)
+
+# ceedling gcov:all
+add_custom_target(omni-test-coverage-report
+    COMMAND ceedling gcov:all utils:gcov
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/omni/test
+    COMMENT "Generating coverage report"
+)

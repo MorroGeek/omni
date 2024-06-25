@@ -76,6 +76,10 @@ add_subdirectory(targets)
 add_subdirectory(utilities)
 add_subdirectory(libraries)
 
+if(OMNI_TEST STREQUAL ON)
+    add_subdirectory(test)
+endif()
+
 target_link_libraries(omni-core INTERFACE
         omni-cmsis
         omni-drivers
