@@ -13,17 +13,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_subdirectory(stm)
-add_subdirectory(apm)
+add_subdirectory(apm32f4)
 
-add_library(omni-targets INTERFACE)
+add_library(omni-apm INTERFACE)
 
-if(${OMNI_PLATFORM} STREQUAL "stm")
-    target_link_libraries(omni-targets INTERFACE
-        omni-stm
-    )
-endif()
+file(GLOB OMNI_TARGET_SOURCES "*.c")
 
-target_include_directories(omni-targets INTERFACE
-    .
+target_sources(omni-apm INTERFACE
+        ${OMNI_TARGET_SOURCES}
+)
+
+target_include_directories(omni-apm INTERFACE
+        .
+)
+
+# link omni-cmsis-cortex-m to omni-apm
+target_link_libraries(omni-apm INTERFACE 
+    omni-cmsis-cortex-m
+    omni-apm32f4
 )

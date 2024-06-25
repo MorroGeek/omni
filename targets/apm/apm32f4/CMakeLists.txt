@@ -13,17 +13,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_subdirectory(stm)
-add_subdirectory(apm)
+add_library(omni-apm32f4 INTERFACE)
 
-add_library(omni-targets INTERFACE)
+# add_subdirectory(stm32cube_fw)
 
-if(${OMNI_PLATFORM} STREQUAL "stm")
-    target_link_libraries(omni-targets INTERFACE
-        omni-stm
-    )
+# add_subdirectory(stm32f405xg EXCLUDE_FROM_ALL)
+# add_subdirectory(stm32f407xg EXCLUDE_FROM_ALL)
+
+target_include_directories(omni-apm32f4 INTERFACE
+        .
+)
+
+if(NOT ${OMNI_CPU} STREQUAL "")
+    set(CPU_TYPE "omni-${OMNI_CPU}")
+else()
+    message(FATAL_ERROR "OMNI_CPU is not set")
 endif()
 
-target_include_directories(omni-targets INTERFACE
-    .
+target_link_libraries(omni-apm32f4 INTERFACE
+    ${CPU_TYPE}
+    # omni-stm32f4cube-fw
 )
