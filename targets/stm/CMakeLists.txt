@@ -17,10 +17,10 @@ add_subdirectory(stm32f4)
 
 add_library(omni-stm INTERFACE)
 
-file(GLOB OMNI_TARGET_STM_SOURCES "*.c")
+file(GLOB OMNI_TARGET_SOURCES "*.c")
 
 target_sources(omni-stm INTERFACE
-        ${OMNI_TARGET_STM_SOURCES}
+        ${OMNI_TARGET_SOURCES}
 )
 
 target_include_directories(omni-stm INTERFACE

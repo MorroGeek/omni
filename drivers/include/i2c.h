@@ -1,7 +1,7 @@
 /**
-  * @file    omni_i2c.h
+  * @file    i2c.h
   * @author  MorroMaker
-  * @brief   Header for omni_i2c.c file
+  * @brief   I2C class for Omni
   * @attention
   *
   * Copyright (c) 2024 MorroMaker
@@ -25,7 +25,6 @@
 #define OMNI_I2C_H
 
 /* Includes ------------------------------------------------------------------*/
-#include "platform/platform.h"
 #include "i2c_hal.h"
 
 namespace omni {
@@ -47,6 +46,9 @@ namespace omni {
          * @brief Destroy the I2C object
          */
         virtual ~I2C() {}
+
+        // Get the I2C driver APIs
+        struct i2c_driver_api *i2c = i2c_driver();
 
         /*
         * @brief  I2C EEPROM structure

@@ -1,7 +1,7 @@
 /**
-  * @file    omni_digital.h
+  * @file    digital.h
   * @author  MorroMaker
-  * @brief   Omni Digital IO class
+  * @brief   Digital class for Omni
   * @attention
   *
   * Copyright (c) 2024 MorroMaker
@@ -25,7 +25,6 @@
 #define OMNI_DIGITAL_H
 
 /* Includes ------------------------------------------------------------------*/
-#include "platform/platform.h"
 #include "gpio_hal.h"
 
 namespace omni {
@@ -71,7 +70,7 @@ namespace omni {
                     value,
             };
 
-            gpio_init(&_gpio, _pin_map);
+            gpio->init(&_gpio, _pin_map);
         }
 
         /**
@@ -79,13 +78,16 @@ namespace omni {
          */
         virtual ~Digital() {}
 
+        // Get the GPIO driver APIs
+        struct gpio_driver_api *gpio = gpio_driver();
+
         /**
          * @brief Write a value to the digital pin
          * @param value: value to write
          */
         void write(int value)
         {
-            gpio_write(&_gpio, value);
+            gpio->write(&_gpio, value);
         }
 
         /**
@@ -93,15 +95,15 @@ namespace omni {
          */
         void toggle()
         {
-            gpio_toggle(&_gpio);
+            gpio->toggle(&_gpio);
         }
 
         /**
          * @brief Read the digital pin
          */
-        void read()
+        void read(uint32_t *value)
         {
-            gpio_read(&_gpio);
+            gpio->read(&_gpio, value);
         }
 
     private:

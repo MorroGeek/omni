@@ -21,7 +21,9 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "omni_digital.h"
+#include "drivers/include/digital.h"
+#include "platform.h"
+#include "assert.h"
 
 namespace omni {
 

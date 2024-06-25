@@ -1,7 +1,7 @@
 /**
-  * @file    device.h
+  * @file    assert.h
   * @author  MorroMaker
-  * @brief   Device header file
+  * @brief   Assert functions for Omni
   * @attention
   *
   * Copyright (c) 2024 MorroMaker
@@ -21,12 +21,34 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef OMNI_DEVICE_H
-#define OMNI_DEVICE_H
+#ifndef OMNI_ASSERT_H
+#define OMNI_ASSERT_H
 
 /* Includes ------------------------------------------------------------------*/
-#include "targets.h"
-#include "omni_board.h"
-#include <stdbool.h>
+#include <assert.h>
 
-#endif /* OMNI_DEVICE_H */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#define USE_OMNI_ASSERT
+
+/**
+ * @brief Assert function for OmniOS
+ * @param expr: The expression to be evaluated
+ * @param file: The file name where the assert function is called
+ * @param line: The line number where the assert function is called
+ */
+void omni_assert(const char *expr, const char *file, int line);
+
+#ifdef USE_OMNI_ASSERT
+#define OMNI_ASSERT(expr) ((expr) ? (void)(expr) : omni_assert(#expr, __FILE__, __LINE__))
+#else
+#define OMNI_ASSERT(expr) ((void)(expr))
+#endif /* USE_OMNI_ASSERT */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* OMNI_ASSERT_H */

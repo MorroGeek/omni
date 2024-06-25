@@ -1,7 +1,7 @@
 /**
-  * @file    gpio_hal.h
+  * @file    serial_hal.h
   * @author  MorroMaker
-  * @brief   Header for gpio_hal.c file
+  * @brief   Header for serial_hal.c file
   * @attention
   *
   * Copyright (c) 2024 MorroMaker
@@ -21,8 +21,8 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef OMNI_GPIO_HAL_H
-#define OMNI_GPIO_HAL_H
+#ifndef OMNI_SERIAL_HAL_H
+#define OMNI_SERIAL_HAL_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,86 +30,75 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "device.h"
-#include "omni_common.h"
-#include "platform/omni_assert.h"
+#include "common.h"
 
 /* Exported defines ----------------------------------------------------------*/
 /* Exported typedef ----------------------------------------------------------*/
 
 /**
- * @brief GPIO output mode
+ * @brief Serial mode
  */
 typedef enum {
-    OMNI_GPIO_PP_PULLNONE = 0,
-    OMNI_GPIO_PP_PULLUP = 1,
-    OMNI_GPIO_PP_PULLDOWN = 2,
-    OMNI_GPIO_OD_PULLNONE = 3,
-    OMNI_GPIO_OD_PULLUP = 4,
-    OMNI_GPIO_OD_PULLDOWN = 5,
-    OMNI_GPIO_ANALOG = 6,
-    OMNI_GPIO_AF_PP = 7,
-    OMNI_GPIO_AF_OD = 8,
-} gpio_mode_t;
+    OMNI_SERIAL_MODE_INVALID = 0U,
+    OMNI_SERIAL_MODE_BASE = 1U,
+} serial_mode_t;
 
 /**
- * @brief GPIO pull
- */
-typedef enum
-{
-    OMNI_GPIO_PULL_NONE = 0,
-    OMNI_GPIO_PULL_UP = 1,
-    OMNI_GPIO_PULL_DOWN = 2,
-} gpio_pull_t;
-
-/**
- * @brief GPIO output speed
+ * @brief Serial word length
  */
 typedef enum {
-    OMNI_GPIO_SPEED_LOW = 0,
-    OMNI_GPIO_SPEED_MEDIUM = 1,
-    OMNI_GPIO_SPEED_HIGH = 2,
-    OMNI_GPIO_SPEED_VERYHIGH = 3,
-} gpio_speed_t;
+    OMNI_SERIAL_WORDLENGTH_8B = 0U,
+    OMNI_SERIAL_WORDLENGTH_9B = 1U,
+} serial_word_length_t;
 
 /**
- * @brief GPIO direction
+ * @brief Serial stop bits
  */
 typedef enum {
-    OMNI_GPIO_INPUT = 0,
-    OMNI_GPIO_OUTPUT = 1,
-    OMNI_GPIO_INOUT = 2,
-} gpio_dir_t;
+    OMNI_SERIAL_STOPBITS_1 = 0U,
+    OMNI_SERIAL_STOPBITS_2 = 1U,
+} serial_stop_bits_t;
 
 /**
- * @brief GPIO status
+ * @brief Serial parity
  */
 typedef enum {
-    OMNI_GPIO_LOW = 0,
-    OMNI_GPIO_HIGH = 1,
-} gpio_status_t;
+    OMNI_SERIAL_PARITY_NONE = 0U,
+    OMNI_SERIAL_PARITY_EVEN = 1U,
+    OMNI_SERIAL_PARITY_ODD = 2U,
+} serial_parity_t;
 
 /**
- * @brief GPIO inverted
+ * @brief Serial handle structure
  */
-typedef enum {
-    OMNI_GPIO_NONINVERTED = 0,
-    OMNI_GPIO_INVERTED = 1,
-} gpio_inverted_t;
+typedef struct {
+    uint32_t mode;
+    uint32_t baud_rate;
+    uint32_t data_bits;
+    uint32_t stop_bits;
+    uint32_t parity;
+    struct serial_s serial;     // Serial object
+    void (*init_callback)();    // Serial init callback
+} serial_t;
 
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
-
 /* Exported functions prototypes ---------------------------------------------*/
-void gpio_init(gpio_t *obj, pin_map_t map);
-void gpio_mode(gpio_t *obj, gpio_mode_t mode);
-void gpio_dir(gpio_t *obj, gpio_dir_t dir);
-void gpio_speed(gpio_t *obj, gpio_speed_t speed);
-void gpio_write(gpio_t *obj, int value);
-void gpio_toggle(gpio_t *obj);
-uint32_t gpio_read(gpio_t *obj);
+
+/**
+ * @brief Serial driver APIs structure
+ */
+struct serial_driver_api {
+    int (*init)(serial_t *obj);
+    int (*deinit)(serial_t *obj);
+    int (*write)(serial_t *obj, uint8_t *data, uint32_t size, uint32_t timeout);
+    int (*read)(serial_t *obj, uint8_t *data, uint32_t size, uint32_t timeout);
+};
+
+struct serial_driver_api *serial_driver(void);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* OMNI_GPIO_HAL_H */
+#endif /* OMNI_SERIAL_HAL_H */

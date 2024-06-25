@@ -1,5 +1,5 @@
 /**
-  * @file    omni_command.h
+  * @file    command.h
   * @author  MorroMaker
   * @brief   Provide a class to implement command
   * @attention

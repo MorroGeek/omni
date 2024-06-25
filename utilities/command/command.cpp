@@ -1,5 +1,5 @@
 /**
-  * @file    omni_command.cpp
+  * @file    command.cpp
   * @author  MorroMaker
   * @brief   Command class
   * @attention
@@ -21,7 +21,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "omni_command.h"
+#include "command.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* Private typedef -----------------------------------------------------------*/

@@ -21,7 +21,9 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "omni_i2c.h"
+#include "drivers/include/i2c.h"
+#include "platform.h"
+#include "assert.h"
 
 namespace omni {
 
@@ -32,7 +34,7 @@ namespace omni {
      *         false: fail
      */
     bool I2C::init(i2c_t obj) {
-        if(i2c_init(&obj)) {
+        if(i2c->init(&obj)) {
             _is_initialized = true;
             return true;
         }
@@ -47,7 +49,7 @@ namespace omni {
      *         false: fail
      */
     bool I2C::free() {
-        if(i2c_deinit(&_i2c)) {
+        if(i2c->deinit(&_i2c)) {
             _is_initialized = false;
             return true;
         }
@@ -71,7 +73,7 @@ namespace omni {
             return false;
         }
 
-        return i2c_write(&_i2c, address, data, size, timeout);
+        return i2c->write(&_i2c, address, data, size, timeout);
     }
 
     /**
@@ -88,7 +90,7 @@ namespace omni {
             return false;
         }
 
-        return i2c_read(&_i2c, address, data, size, timeout);
+        return i2c->read(&_i2c, address, data, size, timeout);
     }
 
     /*
@@ -104,7 +106,7 @@ namespace omni {
         eeprom_info.data = new uint8_t[size];
         eeprom_info.cache = new uint8_t[size];
 
-        return i2c_listen(&_i2c);
+        return i2c->listen(&_i2c);
     }
 
     /**
@@ -123,7 +125,7 @@ namespace omni {
             delete[] eeprom_info.cache;
         }
 
-        return (i2c_listen_stop(&_i2c));
+        return (i2c->listen_stop(&_i2c));
     }
 
 } // namespace omni

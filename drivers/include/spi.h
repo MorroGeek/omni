@@ -1,7 +1,7 @@
 /**
-  * @file    omni_spi.h
+  * @file    spi.h
   * @author  MorroMaker
-  * @brief   Header for omni_spi.c file
+  * @brief   SPI class for Omni
   * @attention
   *
   * Copyright (c) 2024 MorroMaker
@@ -25,7 +25,6 @@
 #define OMNI_SPI_H
 
 /* Includes ------------------------------------------------------------------*/
-#include "platform/platform.h"
 #include "spi_hal.h"
 
 namespace omni {
@@ -49,6 +48,9 @@ namespace omni {
          * @brief Destroy the SPI object
          */
         virtual ~SPI() {}
+
+        // Get the SPI driver APIs
+        struct spi_driver_api *spi = spi_driver();
 
         void *get_handle() { return _spi.spi.handle; }
 

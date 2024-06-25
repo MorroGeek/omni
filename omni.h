@@ -26,14 +26,14 @@
 
 /* Includes ------------------------------------------------------------------*/
 /* OmniOS drivers */
-#include "drivers/include/omni_digital.h"
-#include "drivers/include/omni_serial.h"
-#include "drivers/include/omni_i2c.h"
-#include "drivers/include/omni_spi.h"
+#include "drivers/include/digital.h"
+#include "drivers/include/serial.h"
+#include "drivers/include/i2c.h"
+#include "drivers/include/spi.h"
 
 /* OmniOS utilities */
-#include "utilities/command/omni_command.h"
-#include "utilities/ring_buffer/omni_ring_buffer.h"
+#include "utilities/command/command.h"
+#include "utilities/ring_buffer/ring_buffer.h"
 
 /* Exported defines ----------------------------------------------------------*/
 using namespace omni;

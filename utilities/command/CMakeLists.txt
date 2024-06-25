@@ -18,5 +18,9 @@ add_library(omni-utilities-command INTERFACE)
 file(GLOB OMNI_COMMAND_SOURCES "*.cpp")
 
 target_sources(omni-utilities-command INTERFACE
-        ${OMNI_COMMAND_SOURCES}
+    ${OMNI_COMMAND_SOURCES}
+)
+
+target_include_directories(omni-utilities-command INTERFACE
+    ${CMAKE_CURRENT_SOURCE_DIR}
 )

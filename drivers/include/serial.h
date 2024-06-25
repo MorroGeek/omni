@@ -1,7 +1,7 @@
 /**
-  * @file    omni_serial.h
+  * @file    serial.h
   * @author  MorroMaker
-  * @brief   Omni Serial IO class
+  * @brief   Serial class for Omni
   * @attention
   *
   * Copyright (c) 2024 MorroMaker
@@ -25,7 +25,6 @@
 #define OMNI_SERIAL_H
 
 /* Includes ------------------------------------------------------------------*/
-#include "platform/platform.h"
 #include "serial_hal.h"
 
 namespace omni {
@@ -40,6 +39,9 @@ namespace omni {
         Serial(serial_t obj) : _serial(obj) {}
 
         virtual ~Serial() {}
+
+        // Get the serial driver APIs
+        struct serial_driver_api *serial = serial_driver();
 
         void *get_handle() { return _serial.serial.handle; }
 

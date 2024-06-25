@@ -21,7 +21,9 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "omni_spi.h"
+#include "drivers/include/spi.h"
+#include "platform.h"
+#include "assert.h"
 
 namespace omni {
 
@@ -32,7 +34,7 @@ namespace omni {
      *         false: fail
      */
     bool SPI::init(spi_t obj) {
-        if (spi_init(&obj)) {
+        if (spi->init(&obj)) {
             _is_initialized = true;
             return true;
         }
@@ -47,7 +49,7 @@ namespace omni {
      *         false: fail
      */
     bool SPI::free() {
-        if (spi_deinit(&_spi)) {
+        if (spi->deinit(&_spi)) {
             _is_initialized = false;
             return true;
         }
@@ -64,7 +66,7 @@ namespace omni {
      *         false: fail
      */
     bool SPI::write(uint8_t *data, uint16_t size, uint32_t timeout) {
-        if (spi_write(&_spi, data, size, timeout)) {
+        if (spi->write(&_spi, data, size, timeout)) {
             return true;
         }
 
@@ -80,7 +82,7 @@ namespace omni {
      *         false: fail
      */
     bool SPI::read(uint8_t *data, uint16_t size, uint32_t timeout) {
-        if (spi_read(&_spi, data, size, timeout)) {
+        if (spi->read(&_spi, data, size, timeout)) {
             return true;
         }
 
@@ -97,7 +99,7 @@ namespace omni {
      *         false: fail
      */
     bool SPI::transfer(uint8_t *txData, uint8_t *rxData, uint16_t size, uint32_t timeout) {
-        if (spi_transfer(&_spi, txData, rxData, size, timeout)) {
+        if (spi->transfer(&_spi, txData, rxData, size, timeout)) {
             return true;
         }
 

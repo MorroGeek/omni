@@ -30,6 +30,7 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "device.h"
+#include "common.h"
 
 /* Exported defines ----------------------------------------------------------*/
 
@@ -84,11 +85,19 @@ typedef struct {
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions prototypes ---------------------------------------------*/
-bool spi_init(spi_t *obj);
-bool spi_deinit(spi_t *obj);
-bool spi_write(spi_t *obj, uint8_t *data, uint16_t size, uint32_t timeout);
-bool spi_read(spi_t *obj, uint8_t *data, uint16_t size, uint32_t timeout);
-bool spi_transfer(spi_t *obj, uint8_t *txData, uint8_t *rxData, uint16_t size, uint32_t timeout);
+
+/**
+ * @brief SPI driver APIs structure
+ */
+struct spi_driver_api {
+    int (*init)(spi_t *obj);
+    int (*deinit)(spi_t *obj);
+    int (*write)(spi_t *obj, uint8_t *data, uint16_t size, uint32_t timeout);
+    int (*read)(spi_t *obj, uint8_t *data, uint16_t size, uint32_t timeout);
+    int (*transfer)(spi_t *obj, uint8_t *txData, uint8_t *rxData, uint16_t size, uint32_t timeout);
+};
+
+struct spi_driver_api *spi_driver(void);
 
 #ifdef __cplusplus
 }

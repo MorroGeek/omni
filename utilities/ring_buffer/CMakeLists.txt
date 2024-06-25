@@ -14,3 +14,7 @@
 # limitations under the License.
 
 add_library(omni-utilities-ring-buffer INTERFACE)
+
+target_include_directories(omni-utilities-ring-buffer INTERFACE 
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)

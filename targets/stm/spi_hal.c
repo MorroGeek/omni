@@ -44,22 +44,41 @@ static const uint32_t baudrate_prescaler_table[] = {
 };
 
 /* Private function prototypes -----------------------------------------------*/
+static int spi_init(spi_t *obj);
+static int spi_deinit(spi_t *obj);
+static int spi_write(spi_t *obj, uint8_t *data, uint16_t size, uint32_t timeout);
+static int spi_read(spi_t *obj, uint8_t *data, uint16_t size, uint32_t timeout);
+static int spi_transfer(spi_t *obj, uint8_t *txData, uint8_t *rxData, uint16_t size, uint32_t timeout);
 
 /* External variables --------------------------------------------------------*/
 /* External functions --------------------------------------------------------*/
 
+static struct spi_driver_api spi_stm32_driver = {
+    .init = spi_init,
+    .deinit = spi_deinit,
+    .write = spi_write,
+    .read = spi_read,
+    .transfer = spi_transfer,
+};
+
+struct spi_driver_api *spi_driver(void)
+{
+    return &spi_stm32_driver;
+}
+
 /**
  * @brief Initialize the SPI bus
  * @param obj SPI handle structure
- * @retval true: success
- *         false: fail
+ * @return Operation status
+ *         @arg OMNI_OK: Operation successful
+ *         @arg OMNI_FAIL: Operation failed
  */
-bool spi_init(spi_t *obj)
+static int spi_init(spi_t *obj)
 {
     SPI_HandleTypeDef *handle = GET_OBJ_HANDLE(obj);
 
     if (handle == NULL) {
-        return false;
+        return OMNI_FAIL;
     }
 
     switch (obj->mode) {
@@ -72,7 +91,7 @@ bool spi_init(spi_t *obj)
             break;
 
         default:
-            return false;
+            return OMNI_FAIL;
     }
 
     // Set SPI bus frequency
@@ -125,31 +144,32 @@ bool spi_init(spi_t *obj)
     }
 
     if (HAL_SPI_Init(handle) != HAL_OK) {
-        return false;
+        return OMNI_FAIL;
     }
 
-    return true;
+    return OMNI_OK;
 }
 
 /**
  * @brief Deinitialize the SPI bus
  * @param obj SPI handle structure
- * @retval true: success
- *         false: fail
+ * @return Operation status
+ *         @arg OMNI_OK: Operation successful
+ *         @arg OMNI_FAIL: Operation failed
  */
-bool spi_deinit(spi_t *obj)
+static int spi_deinit(spi_t *obj)
 {
     SPI_HandleTypeDef *handle = GET_OBJ_HANDLE(obj);
 
     if (handle == NULL) {
-        return false;
+        return OMNI_FAIL;
     }
 
     if (HAL_SPI_DeInit(handle) != HAL_OK) {
-        return false;
+        return OMNI_FAIL;
     }
 
-    return true;
+    return OMNI_OK;
 }
 
 /**
@@ -158,22 +178,23 @@ bool spi_deinit(spi_t *obj)
  * @param data Data buffer
  * @param size Data size
  * @param timeout Timeout
- * @retval true: success
- *         false: fail
+ * @return Operation status
+ *         @arg OMNI_OK: Operation successful
+ *         @arg OMNI_FAIL: Operation failed
  */
-bool spi_write(spi_t *obj, uint8_t *data, uint16_t size, uint32_t timeout)
+static int spi_write(spi_t *obj, uint8_t *data, uint16_t size, uint32_t timeout)
 {
     SPI_HandleTypeDef *handle = GET_OBJ_HANDLE(obj);
 
     if (handle == NULL) {
-        return false;
+        return OMNI_FAIL;
     }
 
     if (HAL_SPI_Transmit(handle, data, size, timeout) != HAL_OK) {
-        return false;
+        return OMNI_FAIL;
     }
 
-    return true;
+    return OMNI_OK;
 }
 
 /**
@@ -182,22 +203,23 @@ bool spi_write(spi_t *obj, uint8_t *data, uint16_t size, uint32_t timeout)
  * @param data Data buffer
  * @param size Data size
  * @param timeout Timeout
- * @retval true: success
- *         false: fail
+ * @return Operation status
+ *         @arg OMNI_OK: Operation successful
+ *         @arg OMNI_FAIL: Operation failed
  */
-bool spi_read(spi_t *obj, uint8_t *data, uint16_t size, uint32_t timeout)
+static int spi_read(spi_t *obj, uint8_t *data, uint16_t size, uint32_t timeout)
 {
     SPI_HandleTypeDef *handle = GET_OBJ_HANDLE(obj);
 
     if (handle == NULL) {
-        return false;
+        return OMNI_FAIL;
     }
 
     if (HAL_SPI_Receive(handle, data, size, timeout) != HAL_OK) {
-        return false;
+        return OMNI_FAIL;
     }
 
-    return true;
+    return OMNI_OK;
 }
 
 /**
@@ -207,22 +229,23 @@ bool spi_read(spi_t *obj, uint8_t *data, uint16_t size, uint32_t timeout)
  * @param rxData Data buffer to read
  * @param size Data size
  * @param timeout Timeout
- * @retval true: success
- *         false: fail
+ * @return Operation status
+ *         @arg OMNI_OK: Operation successful
+ *         @arg OMNI_FAIL: Operation failed
  */
-bool spi_transfer(spi_t *obj, uint8_t *txData, uint8_t *rxData, uint16_t size, uint32_t timeout)
+static int spi_transfer(spi_t *obj, uint8_t *txData, uint8_t *rxData, uint16_t size, uint32_t timeout)
 {
     SPI_HandleTypeDef *handle = GET_OBJ_HANDLE(obj);
 
     if (handle == NULL) {
-        return false;
+        return OMNI_FAIL;
     }
 
     if (HAL_SPI_TransmitReceive(handle, txData, rxData, size, timeout) != HAL_OK) {
-        return false;
+        return OMNI_FAIL;
     }
 
-    return true;
+    return OMNI_OK;
 }
 
 /* Private functions ---------------------------------------------------------*/

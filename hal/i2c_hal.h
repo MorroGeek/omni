@@ -1,7 +1,7 @@
 /**
-  * @file    omni_common.h
+  * @file    i2c_hal.h
   * @author  MorroMaker
-  * @brief   Header for omni_common.c file
+  * @brief   Header for i2c_hal.c file
   * @attention
   *
   * Copyright (c) 2024 MorroMaker
@@ -21,49 +21,61 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef OMNI_COMMON_H
-#define OMNI_COMMON_H
+#ifndef OMNI_I2C_HAL_H
+#define OMNI_I2C_HAL_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include <stdbool.h>
-#include <stdint.h>
-#include "omni_board.h"
+#include "device.h"
+#include "common.h"
 
 /* Exported defines ----------------------------------------------------------*/
 /* Exported typedef ----------------------------------------------------------*/
+
 /**
- * @brief Pin map structure
+ * @brief I2C mode
+ */
+typedef enum {
+    OMNI_I2C_MODE_INVALID = 0U,
+    OMNI_I2C_MODE_MASTER = 1U,
+    OMNI_I2C_MODE_SLAVE = 2U,
+} i2c_mode_t;
+
+/**
+ * @brief I2C handle structure
  */
 typedef struct {
-    pin_name_t pin;
-    uint32_t peripheral;
-    union {
-
-        struct {
-            uint32_t mode       : 4;
-            uint32_t dir        : 2;
-            uint32_t speed      : 2;
-            uint32_t alternate  : 4;
-            uint32_t channel    : 5;
-            uint32_t inverted   : 1;
-            uint32_t status     : 1;
-            uint32_t reserved   : 13;
-        } feature;
-
-        uint32_t _feature;
-    };
-} pin_map_t;
+    uint32_t mode;
+    uint32_t frequency;
+    uint32_t address1;
+    uint32_t address2;
+    struct i2c_s i2c;           // I2C object
+    void (*init_callback)();    // I2C init callback
+} i2c_t;
 
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions prototypes ---------------------------------------------*/
 
+/**
+ * @brief  I2C driver APIs structure
+ */
+struct i2c_driver_api {
+    int (*init)(i2c_t *obj);
+    int (*deinit)(i2c_t *obj);
+    int (*write)(i2c_t *obj, uint16_t devAddress, uint8_t *pData, uint16_t size, uint32_t timeout);
+    int (*read)(i2c_t *obj, uint16_t devAddress, uint8_t *pData, uint16_t size, uint32_t timeout);
+    int (*listen)(i2c_t *obj);
+    int (*listen_stop)(i2c_t *obj);
+};
+
+struct i2c_driver_api *i2c_driver(void);
+
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* OMNI_COMMON_H */
+#endif /* OMNI_I2C_HAL_H */
