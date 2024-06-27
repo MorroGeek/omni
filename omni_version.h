@@ -26,7 +26,7 @@
 
 #define OMNI_VER_MAJOR                               0
 #define OMNI_VER_MINOR                               1
-#define OMNI_VER_PATCH                               3
+#define OMNI_VER_PATCH                               4
 #define OMNI_VER                                     (OMNI_VER_MAJOR * 10000 + OMNI_VER_MINOR * 100 + OMNI_VER_PATCH)
 #define OMNI_STR(x)                                  #x
 #define OMNI_PROJECT_VERSION(major, minor, patch)    "v" APP_STR(major, minor, patch)
