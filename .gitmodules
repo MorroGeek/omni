@@ -4,3 +4,6 @@
 [submodule "libraries/cherryusb"]
 	path = libraries/cherryusb
 	url = https://github.com/MorroGeek/cherryusb
+[submodule "libraries/letter_shell"]
+	path = libraries/letter_shell
+	url = https://github.com/MorroGeek/letter_shell
