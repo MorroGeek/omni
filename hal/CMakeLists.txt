@@ -18,9 +18,9 @@ add_library(omni-hal INTERFACE)
 file(GLOB OMNI_HAL_SOURCES "source/*.c")
 
 target_sources(omni-hal INTERFACE
-        ${OMNI_HAL_SOURCES}
+    ${OMNI_HAL_SOURCES}
 )
 
 target_include_directories(omni-hal INTERFACE
-        include
+    .
 )

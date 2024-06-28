@@ -1,7 +1,7 @@
 /**
-  * @file    gpio_hal.c
+  * @file    gpio.c
   * @author  MorroMaker
-  * @brief   GPIO HAL for STM32F4
+  * @brief   GPIO driver for STM32F4
   * @attention
   *
   * Copyright (c) 2024 MorroMaker
@@ -53,17 +53,45 @@ static void set_gpio_clock(pin_name_t pin);
 static GPIO_TypeDef *get_gpio_port(pin_name_t pin);
 static uint32_t get_gpio_pin(pin_name_t pin);
 
+static int gpio_init(gpio_t *obj, pin_map_t map);
+static int gpio_mode(gpio_t *obj, gpio_mode_t mode);
+static int gpio_dir(gpio_t *obj, gpio_dir_t dir);
+static int gpio_speed(gpio_t *obj, gpio_speed_t speed);
+static int gpio_write(gpio_t *obj, int value);
+static int gpio_toggle(gpio_t *obj);
+static int gpio_read(gpio_t *obj, uint32_t *value);
+
 /* External variables --------------------------------------------------------*/
 /* External functions --------------------------------------------------------*/
+
+static struct gpio_driver_api gpio_stm32_driver = {
+    .init = gpio_init,
+    .mode = gpio_mode,
+    .dir = gpio_dir,
+    .speed = gpio_speed,
+    .write = gpio_write,
+    .toggle = gpio_toggle,
+    .read = gpio_read,
+};
+
+struct gpio_driver_api *gpio_driver(void) {
+    return &gpio_stm32_driver;
+}
 
 /**
  * @brief Initialize the GPIO
  * @param obj: GPIO handle structure
+ * @param map: GPIO pin map
+ * @return Operation status
+ *         @arg OMNI_OK: Operation successful
+ *         @arg OMNI_FAIL: Operation failed
  */
-void gpio_init(gpio_t *obj, pin_map_t map)
+static int gpio_init(gpio_t *obj, pin_map_t map)
 {
+    int res;
+
     if (map.pin == NC) {
-        return;
+        return OMNI_FAIL;
     }
 
     // Get GPIO port
@@ -76,20 +104,39 @@ void gpio_init(gpio_t *obj, pin_map_t map)
     set_gpio_clock(map.pin);
 
     // Set GPIO initial value
-    gpio_write(obj, map.feature.status);
+    res = gpio_write(obj, map.feature.status);
+    if (res != OMNI_OK) {
+        return res;
+    }
 
     // GPIO configuration
-    gpio_speed(obj, map.feature.speed);
-    gpio_dir(obj, map.feature.dir);
-    gpio_mode(obj, map.feature.mode);
+    res = gpio_speed(obj, map.feature.speed);
+    if (res != OMNI_OK) {
+        return res;
+    }
+
+    res = gpio_dir(obj, map.feature.dir);
+    if (res != OMNI_OK) {
+        return res;
+    }
+
+    res = gpio_mode(obj, map.feature.mode);
+    if (res != OMNI_OK) {
+        return res;
+    }
+
+    return OMNI_OK;
 }
 
 /**
  * @brief Set GPIO mode
  * @param obj: GPIO handle structure
  * @param mode: GPIO mode
+ * @return Operation status
+ *         @arg OMNI_OK: Operation successful
+ *         @arg OMNI_FAIL: Operation failed
  */
-void gpio_mode(gpio_t *obj, gpio_mode_t mode)
+static int gpio_mode(gpio_t *obj, gpio_mode_t mode)
 {
     // Set GPIO output type
     if ((mode == OMNI_GPIO_PP_PULLNONE) || (mode == OMNI_GPIO_PP_PULLUP) || (mode == OMNI_GPIO_PP_PULLDOWN)) {
@@ -106,14 +153,19 @@ void gpio_mode(gpio_t *obj, gpio_mode_t mode)
     } else {
         LL_GPIO_SetPinPull(obj->ins, obj->pin, LL_GPIO_PULL_NO);
     }
+
+    return OMNI_OK;
 }
 
 /**
  * @brief Set GPIO direction
  * @param obj: GPIO handle structure
  * @param dir: GPIO direction
+ * @return Operation status
+ *         @arg OMNI_OK: Operation successful
+ *         @arg OMNI_FAIL: Operation failed
  */
-void gpio_dir(gpio_t *obj, gpio_dir_t dir)
+static int gpio_dir(gpio_t *obj, gpio_dir_t dir)
 {
     // Set GPIO direction
     if (dir == OMNI_GPIO_INPUT) {
@@ -121,49 +173,71 @@ void gpio_dir(gpio_t *obj, gpio_dir_t dir)
     } else {
         LL_GPIO_SetPinMode(obj->ins, obj->pin, LL_GPIO_MODE_OUTPUT);
     }
+
+    return OMNI_OK;
 }
 
 /**
  * @brief Set GPIO speed
  * @param obj: GPIO handle structure
  * @param speed: GPIO speed
+ * @return Operation status
+ *         @arg OMNI_OK: Operation successful
+ *         @arg OMNI_FAIL: Operation failed
  */
-void gpio_speed(gpio_t *obj, gpio_speed_t speed)
+static int gpio_speed(gpio_t *obj, gpio_speed_t speed)
 {
     LL_GPIO_SetPinSpeed(obj->ins, obj->pin, speed);
+
+    return OMNI_OK;
 }
 
 /**
  * @brief Set GPIO value
  * @param obj: GPIO handle structure
  * @param value: GPIO value
+ * @return Operation status
+ *         @arg OMNI_OK: Operation successful
+ *         @arg OMNI_FAIL: Operation failed
  */
-void gpio_write(gpio_t *obj, int value)
+static int gpio_write(gpio_t *obj, int value)
 {
     if (value) {
         LL_GPIO_SetOutputPin(obj->ins, obj->pin);
     } else {
         LL_GPIO_ResetOutputPin(obj->ins, obj->pin);
     }
+
+    return OMNI_OK;
 }
 
 /**
  * @brief Toggle GPIO value
  * @param obj: GPIO handle structure
+ * @return Operation status
+ *         @arg OMNI_OK: Operation successful
+ *         @arg OMNI_FAIL: Operation failed
  */
-void gpio_toggle(gpio_t *obj)
+static int gpio_toggle(gpio_t *obj)
 {
     LL_GPIO_TogglePin(obj->ins, obj->pin);
+
+    return OMNI_OK;
 }
 
 /**
  * @brief Get GPIO value
  * @param obj: GPIO handle structure
- * @return GPIO value
+ * @param value: GPIO value
+ * @return Operation status
+ *         @arg OMNI_OK: Operation successful
+ *         @arg OMNI_FAIL: Operation failed
  */
-uint32_t gpio_read(gpio_t *obj)
+static int gpio_read(gpio_t *obj, uint32_t *value)
 {
-    return LL_GPIO_IsInputPinSet(obj->ins, obj->pin);
+    *value = LL_GPIO_IsInputPinSet(obj->ins, obj->pin);
+
+    return OMNI_OK;
 }
 
 /* Private functions ---------------------------------------------------------*/

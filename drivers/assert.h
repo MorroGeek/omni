@@ -1,7 +1,7 @@
 /**
-  * @file    omni.h
+  * @file    assert.h
   * @author  MorroMaker
-  * @brief   OmniOS header file
+  * @brief   Assert functions for Omni
   * @attention
   *
   * Copyright (c) 2024 MorroMaker
@@ -21,21 +21,34 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef OMNI_H
-#define OMNI_H
+#ifndef OMNI_ASSERT_H
+#define OMNI_ASSERT_H
 
 /* Includes ------------------------------------------------------------------*/
-/* OmniOS drivers */
-#include "drivers/include/digital.h"
-#include "drivers/include/serial.h"
-#include "drivers/include/i2c.h"
-#include "drivers/include/spi.h"
+#include <assert.h>
 
-/* OmniOS utilities */
-#include "utilities/command/command.h"
-#include "utilities/ring_buffer/ring_buffer.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-/* Exported defines ----------------------------------------------------------*/
-using namespace omni;
+#define USE_OMNI_ASSERT
 
-#endif /* OMNI_H */
+/**
+ * @brief Assert function for OmniOS
+ * @param expr: The expression to be evaluated
+ * @param file: The file name where the assert function is called
+ * @param line: The line number where the assert function is called
+ */
+void omni_assert(const char *expr, const char *file, int line);
+
+#ifdef USE_OMNI_ASSERT
+#define OMNI_ASSERT(expr) ((expr) ? (void)(expr) : omni_assert(#expr, __FILE__, __LINE__))
+#else
+#define OMNI_ASSERT(expr) ((void)(expr))
+#endif /* USE_OMNI_ASSERT */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* OMNI_ASSERT_H */

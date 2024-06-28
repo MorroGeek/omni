@@ -1,7 +1,7 @@
 /**
-  * @file    omni.h
+  * @file    device.h
   * @author  MorroMaker
-  * @brief   OmniOS header file
+  * @brief   Device header file
   * @attention
   *
   * Copyright (c) 2024 MorroMaker
@@ -21,21 +21,11 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef OMNI_H
-#define OMNI_H
+#ifndef OMNI_DEVICE_H
+#define OMNI_DEVICE_H
 
 /* Includes ------------------------------------------------------------------*/
-/* OmniOS drivers */
-#include "drivers/include/digital.h"
-#include "drivers/include/serial.h"
-#include "drivers/include/i2c.h"
-#include "drivers/include/spi.h"
+#include "targets.h"
+#include "omni_board.h"
 
-/* OmniOS utilities */
-#include "utilities/command/command.h"
-#include "utilities/ring_buffer/ring_buffer.h"
-
-/* Exported defines ----------------------------------------------------------*/
-using namespace omni;
-
-#endif /* OMNI_H */
+#endif /* OMNI_DEVICE_H */

@@ -14,6 +14,7 @@
 # limitations under the License.
 
 add_subdirectory(stm)
+add_subdirectory(apm)
 
 add_library(omni-targets INTERFACE)
 
@@ -22,3 +23,7 @@ if(${OMNI_PLATFORM} STREQUAL "stm")
         omni-stm
     )
 endif()
+
+target_include_directories(omni-targets INTERFACE
+    .
+)

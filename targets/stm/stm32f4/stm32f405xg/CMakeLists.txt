@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+add_subdirectory(target_f405rg)
 add_subdirectory(target_mcstools)
 
 include(../../../../tools/cmake/omni_set_linker_script.cmake)
@@ -51,7 +52,7 @@ if(${OMNI_CPU} STREQUAL "stm32f405xg")
     list(FIND OMNI_BOARDS ${OMNI_BOARD} BOARD_INDEX)
 
     if(${BOARD_INDEX} GREATER -1)
-    #    message(STATUS "${OMNI_BOARD} is in the list.")
+        # message(STATUS "${OMNI_BOARD} is in the list.")
         set(BOARD_TYPE "omni-stm32f405xg-${OMNI_BOARD}")
     else()
         # 输出结果

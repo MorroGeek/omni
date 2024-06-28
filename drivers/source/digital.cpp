@@ -1,7 +1,7 @@
 /**
-  * @file    omni.h
+  * @file    omni_digital.cpp
   * @author  MorroMaker
-  * @brief   OmniOS header file
+  * @brief   Digital IO driver for OmniOS
   * @attention
   *
   * Copyright (c) 2024 MorroMaker
@@ -20,22 +20,12 @@
   * limitations under the License.
   */
 
-/* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef OMNI_H
-#define OMNI_H
-
 /* Includes ------------------------------------------------------------------*/
-/* OmniOS drivers */
 #include "drivers/include/digital.h"
-#include "drivers/include/serial.h"
-#include "drivers/include/i2c.h"
-#include "drivers/include/spi.h"
+#include "platform.h"
+#include "assert.h"
 
-/* OmniOS utilities */
-#include "utilities/command/command.h"
-#include "utilities/ring_buffer/ring_buffer.h"
+namespace omni {
 
-/* Exported defines ----------------------------------------------------------*/
-using namespace omni;
 
-#endif /* OMNI_H */
+} // namespace omni

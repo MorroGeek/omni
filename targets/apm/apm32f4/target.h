@@ -1,7 +1,7 @@
 /**
-  * @file    omni.h
+  * @file    targets.h
   * @author  MorroMaker
-  * @brief   OmniOS header file
+  * @brief   Target specific header file
   * @attention
   *
   * Copyright (c) 2024 MorroMaker
@@ -21,21 +21,15 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef OMNI_H
-#define OMNI_H
+#ifndef OMNI_TARGETS_H
+#define OMNI_TARGETS_H
 
-/* Includes ------------------------------------------------------------------*/
-/* OmniOS drivers */
-#include "drivers/include/digital.h"
-#include "drivers/include/serial.h"
-#include "drivers/include/i2c.h"
-#include "drivers/include/spi.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-/* OmniOS utilities */
-#include "utilities/command/command.h"
-#include "utilities/ring_buffer/ring_buffer.h"
+#ifdef __cplusplus
+}
+#endif
 
-/* Exported defines ----------------------------------------------------------*/
-using namespace omni;
-
-#endif /* OMNI_H */
+#endif /* OMNI_TARGETS_H */

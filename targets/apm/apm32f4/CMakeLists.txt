@@ -13,10 +13,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if(OMNI_RTOS STREQUAL "freertos")
-    add_subdirectory(freertos)
+add_library(omni-apm32f4 INTERFACE)
+
+# add_subdirectory(stm32cube_fw)
+
+# add_subdirectory(stm32f405xg EXCLUDE_FROM_ALL)
+# add_subdirectory(stm32f407xg EXCLUDE_FROM_ALL)
+
+target_include_directories(omni-apm32f4 INTERFACE
+        .
+)
+
+if(NOT ${OMNI_CPU} STREQUAL "")
+    set(CPU_TYPE "omni-${OMNI_CPU}")
+else()
+    message(FATAL_ERROR "OMNI_CPU is not set")
 endif()
 
-if(OMNI_USB STREQUAL "cherryusb")
-    add_subdirectory(cherryusb)
-endif()
+target_link_libraries(omni-apm32f4 INTERFACE
+    ${CPU_TYPE}
+    # omni-stm32f4cube-fw
+)

@@ -13,6 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+add_subdirectory(target_f407ig)
+
 include(../../../../tools/cmake/omni_set_linker_script.cmake)
 include(../../../../tools/cmake/omni_get_subdirectories.cmake)
 

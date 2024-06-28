@@ -1,7 +1,7 @@
 /**
-  * @file    omni.h
+  * @file    test_i2c.c
   * @author  MorroMaker
-  * @brief   OmniOS header file
+  * @brief   I2C test file
   * @attention
   *
   * Copyright (c) 2024 MorroMaker
@@ -20,22 +20,38 @@
   * limitations under the License.
   */
 
-/* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef OMNI_H
-#define OMNI_H
-
 /* Includes ------------------------------------------------------------------*/
-/* OmniOS drivers */
-#include "drivers/include/digital.h"
-#include "drivers/include/serial.h"
-#include "drivers/include/i2c.h"
-#include "drivers/include/spi.h"
+#include "unity.h"
 
-/* OmniOS utilities */
-#include "utilities/command/command.h"
-#include "utilities/ring_buffer/ring_buffer.h"
+extern "C"
+{
+    #include "mock_gpio_hal.h"
+    #include "digital.h"
+}
 
-/* Exported defines ----------------------------------------------------------*/
-using namespace omni;
+/**
+ * @brief Setup function for test runner
+ * @note setUp() is called by the generated runner before each test case function.
+ * Every test file requires this function.
+ */
+void setUp(void)
+{
+    // Set up any necessary initialization here
+}
 
-#endif /* OMNI_H */
+/**
+ * @brief Teardown function for test runner
+ * @note tearDown() is called by the generated runner after each test case function.
+ * Every test file requires this function.
+ */
+void tearDown(void)
+{
+    // Clean up after each test case
+}
+
+// void test_i2c_init(void)
+// {
+//     i2c_t obj;
+//     bool ret = I2C::init(obj);
+//     TEST_ASSERT_TRUE(ret);
+// }

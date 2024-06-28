@@ -32,21 +32,39 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
+static int serial_init(serial_t *obj);
+static int serial_deinit(serial_t *obj);
+static int serial_write(serial_t *obj, uint8_t *data, uint32_t size, uint32_t timeout);
+static int serial_read(serial_t *obj, uint8_t *data, uint32_t size, uint32_t timeout);
+
 /* External variables --------------------------------------------------------*/
 /* External functions --------------------------------------------------------*/
+
+static struct serial_driver_api serial_stm32_driver = {
+    .init = serial_init,
+    .deinit = serial_deinit,
+    .write = serial_write,
+    .read = serial_read,
+};
+
+struct serial_driver_api *serial_driver(void)
+{
+    return &serial_stm32_driver;
+}
 
 /**
  * @brief Initialize the serial port
  * @param obj: Serial handle structure
- * @retval true: success
- *         false: fail
+ * @return Operation status
+ *         @arg OMNI_OK: Operation successful
+ *         @arg OMNI_FAIL: Operation failed
  */
-bool serial_init(serial_t *obj)
+static int serial_init(serial_t *obj)
 {
     UART_HandleTypeDef *handle = GET_OBJ_HANDLE(obj);
 
     if (handle == NULL) {
-        return false;
+        return OMNI_FAIL;
     }
 
     switch (obj->mode) {
@@ -55,7 +73,7 @@ bool serial_init(serial_t *obj)
             break;
 
         default:
-            return false;
+            return OMNI_FAIL;
     }
 
     handle->Init.BaudRate = obj->baud_rate;
@@ -70,7 +88,7 @@ bool serial_init(serial_t *obj)
             break;
 
         default:
-            return false;
+            return OMNI_FAIL;
     }
 
     switch (obj->stop_bits) {
@@ -83,7 +101,7 @@ bool serial_init(serial_t *obj)
             break;
 
         default:
-            return false;
+            return OMNI_FAIL;
     }
 
     switch (obj->parity) {
@@ -100,37 +118,38 @@ bool serial_init(serial_t *obj)
             break;
 
         default:
-            return false;
+            return OMNI_FAIL;
     }
 
     handle->Init.OverSampling = UART_OVERSAMPLING_16;
 
     if (HAL_UART_Init(handle) != HAL_OK) {
-        return false;
+        return OMNI_FAIL;
     }
 
-    return true;
+    return OMNI_OK;
 }
 
 /**
  * @brief Deinitialize the serial port
  * @param obj: Serial handle structure
- * @retval true: success
- *         false: fail
+ * @return Operation status
+ *         @arg OMNI_OK: Operation successful
+ *         @arg OMNI_FAIL: Operation failed
  */
-bool serial_deinit(serial_t *obj)
+static int serial_deinit(serial_t *obj)
 {
     UART_HandleTypeDef *handle = GET_OBJ_HANDLE(obj);
 
     if (handle == NULL) {
-        return false;
+        return OMNI_FAIL;
     }
 
     if (HAL_UART_DeInit(handle) != HAL_OK) {
-        return false;
+        return OMNI_FAIL;
     }
 
-    return true;
+    return OMNI_OK;
 }
 
 /**
@@ -139,22 +158,23 @@ bool serial_deinit(serial_t *obj)
  * @param data: Data buffer
  * @param size: Data size
  * @param timeout: Timeout
- * @retval true: success
- *         false: fail
+ * @return Operation status
+ *         @arg OMNI_OK: Operation successful
+ *         @arg OMNI_FAIL: Operation failed
  */
-bool serial_write(serial_t *obj, uint8_t *data, uint32_t size, uint32_t timeout)
+static int serial_write(serial_t *obj, uint8_t *data, uint32_t size, uint32_t timeout)
 {
     UART_HandleTypeDef *handle = GET_OBJ_HANDLE(obj);
 
     if (handle == NULL) {
-        return false;
+        return OMNI_FAIL;
     }
 
     if (HAL_UART_Transmit(handle, data, size, timeout) != HAL_OK) {
-        return false;
+        return OMNI_FAIL;
     }
 
-    return true;
+    return OMNI_OK;
 }
 
 /**
@@ -163,22 +183,23 @@ bool serial_write(serial_t *obj, uint8_t *data, uint32_t size, uint32_t timeout)
  * @param data: Data buffer
  * @param size: Data size
  * @param timeout: Timeout
- * @retval true: success
- *         false: fail
+ * @return Operation status
+ *         @arg OMNI_OK: Operation successful
+ *         @arg OMNI_FAIL: Operation failed
  */
-bool serial_read(serial_t *obj, uint8_t *data, uint32_t size, uint32_t timeout)
+static int serial_read(serial_t *obj, uint8_t *data, uint32_t size, uint32_t timeout)
 {
     UART_HandleTypeDef *handle = GET_OBJ_HANDLE(obj);
 
     if (handle == NULL) {
-        return false;
+        return OMNI_FAIL;
     }
 
     if (HAL_UART_Receive(handle, data, size, timeout) != HAL_OK) {
-        return false;
+        return OMNI_FAIL;
     }
 
-    return true;
+    return OMNI_OK;
 }
 
 

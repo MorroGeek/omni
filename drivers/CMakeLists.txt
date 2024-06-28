@@ -23,4 +23,5 @@ target_sources(omni-drivers INTERFACE
 
 target_include_directories(omni-drivers INTERFACE
     include
+    .
 )

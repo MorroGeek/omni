@@ -13,10 +13,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if(OMNI_RTOS STREQUAL "freertos")
-    add_subdirectory(freertos)
-endif()
+add_library(omni-stm32f407xg-f407ig INTERFACE)
 
-if(OMNI_USB STREQUAL "cherryusb")
-    add_subdirectory(cherryusb)
-endif()
+target_sources(omni-stm32f407xg-f407ig INTERFACE
+        omni_board.c
+)
+
+target_include_directories(omni-stm32f407xg-f407ig INTERFACE
+        .
+)
+
+target_link_libraries(omni-stm32f407xg-f407ig INTERFACE
+        omni-stm32f407xg
+)
+
+

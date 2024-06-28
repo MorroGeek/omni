@@ -13,10 +13,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if(OMNI_RTOS STREQUAL "freertos")
-    add_subdirectory(freertos)
-endif()
+add_subdirectory(apm32f4)
 
-if(OMNI_USB STREQUAL "cherryusb")
-    add_subdirectory(cherryusb)
-endif()
+add_library(omni-apm INTERFACE)
+
+file(GLOB OMNI_TARGET_SOURCES "*.c")
+
+target_sources(omni-apm INTERFACE
+        ${OMNI_TARGET_SOURCES}
+)
+
+target_include_directories(omni-apm INTERFACE
+        .
+)
+
+# link omni-cmsis-cortex-m to omni-apm
+target_link_libraries(omni-apm INTERFACE 
+    omni-cmsis-cortex-m
+    omni-apm32f4
+)
