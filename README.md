@@ -42,6 +42,7 @@ make
 
 - [Omni-FreeRTOS](https://github.com/MorroGeek/freertos) - FreeRTOS library for Omni
 - [Omni-CherryUSB](https://github.com/MorroGeek/cherryusb) - CherryUSB library for Omni
+- [Omni-LetterShell](https://github.com/MorroGeek/letter_shell) - LetterShell library for Omni
 
 ## License
 

@@ -37,6 +37,10 @@ if(NOT DEFINED OMNI_USB)
     set(OMNI_USB "cherryusb" CACHE STRING "Omni USB")
 endif()
 
+if(NOT DEFINED OMNI_SHELL)
+    set(OMNI_SHELL "letter" CACHE STRING "Omni shell")
+endif()
+
 if(NOT DEFINED OMNI_LINKER_SCRIPT)
     set(OMNI_LINKER_SCRIPT "default" CACHE STRING "Omni linker script")
 endif()
@@ -50,6 +54,7 @@ message(STATUS "CPU: ${OMNI_CPU}")
 message(STATUS "Board: ${OMNI_BOARD}")
 message(STATUS "RTOS: ${OMNI_RTOS}")
 message(STATUS "USB: ${OMNI_USB}")
+message(STATUS "Shell: ${OMNI_SHELL}")
 message(STATUS "ARM GCC version: ${ARM_GCC_VERSION}")
 
 # Check ARM GCC version
@@ -97,5 +102,11 @@ endif()
 if(OMNI_USB STREQUAL "cherryusb")
     target_link_libraries(omni-core INTERFACE
             omni-cherryusb
+    )
+endif()
+
+if(OMNI_SHELL STREQUAL "letter")
+    target_link_libraries(omni-core INTERFACE
+        omni-letter-shell
     )
 endif()
