@@ -20,3 +20,7 @@ endif()
 if(OMNI_USB STREQUAL "cherryusb")
     add_subdirectory(cherryusb)
 endif()
+
+if(OMNI_SHELL STREQUAL "letter")
+    add_subdirectory(letter_shell)
+endif()

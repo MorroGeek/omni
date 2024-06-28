@@ -32,9 +32,6 @@ extern "C" {
 #include "device.h"
 #include "common.h"
 
-/* Exported defines ----------------------------------------------------------*/
-/* Exported typedef ----------------------------------------------------------*/
-
 /**
  * @brief GPIO output mode
  */
@@ -95,10 +92,6 @@ typedef enum {
     OMNI_GPIO_INVERTED = 1,
 } gpio_inverted_t;
 
-/* Exported constants --------------------------------------------------------*/
-/* Exported macro ------------------------------------------------------------*/
-
-/* Exported functions prototypes ---------------------------------------------*/
 /**
  * @brief GPIO driver APIs structure
  */
@@ -116,6 +109,6 @@ struct gpio_driver_api *gpio_driver(void);
 
 #ifdef __cplusplus
 }
-#endif
+#endif /* __cplusplus */
 
 #endif /* OMNI_GPIO_HAL_H */

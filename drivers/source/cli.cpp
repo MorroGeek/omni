@@ -1,7 +1,7 @@
 /**
-  * @file    omni.h
+  * @file    cli.cpp
   * @author  MorroMaker
-  * @brief   Omni header file
+  * @brief   Command Line Interface (CLI) class for Omni
   * @attention
   *
   * Copyright (c) 2024 MorroMaker
@@ -20,23 +20,12 @@
   * limitations under the License.
   */
 
-/* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef OMNI_H
-#define OMNI_H
-
 /* Includes ------------------------------------------------------------------*/
-/* Omni drivers */
 #include "drivers/include/cli.h"
-#include "drivers/include/digital.h"
-#include "drivers/include/serial.h"
-#include "drivers/include/i2c.h"
-#include "drivers/include/spi.h"
+#include "platform.h"
+#include "assert.h"
 
-/* Omni utilities */
-#include "utilities/command/command.h"
-#include "utilities/ring_buffer/ring_buffer.h"
+namespace omni {
 
-/* Exported defines ----------------------------------------------------------*/
-using namespace omni;
 
-#endif /* OMNI_H */
+} // namespace omni

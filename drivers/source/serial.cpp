@@ -1,7 +1,7 @@
 /**
-  * @file    omni_serial.cpp
+  * @file    serial.cpp
   * @author  MorroMaker
-  * @brief   Serial driver for OmniOS
+  * @brief   Serial driver for Omni
   * @attention
   *
   * Copyright (c) 2024 MorroMaker
