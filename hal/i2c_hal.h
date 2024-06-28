@@ -32,9 +32,6 @@ extern "C" {
 #include "device.h"
 #include "common.h"
 
-/* Exported defines ----------------------------------------------------------*/
-/* Exported typedef ----------------------------------------------------------*/
-
 /**
  * @brief I2C mode
  */
@@ -56,10 +53,6 @@ typedef struct {
     void (*init_callback)();    // I2C init callback
 } i2c_t;
 
-/* Exported constants --------------------------------------------------------*/
-/* Exported macro ------------------------------------------------------------*/
-/* Exported functions prototypes ---------------------------------------------*/
-
 /**
  * @brief  I2C driver APIs structure
  */
@@ -76,6 +69,6 @@ struct i2c_driver_api *i2c_driver(void);
 
 #ifdef __cplusplus
 }
-#endif
+#endif /* __cplusplus */
 
 #endif /* OMNI_I2C_HAL_H */

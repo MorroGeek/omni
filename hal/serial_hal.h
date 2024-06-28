@@ -32,9 +32,6 @@ extern "C" {
 #include "device.h"
 #include "common.h"
 
-/* Exported defines ----------------------------------------------------------*/
-/* Exported typedef ----------------------------------------------------------*/
-
 /**
  * @brief Serial mode
  */
@@ -81,10 +78,6 @@ typedef struct {
     void (*init_callback)();    // Serial init callback
 } serial_t;
 
-/* Exported constants --------------------------------------------------------*/
-/* Exported macro ------------------------------------------------------------*/
-/* Exported functions prototypes ---------------------------------------------*/
-
 /**
  * @brief Serial driver APIs structure
  */
@@ -99,6 +92,6 @@ struct serial_driver_api *serial_driver(void);
 
 #ifdef __cplusplus
 }
-#endif
+#endif /* __cplusplus */
 
 #endif /* OMNI_SERIAL_HAL_H */

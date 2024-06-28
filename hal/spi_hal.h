@@ -32,8 +32,6 @@ extern "C" {
 #include "device.h"
 #include "common.h"
 
-/* Exported defines ----------------------------------------------------------*/
-
 /**
  * @brief SPI mode
  */
@@ -67,8 +65,6 @@ typedef enum {
     OMNI_SPI_FIRSTBIT_LSB = 1U,
 } spi_first_bit_t;
 
-/* Exported typedef ----------------------------------------------------------*/
-
 /**
  * @brief SPI handle structure
  */
@@ -81,10 +77,6 @@ typedef struct {
     struct spi_s spi;           // SPI object
     void (*init_callback)();    // SPI init callback
 } spi_t;
-
-/* Exported constants --------------------------------------------------------*/
-/* Exported macro ------------------------------------------------------------*/
-/* Exported functions prototypes ---------------------------------------------*/
 
 /**
  * @brief SPI driver APIs structure
@@ -101,6 +93,6 @@ struct spi_driver_api *spi_driver(void);
 
 #ifdef __cplusplus
 }
-#endif
+#endif /* __cplusplus */
 
 #endif /* OMNI_SPI_HAL_H */

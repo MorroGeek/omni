@@ -1,7 +1,7 @@
 /**
-  * @file    omni_i2c.cpp
+  * @file    i2c.cpp
   * @author  MorroMaker
-  * @brief   I2C driver for OmniOS
+  * @brief   I2C driver for Omni
   * @attention
   *
   * Copyright (c) 2024 MorroMaker

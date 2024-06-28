@@ -1,7 +1,7 @@
 /**
-  * @file    omni_spi.cpp
+  * @file    spi.cpp
   * @author  MorroMaker
-  * @brief   SPI driver for OmniOS
+  * @brief   SPI driver for Omni
   * @attention
   *
   * Copyright (c) 2024 MorroMaker

@@ -1,7 +1,7 @@
 /**
-  * @file    omni_digital.cpp
+  * @file    digital.cpp
   * @author  MorroMaker
-  * @brief   Digital IO driver for OmniOS
+  * @brief   Digital IO driver for Omni
   * @attention
   *
   * Copyright (c) 2024 MorroMaker
