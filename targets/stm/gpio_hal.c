@@ -21,7 +21,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "gpio_hal.h"
+#include "hal/gpio_hal.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* Private typedef -----------------------------------------------------------*/
@@ -86,8 +86,7 @@ struct gpio_driver_api *gpio_driver(void) {
  *         @arg OMNI_OK: Operation successful
  *         @arg OMNI_FAIL: Operation failed
  */
-static int gpio_init(gpio_t *obj, pin_map_t map)
-{
+static int gpio_init(gpio_t *obj, pin_map_t map) {
     int res;
 
     if (map.pin == NC) {
@@ -136,8 +135,7 @@ static int gpio_init(gpio_t *obj, pin_map_t map)
  *         @arg OMNI_OK: Operation successful
  *         @arg OMNI_FAIL: Operation failed
  */
-static int gpio_mode(gpio_t *obj, gpio_mode_t mode)
-{
+static int gpio_mode(gpio_t *obj, gpio_mode_t mode) {
     // Set GPIO output type
     if ((mode == OMNI_GPIO_PP_PULLNONE) || (mode == OMNI_GPIO_PP_PULLUP) || (mode == OMNI_GPIO_PP_PULLDOWN)) {
         LL_GPIO_SetPinOutputType(obj->ins, obj->pin, LL_GPIO_OUTPUT_PUSHPULL);
@@ -165,8 +163,7 @@ static int gpio_mode(gpio_t *obj, gpio_mode_t mode)
  *         @arg OMNI_OK: Operation successful
  *         @arg OMNI_FAIL: Operation failed
  */
-static int gpio_dir(gpio_t *obj, gpio_dir_t dir)
-{
+static int gpio_dir(gpio_t *obj, gpio_dir_t dir) {
     // Set GPIO direction
     if (dir == OMNI_GPIO_INPUT) {
         LL_GPIO_SetPinMode(obj->ins, obj->pin, LL_GPIO_MODE_INPUT);
@@ -185,8 +182,7 @@ static int gpio_dir(gpio_t *obj, gpio_dir_t dir)
  *         @arg OMNI_OK: Operation successful
  *         @arg OMNI_FAIL: Operation failed
  */
-static int gpio_speed(gpio_t *obj, gpio_speed_t speed)
-{
+static int gpio_speed(gpio_t *obj, gpio_speed_t speed) {
     LL_GPIO_SetPinSpeed(obj->ins, obj->pin, speed);
 
     return OMNI_OK;
@@ -200,8 +196,7 @@ static int gpio_speed(gpio_t *obj, gpio_speed_t speed)
  *         @arg OMNI_OK: Operation successful
  *         @arg OMNI_FAIL: Operation failed
  */
-static int gpio_write(gpio_t *obj, int value)
-{
+static int gpio_write(gpio_t *obj, int value) {
     if (value) {
         LL_GPIO_SetOutputPin(obj->ins, obj->pin);
     } else {
@@ -218,8 +213,7 @@ static int gpio_write(gpio_t *obj, int value)
  *         @arg OMNI_OK: Operation successful
  *         @arg OMNI_FAIL: Operation failed
  */
-static int gpio_toggle(gpio_t *obj)
-{
+static int gpio_toggle(gpio_t *obj) {
     LL_GPIO_TogglePin(obj->ins, obj->pin);
 
     return OMNI_OK;
@@ -233,8 +227,7 @@ static int gpio_toggle(gpio_t *obj)
  *         @arg OMNI_OK: Operation successful
  *         @arg OMNI_FAIL: Operation failed
  */
-static int gpio_read(gpio_t *obj, uint32_t *value)
-{
+static int gpio_read(gpio_t *obj, uint32_t *value) {
     *value = LL_GPIO_IsInputPinSet(obj->ins, obj->pin);
 
     return OMNI_OK;
@@ -247,8 +240,7 @@ static int gpio_read(gpio_t *obj, uint32_t *value)
  * @param pin: GPIO pin
  * @return GPIO pin
  */
-static uint32_t get_gpio_pin(pin_name_t pin)
-{
+static uint32_t get_gpio_pin(pin_name_t pin) {
     return ll_pin[pin & 0x0F];
 }
 
@@ -257,8 +249,7 @@ static uint32_t get_gpio_pin(pin_name_t pin)
  * @param pin: GPIO pin
  * @return GPIO port
  */
-static GPIO_TypeDef *get_gpio_port(pin_name_t pin)
-{
+static GPIO_TypeDef *get_gpio_port(pin_name_t pin) {
     switch (pin & 0xF0U) {
         case PORTA:
             return GPIOA;
@@ -319,8 +310,7 @@ static GPIO_TypeDef *get_gpio_port(pin_name_t pin)
  * @param pin: GPIO pin
  * @return GPIO port
  */
-static void set_gpio_clock(pin_name_t pin)
-{
+static void set_gpio_clock(pin_name_t pin) {
     switch (pin & 0xF0U) {
         case PORTA:
             __HAL_RCC_GPIOA_CLK_ENABLE();

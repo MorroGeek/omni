@@ -21,7 +21,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "serial_hal.h"
+#include "hal/serial_hal.h"
 
 /* Private includes ----------------------------------------------------------*/
 
@@ -47,8 +47,7 @@ static struct serial_driver_api serial_stm32_driver = {
     .read = serial_read,
 };
 
-struct serial_driver_api *serial_driver(void)
-{
+struct serial_driver_api *serial_driver(void) {
     return &serial_stm32_driver;
 }
 
@@ -59,8 +58,7 @@ struct serial_driver_api *serial_driver(void)
  *         @arg OMNI_OK: Operation successful
  *         @arg OMNI_FAIL: Operation failed
  */
-static int serial_init(serial_t *obj)
-{
+static int serial_init(serial_t *obj) {
     UART_HandleTypeDef *handle = GET_OBJ_HANDLE(obj);
 
     if (handle == NULL) {
@@ -137,8 +135,7 @@ static int serial_init(serial_t *obj)
  *         @arg OMNI_OK: Operation successful
  *         @arg OMNI_FAIL: Operation failed
  */
-static int serial_deinit(serial_t *obj)
-{
+static int serial_deinit(serial_t *obj) {
     UART_HandleTypeDef *handle = GET_OBJ_HANDLE(obj);
 
     if (handle == NULL) {
@@ -162,8 +159,7 @@ static int serial_deinit(serial_t *obj)
  *         @arg OMNI_OK: Operation successful
  *         @arg OMNI_FAIL: Operation failed
  */
-static int serial_write(serial_t *obj, uint8_t *data, uint32_t size, uint32_t timeout)
-{
+static int serial_write(serial_t *obj, uint8_t *data, uint32_t size, uint32_t timeout) {
     UART_HandleTypeDef *handle = GET_OBJ_HANDLE(obj);
 
     if (handle == NULL) {
@@ -187,8 +183,7 @@ static int serial_write(serial_t *obj, uint8_t *data, uint32_t size, uint32_t ti
  *         @arg OMNI_OK: Operation successful
  *         @arg OMNI_FAIL: Operation failed
  */
-static int serial_read(serial_t *obj, uint8_t *data, uint32_t size, uint32_t timeout)
-{
+static int serial_read(serial_t *obj, uint8_t *data, uint32_t size, uint32_t timeout) {
     UART_HandleTypeDef *handle = GET_OBJ_HANDLE(obj);
 
     if (handle == NULL) {
@@ -201,6 +196,5 @@ static int serial_read(serial_t *obj, uint8_t *data, uint32_t size, uint32_t tim
 
     return OMNI_OK;
 }
-
 
 /* Private functions ---------------------------------------------------------*/

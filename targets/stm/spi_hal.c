@@ -21,7 +21,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "spi_hal.h"
+#include "hal/spi_hal.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* Private typedef -----------------------------------------------------------*/
@@ -61,8 +61,7 @@ static struct spi_driver_api spi_stm32_driver = {
     .transfer = spi_transfer,
 };
 
-struct spi_driver_api *spi_driver(void)
-{
+struct spi_driver_api *spi_driver(void) {
     return &spi_stm32_driver;
 }
 
@@ -73,8 +72,7 @@ struct spi_driver_api *spi_driver(void)
  *         @arg OMNI_OK: Operation successful
  *         @arg OMNI_FAIL: Operation failed
  */
-static int spi_init(spi_t *obj)
-{
+static int spi_init(spi_t *obj) {
     SPI_HandleTypeDef *handle = GET_OBJ_HANDLE(obj);
 
     if (handle == NULL) {
@@ -157,8 +155,7 @@ static int spi_init(spi_t *obj)
  *         @arg OMNI_OK: Operation successful
  *         @arg OMNI_FAIL: Operation failed
  */
-static int spi_deinit(spi_t *obj)
-{
+static int spi_deinit(spi_t *obj) {
     SPI_HandleTypeDef *handle = GET_OBJ_HANDLE(obj);
 
     if (handle == NULL) {
@@ -182,8 +179,7 @@ static int spi_deinit(spi_t *obj)
  *         @arg OMNI_OK: Operation successful
  *         @arg OMNI_FAIL: Operation failed
  */
-static int spi_write(spi_t *obj, uint8_t *data, uint16_t size, uint32_t timeout)
-{
+static int spi_write(spi_t *obj, uint8_t *data, uint16_t size, uint32_t timeout) {
     SPI_HandleTypeDef *handle = GET_OBJ_HANDLE(obj);
 
     if (handle == NULL) {
@@ -207,8 +203,7 @@ static int spi_write(spi_t *obj, uint8_t *data, uint16_t size, uint32_t timeout)
  *         @arg OMNI_OK: Operation successful
  *         @arg OMNI_FAIL: Operation failed
  */
-static int spi_read(spi_t *obj, uint8_t *data, uint16_t size, uint32_t timeout)
-{
+static int spi_read(spi_t *obj, uint8_t *data, uint16_t size, uint32_t timeout) {
     SPI_HandleTypeDef *handle = GET_OBJ_HANDLE(obj);
 
     if (handle == NULL) {
@@ -233,8 +228,7 @@ static int spi_read(spi_t *obj, uint8_t *data, uint16_t size, uint32_t timeout)
  *         @arg OMNI_OK: Operation successful
  *         @arg OMNI_FAIL: Operation failed
  */
-static int spi_transfer(spi_t *obj, uint8_t *txData, uint8_t *rxData, uint16_t size, uint32_t timeout)
-{
+static int spi_transfer(spi_t *obj, uint8_t *txData, uint8_t *rxData, uint16_t size, uint32_t timeout) {
     SPI_HandleTypeDef *handle = GET_OBJ_HANDLE(obj);
 
     if (handle == NULL) {

@@ -21,7 +21,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "i2c_hal.h"
+#include "hal/i2c_hal.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* Private typedef -----------------------------------------------------------*/
@@ -38,8 +38,8 @@ static int i2c_init(i2c_t *obj);
 static int i2c_deinit(i2c_t *obj);
 static int i2c_write(i2c_t *obj, uint16_t devAddress, uint8_t *pData, uint16_t size, uint32_t timeout);
 static int i2c_read(i2c_t *obj, uint16_t devAddress, uint8_t *pData, uint16_t size, uint32_t timeout);
-static int i2c_listen(i2c_t *obj);
-static int i2c_listen_stop(i2c_t *obj);
+static int i2c_enable_listen(i2c_t *obj);
+static int i2c_disable_listen(i2c_t *obj);
 
 /* External variables --------------------------------------------------------*/
 /* External functions --------------------------------------------------------*/
@@ -49,12 +49,11 @@ static struct i2c_driver_api i2c_stm32_driver = {
     .deinit = i2c_deinit,
     .write = i2c_write,
     .read = i2c_read,
-    .listen = i2c_listen,
-    .listen_stop = i2c_listen_stop,
+    .enable_listen = i2c_enable_listen,
+    .disable_listen = i2c_disable_listen,
 };
 
-struct i2c_driver_api *i2c_driver(void)
-{
+struct i2c_driver_api *i2c_driver(void) {
     return &i2c_stm32_driver;
 }
 
@@ -65,8 +64,7 @@ struct i2c_driver_api *i2c_driver(void)
  *         @arg OMNI_OK: Operation successful
  *         @arg OMNI_FAIL: Operation failed
  */
-static int i2c_init(i2c_t *obj)
-{
+static int i2c_init(i2c_t *obj) {
     int res;
 
     I2C_HandleTypeDef *handle = GET_OBJ_HANDLE(obj);
@@ -82,17 +80,17 @@ static int i2c_init(i2c_t *obj)
 
     // Initialize the I2C bus
     if (obj->mode == OMNI_I2C_MODE_MASTER) {
-        handle->Init.ClockSpeed = (uint32_t) (obj->frequency) * 1000; // 1000倍频率，单位为Hz
-        handle->Init.DutyCycle = I2C_DUTYCYCLE_2; // 50%快速模式占空比，即高电平和低电平时间相等，仅在快速模式下有效
+        handle->Init.ClockSpeed = (uint32_t) (obj->frequency) * 1000;  // 1000倍频率，单位为Hz
+        handle->Init.DutyCycle = I2C_DUTYCYCLE_2;  // 50%快速模式占空比，即高电平和低电平时间相等，仅在快速模式下有效
     } else if (obj->mode == OMNI_I2C_MODE_SLAVE) {
-        handle->Init.ClockSpeed = (uint32_t) (obj->frequency) * 1000; // 1000倍频率，单位为Hz
-        handle->Init.DutyCycle = I2C_DUTYCYCLE_2; // 50%快速模式占空比，即高电平和低电平时间相等，仅在快速模式下有效
-        handle->Init.OwnAddress1 = (uint32_t) (obj->address1); // 从机地址
-        handle->Init.OwnAddress2 = (uint32_t) (obj->address2); // 第二个地址
-        handle->Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT; // 7位地址模式，例如从机地址为10100000b,实际地址为01010000b,最低位为读写位
-        handle->Init.DualAddressMode = I2C_DUALADDRESS_DISABLE; // 双地址模式
-        handle->Init.GeneralCallMode = I2C_GENERALCALL_DISABLE; // 使能广播呼叫，对地址00h应答
-        handle->Init.NoStretchMode = I2C_NOSTRETCH_DISABLE; // 使能时钟拉伸，从机可以拉伸时钟周期，以便于从机处理数据
+        handle->Init.ClockSpeed = (uint32_t) (obj->frequency) * 1000;  // 1000倍频率，单位为Hz
+        handle->Init.DutyCycle = I2C_DUTYCYCLE_2;  // 50%快速模式占空比，即高电平和低电平时间相等，仅在快速模式下有效
+        handle->Init.OwnAddress1 = (uint32_t) (obj->address1);  // 从机地址
+        handle->Init.OwnAddress2 = (uint32_t) (obj->address2);  // 第二个地址
+        handle->Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;  // 7位地址模式，例如从机地址为10100000b,实际地址为01010000b,最低位为读写位
+        handle->Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;  // 双地址模式
+        handle->Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;  // 使能广播呼叫，对地址00h应答
+        handle->Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;  // 使能时钟拉伸，从机可以拉伸时钟周期，以便于从机处理数据
     } else {
         return OMNI_FAIL;
     }
@@ -117,8 +115,7 @@ static int i2c_init(i2c_t *obj)
  *         @arg OMNI_OK: Operation successful
  *         @arg OMNI_FAIL: Operation failed
  */
-static int i2c_deinit(i2c_t *obj)
-{
+static int i2c_deinit(i2c_t *obj) {
     int res;
 
     I2C_HandleTypeDef *handle = GET_OBJ_HANDLE(obj);
@@ -152,8 +149,7 @@ static int i2c_deinit(i2c_t *obj)
  *         @arg OMNI_OK: Operation successful
  *         @arg OMNI_FAIL: Operation failed
  */
-static int i2c_write(i2c_t *obj, uint16_t devAddress, uint8_t *pData, uint16_t size, uint32_t timeout)
-{
+static int i2c_write(i2c_t *obj, uint16_t devAddress, uint8_t *pData, uint16_t size, uint32_t timeout) {
     I2C_HandleTypeDef *handle = GET_OBJ_HANDLE(obj);
 
     if (handle == NULL) {
@@ -178,8 +174,7 @@ static int i2c_write(i2c_t *obj, uint16_t devAddress, uint8_t *pData, uint16_t s
  *         @arg OMNI_OK: Operation successful
  *         @arg OMNI_FAIL: Operation failed
  */
-static int i2c_read(i2c_t *obj, uint16_t devAddress, uint8_t *pData, uint16_t size, uint32_t timeout)
-{
+static int i2c_read(i2c_t *obj, uint16_t devAddress, uint8_t *pData, uint16_t size, uint32_t timeout) {
     I2C_HandleTypeDef *handle = GET_OBJ_HANDLE(obj);
 
     if (handle == NULL) {
@@ -194,14 +189,13 @@ static int i2c_read(i2c_t *obj, uint16_t devAddress, uint8_t *pData, uint16_t si
 }
 
 /**
- * @brief  I2C listen
+ * @brief  I2C enable listen
  * @param  obj: I2C handle structure
  * @return Operation status
  *         @arg OMNI_OK: Operation successful
  *         @arg OMNI_FAIL: Operation failed
  */
-static int i2c_listen(i2c_t *obj)
-{
+static int i2c_enable_listen(i2c_t *obj) {
     I2C_HandleTypeDef *handle = GET_OBJ_HANDLE(obj);
 
     if (HAL_I2C_EnableListen_IT(handle) != HAL_OK) {
@@ -212,14 +206,13 @@ static int i2c_listen(i2c_t *obj)
 }
 
 /**
- * @brief  I2C listen stop
+ * @brief  I2C disable listen
  * @param  obj: I2C handle structure
  * @return Operation status
  *         @arg OMNI_OK: Operation successful
  *         @arg OMNI_FAIL: Operation failed
  */
-static int i2c_listen_stop(i2c_t *obj)
-{
+static int i2c_disable_listen(i2c_t *obj) {
     I2C_HandleTypeDef *handle = GET_OBJ_HANDLE(obj);
 
     if (HAL_I2C_DisableListen_IT(handle) != HAL_OK) {
@@ -238,8 +231,7 @@ static int i2c_listen_stop(i2c_t *obj)
  *         @arg OMNI_OK: Operation successful
  *         @arg OMNI_FAIL: Operation failed
  */
-static int i2c_hw_reset(i2c_t *obj)
-{
+static int i2c_hw_reset(i2c_t *obj) {
     I2C_HandleTypeDef *handle = GET_OBJ_HANDLE(obj);
 
     if (handle == NULL) {
@@ -261,8 +253,7 @@ static int i2c_hw_reset(i2c_t *obj)
  *         @arg OMNI_OK: Operation successful
  *         @arg OMNI_FAIL: Operation failed
  */
-static int i2c_sw_reset(i2c_t *obj)
-{
+static int i2c_sw_reset(i2c_t *obj) {
     I2C_HandleTypeDef *handle = GET_OBJ_HANDLE(obj);
 
     if (handle == NULL) {
@@ -279,7 +270,9 @@ static int i2c_sw_reset(i2c_t *obj)
      *  - Write PE=1.
      */
     handle->Instance->CR1 &=  ~I2C_CR1_PE;
-    while (handle->Instance->CR1 & I2C_CR1_PE);
+    while (handle->Instance->CR1 & I2C_CR1_PE) {
+    }
+
     handle->Instance->CR1 |=  I2C_CR1_PE;
 
     return OMNI_OK;
