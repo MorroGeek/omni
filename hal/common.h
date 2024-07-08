@@ -44,7 +44,6 @@ typedef struct {
     pin_name_t pin;
     uint32_t peripheral;
     union {
-
         struct {
             uint32_t mode       : 4;
             uint32_t dir        : 2;

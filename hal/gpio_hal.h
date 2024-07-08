@@ -29,8 +29,8 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "device.h"
-#include "common.h"
+#include "targets/device.h"
+#include "hal/common.h"
 
 /**
  * @brief GPIO output mode
@@ -50,8 +50,7 @@ typedef enum {
 /**
  * @brief GPIO pull
  */
-typedef enum
-{
+typedef enum {
     OMNI_GPIO_PULL_NONE = 0,
     OMNI_GPIO_PULL_UP = 1,
     OMNI_GPIO_PULL_DOWN = 2,

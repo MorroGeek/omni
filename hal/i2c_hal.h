@@ -29,8 +29,8 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "device.h"
-#include "common.h"
+#include "targets/device.h"
+#include "hal/common.h"
 
 /**
  * @brief I2C mode
@@ -61,8 +61,8 @@ struct i2c_driver_api {
     int (*deinit)(i2c_t *obj);
     int (*write)(i2c_t *obj, uint16_t devAddress, uint8_t *pData, uint16_t size, uint32_t timeout);
     int (*read)(i2c_t *obj, uint16_t devAddress, uint8_t *pData, uint16_t size, uint32_t timeout);
-    int (*listen)(i2c_t *obj);
-    int (*listen_stop)(i2c_t *obj);
+    int (*enable_listen)(i2c_t *obj);
+    int (*disable_listen)(i2c_t *obj);
 };
 
 struct i2c_driver_api *i2c_driver(void);

@@ -29,8 +29,8 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "device.h"
-#include "common.h"
+#include "targets/device.h"
+#include "hal/common.h"
 
 /**
  * @brief Serial mode

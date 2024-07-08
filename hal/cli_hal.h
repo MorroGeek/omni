@@ -29,13 +29,22 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "device.h"
-#include "common.h"
+#include "targets/device.h"
+#include "hal/common.h"
 
-#include "shell.h"
-#include "log.h"
+#include "libraries/letter_shell/include/shell.h"
+#include "libraries/letter_shell/extensions/log/log.h"
 
-#define cli_s       shell_def
+struct cli_s {
+    Shell *shell;
+    Log *log;
+};
+
+// Alias for log functions
+#define log_error       logError
+#define log_warning     logWarning
+#define log_info        logInfo
+#define log_debug       logDebug
 
 /**
  * @brief CLI handle structure
