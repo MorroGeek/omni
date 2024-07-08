@@ -21,7 +21,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "command.h"
+#include "utilities/command/command.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* Private typedef -----------------------------------------------------------*/
@@ -43,8 +43,7 @@ namespace omni {
      * @retval true: success
      *         false: fail
      */
-    bool Command::set(uint8_t type, uint8_t command, uint16_t length, uint8_t *data)
-    {
+    bool Command::set(uint8_t type, uint8_t command, uint16_t length, uint8_t *data) {
         _type = type;
         _command = command;
         _length = length;
@@ -61,33 +60,26 @@ namespace omni {
      * @retval true: success
      *         false: fail
      */
-    bool Command::parse(uint8_t *data, size_t size)
-    {
-        if (size < 4)
-        {
+    bool Command::parse(uint8_t *data, size_t size) {
+        if (size < 4) {
             return false;
         }
 
-        if (data[0] != CMD_STX)
-        {
+        if (data[0] != CMD_STX) {
             return false;
         }
 
         _command = data[1];
         _length = data[2] << 8 | data[3];
 
-        if (_length == 0)
-        {
+        if (_length == 0) {
             _data = nullptr;
-        }
-        else
-        {
+        } else {
             _data = &data[4];
         }
         _checksum = data[4 + _length];
 
-        if (_checksum != calculate_checksum())
-        {
+        if (_checksum != calculate_checksum()) {
             return false;
         }
 
@@ -98,17 +90,14 @@ namespace omni {
      * @brief  Calculate check sum
      * @retval check sum
      */
-    uint8_t Command::calculate_checksum()
-    {
+    uint8_t Command::calculate_checksum() {
         uint8_t check_sum = 0;
         check_sum ^= CMD_STX;
         check_sum ^= _command;
         check_sum ^= _length >> 8;
         check_sum ^= _length & 0xFF;
-        if (_data != nullptr)
-        {
-            for (uint32_t i = 0; i < _length; i++)
-            {
+        if (_data != nullptr) {
+            for (uint32_t i = 0; i < _length; i++) {
                 check_sum ^= _data[i];
             }
         }
@@ -116,6 +105,6 @@ namespace omni {
         return check_sum;
     }
 
-} // namespace omni
+}  // namespace omni
 
 /* Private functions ---------------------------------------------------------*/

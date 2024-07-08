@@ -29,91 +29,85 @@
 #include <cstddef>
 
 namespace omni {
-    template<typename T, size_t SIZE>
-    class Ring_Buffer {
+template<typename T, size_t SIZE>
+class Ring_Buffer {
+ public:
+    /**
+     * @brief  Constructor
+     */
+    Ring_Buffer() : head(0), tail(0) {
+    }
 
-    public:
-        /**
-         * @brief  Constructor
-         */
-        Ring_Buffer() : head(0), tail(0)
-        {
+    /*
+        * @brief  Get the empty status of the buffer
+        * @retval true: buffer is empty
+        *         false: buffer is not empty
+        * @note   This is constance function
+        */
+    bool is_empty() const {
+        return head == tail;
+    }
+
+    /*
+        * @brief  Get the full status of the buffer
+        * @retval true: buffer is full
+        *         false: buffer is not full
+        * @note   This is constance function
+        */
+    bool is_full() const {
+        return ((tail + 1) % SIZE) == head;
+    }
+
+    /*
+        * @brief  Get the size of the buffer
+        * @retval size of the buffer
+        * @note   This is constance function
+        */
+    size_t size() const {
+        return (tail - head + SIZE) % SIZE;
+    }
+
+    /*
+        * @brief  Enqueue the buffer
+        * @param  value: value to enqueue
+        * @retval true: enqueue success
+        *         false: enqueue fail
+        */
+    bool enqueue(const T& value) {
+        if (is_full()) {
+            return false;
         }
 
-        /*
-         * @brief  Get the empty status of the buffer
-         * @retval true: buffer is empty
-         *         false: buffer is not empty
-         * @note   This is constance function
-         */
-        bool is_empty() const
-        {
-            return head == tail;
+        data[tail] = value;         // Copy value to the buffer
+        tail = (tail + 1) % SIZE;   // Update tail
+
+        return true;
+    }
+
+    /*
+        * @brief  Dequeue the buffer
+        * @retval true: dequeue success
+        *         false: dequeue fail
+        */
+    bool dequeue(T* value) {
+        if (is_empty()) {
+            return false;
         }
 
-        /*
-         * @brief  Get the full status of the buffer
-         * @retval true: buffer is full
-         *         false: buffer is not full
-         * @note   This is constance function
-         */
-        bool is_full() const
-        {
-            return ((tail + 1) % SIZE) == head;
+        // Check if the pointer is not null
+        if (value != nullptr) {
+            *value = data[head];  // Copy value from the buffer using the pointer
         }
+        head = (head + 1) % SIZE;  // Update head
 
-        /*
-         * @brief  Get the size of the buffer
-         * @retval size of the buffer
-         * @note   This is constance function
-         */
-        size_t size() const
-        {
-            return (tail - head + SIZE) % SIZE;
-        }
+        return true;
+    }
 
-        /*
-         * @brief  Enqueue the buffer
-         * @param  value: value to enqueue
-         * @retval true: enqueue success
-         *         false: enqueue fail
-         */
-        bool enqueue(const T& value)
-        {
-            if (is_full())
-            {
-                return false;
-            }
-
-            data[tail] = value;         // Copy value to the buffer
-            tail = (tail + 1) % SIZE;   // Update tail
-
-            return true;
-        }
-
-        /*
-         * @brief  Dequeue the buffer
-         * @retval true: dequeue success
-         *         false: dequeue fail
-         */
-        bool dequeue(T& value)
-        {
-            if (is_empty())
-            {
-                return false;
-            }
-
-            value = data[head];         // Copy value from the buffer
-            head = (head + 1) % SIZE;   // Update head
-
-            return true;
-        }
-
-    private:
-        T data[SIZE];
-        size_t head;
-        size_t tail;
-    };
-} // namespace omni
+ private:
+    T data[SIZE];
+    size_t head;
+    size_t tail;
+};  // class Ring_Buffer
+}  // namespace omni
 
 #endif /* OMNI_RING_BUFFER_H */

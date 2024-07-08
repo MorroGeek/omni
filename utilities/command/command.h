@@ -27,6 +27,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include <cstdint>
 #include <cstddef>
+
 /* Exported defines ----------------------------------------------------------*/
 #define CMD_STX         0xA0
 #define CMD_TYPE_REQ    0x00
@@ -43,36 +44,33 @@
  * @brief  Command class
  */
 namespace omni {
-    class Command {
+class Command {
+ public:
+    /**
+     * @brief  Constructor
+     */
+    Command() : _command(0), _length(0), _data(nullptr), _checksum(0), _type(CMD_TYPE_REQ) {
+    }
 
-    public:
-        /**
-         * @brief  Constructor
-         */
-        Command() : _command(0), _length(0), _data(nullptr), _checksum(0), _type(CMD_TYPE_REQ)
-        {
-        }
+    uint8_t rev_complete = 0;
 
-        uint8_t rev_complete = 0;
+    uint8_t get_type() { return _type; }
+    uint8_t get_command() { return _command; }
+    uint8_t get_length() { return _length; }
+    uint8_t *get_data() { return _data; }
+    uint8_t get_checksum() { return _checksum; }
 
-        uint8_t get_type() { return _type; }
-        uint8_t get_command() { return _command; }
-        uint8_t get_length() { return _length; }
-        uint8_t *get_data() { return _data; }
-        uint8_t get_checksum() { return _checksum; }
+    bool set(uint8_t type, uint8_t command, uint16_t length, uint8_t *data);
+    bool parse(uint8_t *data, size_t size);
+    uint8_t calculate_checksum();
 
-        bool set(uint8_t type, uint8_t command, uint16_t length, uint8_t *data);
-        bool parse(uint8_t *data, size_t size);
-        uint8_t calculate_checksum();
-
-    private:
-
-        uint8_t _type;
-        uint8_t _command;
-        uint16_t _length;
-        uint8_t *_data;
-        uint8_t _checksum;
-    };
-} // namespace omni
+ private:
+    uint8_t _type;
+    uint8_t _command;
+    uint16_t _length;
+    uint8_t *_data;
+    uint8_t _checksum;
+};  // class Command
+}  // namespace omni
 
 #endif /* OMNI_COMMAND_H */
