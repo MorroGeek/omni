@@ -13,18 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_library(omni-stm32f407xg-f407ig INTERFACE)
+add_library(omni-stm32f407xx-f407ig INTERFACE)
 
-target_sources(omni-stm32f407xg-f407ig INTERFACE
+target_sources(omni-stm32f407xx-f407ig INTERFACE
         omni_board.c
 )
 
-target_include_directories(omni-stm32f407xg-f407ig INTERFACE
+target_include_directories(omni-stm32f407xx-f407ig INTERFACE
         .
 )
-
-target_link_libraries(omni-stm32f407xg-f407ig INTERFACE
-        omni-stm32f407xg
-)
-
-

@@ -21,13 +21,13 @@ include(../../../../tools/cmake/omni_get_subdirectories.cmake)
 set(STARTUP_FILE toolchain/gcc/startup_stm32f407xx.s)
 set(LINKER_FILE toolchain/gcc/stm32f407xg_flash.ld)
 
-add_library(omni-stm32f407xg INTERFACE)
+add_library(omni-stm32f407xx INTERFACE)
 
-target_include_directories(omni-stm32f407xg INTERFACE
+target_include_directories(omni-stm32f407xx INTERFACE
         .
 )
 
-target_sources(omni-stm32f407xg INTERFACE
+target_sources(omni-stm32f407xx INTERFACE
         ${STARTUP_FILE}
 )
 
@@ -39,9 +39,9 @@ target_sources(omni-stm32f407xg INTERFACE
 #     -T${CMAKE_CURRENT_SOURCE_DIR}/${LINKER_FILE}
 # )
 
-if(${OMNI_CPU} STREQUAL "stm32f407xg")
+if(${OMNI_CPU} STREQUAL "stm32f407xx")
     if(NOT ${OMNI_LINKER_SCRIPT} STREQUAL "custom")
-        omni_set_linker_script(omni-stm32f407xg ${CMAKE_CURRENT_SOURCE_DIR}/${LINKER_FILE})
+        omni_set_linker_script(omni-stm32f407xx ${CMAKE_CURRENT_SOURCE_DIR}/${LINKER_FILE})
     endif()
 
     # 获取所有子目录
@@ -52,7 +52,7 @@ if(${OMNI_CPU} STREQUAL "stm32f407xg")
 
     if(${BOARD_INDEX} GREATER -1)
         #    message(STATUS "${OMNI_BOARD} is in the list.")
-        set(BOARD_TYPE "omni-stm32f407xg-${OMNI_BOARD}")
+        set(BOARD_TYPE "omni-stm32f407xx-${OMNI_BOARD}")
     else()
         # 输出结果
         message("---------- Supported Board ----------")
@@ -62,7 +62,7 @@ if(${OMNI_CPU} STREQUAL "stm32f407xg")
         message(FATAL_ERROR "Board ${OMNI_BOARD} is not supported.")
     endif()
 
-    target_link_libraries(omni-stm32f407xg INTERFACE
+    target_link_libraries(omni-stm32f407xx INTERFACE
             ${BOARD_TYPE}
     )
 endif()

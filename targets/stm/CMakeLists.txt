@@ -20,11 +20,11 @@ add_library(omni-stm INTERFACE)
 file(GLOB OMNI_TARGET_SOURCES "*.c")
 
 target_sources(omni-stm INTERFACE
-        ${OMNI_TARGET_SOURCES}
+    ${OMNI_TARGET_SOURCES}
 )
 
 target_include_directories(omni-stm INTERFACE
-        .
+    .
 )
 
 # link omni-cmsis-cortex-m to omni-stm

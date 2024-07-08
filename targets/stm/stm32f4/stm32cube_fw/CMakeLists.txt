@@ -15,17 +15,16 @@
 
 add_library(omni-stm32f4cube-fw INTERFACE)
 
-file(GLOB SOURCES
+file(GLOB STM32CUBEF4_FW_SOURCES
     "STM32F4xx_HAL_Driver/Src/*.c"
 )
 
 target_sources(omni-stm32f4cube-fw INTERFACE
-        ${SOURCES}
+    ${STM32CUBEF4_FW_SOURCES}
 )
 
 target_include_directories(omni-stm32f4cube-fw INTERFACE
-        STM32F4xx_HAL_Driver/Inc
-        STM32F4xx_HAL_Driver/Inc/Legacy
-        CMSIS/Device/ST/STM32F4xx/Include
-        CMSIS/Include
+    STM32F4xx_HAL_Driver/Inc
+    STM32F4xx_HAL_Driver/Inc/Legacy
+    CMSIS/Device/ST/STM32F4xx/Include
 )

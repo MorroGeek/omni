@@ -13,18 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_library(omni-stm32f405xg-mcstools INTERFACE)
+add_library(omni-stm32f405xx-mcstools INTERFACE)
 
-target_sources(omni-stm32f405xg-mcstools INTERFACE
+target_sources(omni-stm32f405xx-mcstools INTERFACE
         omni_board.c
 )
 
-target_include_directories(omni-stm32f405xg-mcstools INTERFACE
+target_include_directories(omni-stm32f405xx-mcstools INTERFACE
         .
 )
-
-target_link_libraries(omni-stm32f405xg-mcstools INTERFACE
-        omni-stm32f405xg
-)
-
-
