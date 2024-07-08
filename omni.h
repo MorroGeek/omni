@@ -39,4 +39,8 @@
 /* Exported defines ----------------------------------------------------------*/
 using namespace omni;
 
+#ifndef UNUSED
+#define UNUSED(X) (void)X
+#endif /* UNUSED */
+
 #endif /* OMNI_H */
