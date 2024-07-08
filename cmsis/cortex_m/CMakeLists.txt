@@ -14,3 +14,7 @@
 # limitations under the License.
 
 add_library(omni-cmsis-cortex-m INTERFACE)
+
+target_include_directories(omni-cmsis-cortex-m INTERFACE
+    Include
+)
