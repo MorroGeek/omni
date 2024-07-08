@@ -25,52 +25,100 @@
 #define OMNI_CLI_H
 
 /* Includes ------------------------------------------------------------------*/
-#include "cli_hal.h"
+#include <stdarg.h>
+#include "hal/cli_hal.h"
 
 namespace omni {
-    template<typename T, size_t SIZE>
-    class CLI {
+template<typename T, size_t SIZE>
+class CLI {
+ public:
+    /**
+     * @brief Construct a new CLI object
+     *
+     * @param shell: shell object
+     */
 
-    public:
-        /**
-         * @brief Construct a new CLI object
-         *
-         * @param cli
-         */
-        CLI(cli_t obj) : _cli(obj) {
-            _cli = obj;
-            //The initialization of CLI should be completed after driver initialization
+    explicit CLI(Shell *shell) {
+        _handle.cli.shell = shell;
+        _handle.cli.log = nullptr;
+
+        // The initialization of CLI should be completed after driver initialization
+    }
+
+    CLI(Shell *shell, Log *log) {
+        _handle.cli.shell = shell;
+        _handle.cli.log = log;
+
+        // The initialization of CLI should be completed after driver initialization
+    }
+
+    /**
+     * @brief Destroy the CLI object
+     */
+    virtual ~CLI() {
+    }
+
+    bool get_initialized() {
+        return _is_initialized;
+    }
+
+    bool init() {
+        // Initialize the shell
+        shellInit(_handle.cli.shell, _data, SIZE);
+
+        // Register the log
+        if (_handle.cli.log != nullptr) {
+#if SHELL_SUPPORT_END_LINE == 1
+            logRegister(_handle.cli.log, _handle.cli.shell);
+    #else
+            logRegister(_handle.cli.log, nullptr);
+#endif
         }
 
-        /**
-         * @brief Destroy the CLI object
-         */
-        virtual ~CLI()
-        {
+        _is_initialized = true;
+
+        return true;
+    }
+
+    bool deinit() {
+        if (!_is_initialized) {
+            return false;
         }
 
-        bool init()
-        {
-            shellInit(&_cli.cli, _data, SIZE);
-            _is_initialized = true;
+        shellRemove(_handle.cli.shell);
 
-            return true;
+        if (_handle.cli.log != nullptr) {
+            logUnRegister(_handle.cli.log);
         }
 
-        bool run()
-        {
-            if (_is_initialized) {
-                shellTask(&_cli.cli);
-            }
+        _is_initialized = false;
 
-            return true;
+        return true;
+    }
+
+    bool run() {
+        if (_is_initialized) {
+            shellTask(_handle.cli.shell);
         }
 
-    private:
-        cli_t _cli;
-        T _data[SIZE];
-        bool _is_initialized = false;
-    }; // class CLI
-} // namespace omni
+        return true;
+    }
+
+    bool set_log_level(LogLevel level) {
+        if (!_is_initialized) {
+            return false;
+        }
+
+        _handle.cli.log->level = level;
+
+        return true;
+    }
+
+ private:
+    cli_t _handle{};
+    T _data[SIZE];
+    bool _is_initialized = false;
+};  // class CLI
+}  // namespace omni
 
 #endif /* OMNI_CLI_H */

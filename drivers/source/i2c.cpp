@@ -22,8 +22,8 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "drivers/include/i2c.h"
-#include "platform.h"
-#include "assert.h"
+#include "drivers/platform.h"
+#include "drivers/assert.h"
 
 namespace omni {
 
@@ -34,7 +34,7 @@ namespace omni {
      *         false: fail
      */
     bool I2C::init(i2c_t obj) {
-        if(i2c->init(&obj)) {
+        if (i2c->init(&obj)) {
             _is_initialized = true;
             return true;
         }
@@ -49,7 +49,7 @@ namespace omni {
      *         false: fail
      */
     bool I2C::free() {
-        if(i2c->deinit(&_i2c)) {
+        if (i2c->deinit(&_handle)) {
             _is_initialized = false;
             return true;
         }
@@ -57,7 +57,7 @@ namespace omni {
         return false;
     }
 
-    // TODO: Add recovery functions
+    // TODO(MORROR): Add recovery functions
 
     /**
      * @brief Write data to the I2C bus
@@ -73,7 +73,7 @@ namespace omni {
             return false;
         }
 
-        return i2c->write(&_i2c, address, data, size, timeout);
+        return i2c->write(&_handle, address, data, size, timeout);
     }
 
     /**
@@ -90,31 +90,31 @@ namespace omni {
             return false;
         }
 
-        return i2c->read(&_i2c, address, data, size, timeout);
+        return i2c->read(&_handle, address, data, size, timeout);
     }
 
     /*
-     * @brief  Listen I2C
+     * @brief  Enable I2C listen mode
      * @param  size: size of data
      * @retval true: success
      *         false: fail
      * @note   This function is used for I2C slave
      */
-    bool I2C::listen(uint16_t size) {
+    bool I2C::enable_listen(uint16_t size) {
         eeprom_info.size = size;
         // Allocate memory
         eeprom_info.data = new uint8_t[size];
         eeprom_info.cache = new uint8_t[size];
 
-        return i2c->listen(&_i2c);
+        return i2c->enable_listen(&_handle);
     }
 
     /**
-     * @brief Stop listening on the I2C bus
+     * @brief Disable I2C listen mode
      * @retval true: success
      *         false: fail
      */
-    bool I2C::listen_stop() {
+    bool I2C::disable_listen() {
         memset(&eeprom_info, 0, sizeof(eeprom_info));
 
         if (eeprom_info.data != nullptr) {
@@ -125,7 +125,7 @@ namespace omni {
             delete[] eeprom_info.cache;
         }
 
-        return (i2c->listen_stop(&_i2c));
+        return (i2c->disable_listen(&_handle));
     }
 
-} // namespace omni
+}  // namespace omni

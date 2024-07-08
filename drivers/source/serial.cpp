@@ -22,8 +22,8 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "drivers/include/serial.h"
-#include "platform.h"
-#include "assert.h"
+#include "drivers/platform.h"
+#include "drivers/assert.h"
 
 namespace omni {
 
@@ -34,8 +34,8 @@ namespace omni {
      *         false: fail
      */
     bool Serial::init(serial_t obj) {
-        if(serial->init(&obj)) {
-            _serial = obj;
+        if (serial->init(&obj)) {
+            _handle = obj;
             return true;
         }
 
@@ -49,7 +49,7 @@ namespace omni {
      *         false: fail
      */
     bool Serial::free() {
-        if(serial->deinit(&_serial)) {
+        if (serial->deinit(&_handle)) {
             _is_initialized = false;
             return true;
         }
@@ -66,7 +66,7 @@ namespace omni {
      *         false: fail
      */
     bool Serial::write(uint8_t *data, uint16_t size, uint32_t timeout) {
-        if(serial->write(&_serial, data, size, timeout)) {
+        if (serial->write(&_handle, data, size, timeout)) {
             return true;
         }
 
@@ -82,11 +82,11 @@ namespace omni {
      *         false: fail
      */
     bool Serial::read(uint8_t *data, uint16_t size, uint32_t timeout) {
-        if(serial->read(&_serial, data, size, timeout)) {
+        if (serial->read(&_handle, data, size, timeout)) {
             return true;
         }
 
         return false;
     }
 
-} // namespace omni
+}  // namespace omni

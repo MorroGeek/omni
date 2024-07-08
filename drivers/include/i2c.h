@@ -25,71 +25,67 @@
 #define OMNI_I2C_H
 
 /* Includes ------------------------------------------------------------------*/
-#include "i2c_hal.h"
+#include "hal/i2c_hal.h"
 
 namespace omni {
-    class I2C {
+class I2C {
+ public:
+    /**
+     * @brief Construct a new I2C object
+     *
+     * @param i2c
+     */
+    I2C(pin_name_t sda,
+        pin_name_t scl,
+        int frequency = 100000);
 
-    public:
-        /**
-         * @brief Construct a new I2C object
-         *
-         * @param i2c
-         */
-        I2C(pin_name_t sda,
-            pin_name_t scl,
-            int frequency = 100000);
+    explicit I2C(i2c_t obj) : _handle(obj) {}
 
-        I2C(i2c_t obj) : _i2c(obj) {}
+    /**
+     * @brief Destroy the I2C object
+     */
+    virtual ~I2C() {}
 
-        /**
-         * @brief Destroy the I2C object
-         */
-        virtual ~I2C() {}
+    // Get the I2C driver APIs
+    struct i2c_driver_api *i2c = i2c_driver();
 
-        // Get the I2C driver APIs
-        struct i2c_driver_api *i2c = i2c_driver();
+    /*
+    * @brief  I2C EEPROM structure
+    */
+    typedef struct {
+        uint8_t *data;      // Data buffer
+        uint8_t *cache;     // Cache buffer
+        uint16_t address;
+        uint16_t size;
+        __IO uint8_t listen;
+        __IO uint8_t tx_complete;
+        __IO uint8_t rx_complete;
+        __IO uint32_t dir;
+        uint32_t error;
+        uint32_t rx_index;
+    } EEPROM_INFO_T;
 
-        /*
-        * @brief  I2C EEPROM structure
-        */
-        typedef struct {
-            uint8_t *data;  // Data buffer
-            uint8_t *cache; // Cache buffer
-            uint16_t address;
-            uint16_t size;
-            __IO uint8_t listen;
-            __IO uint8_t tx_complete;
-            __IO uint8_t rx_complete;
-            __IO uint32_t dir;
-            uint32_t error;
-            uint32_t rx_index;
-        } EEPROM_INFO_T;
+    EEPROM_INFO_T eeprom_info{};
 
-        EEPROM_INFO_T eeprom_info{};
+    uint32_t get_mode() { return _handle.mode; }
+    uint32_t get_address1() { return _handle.address1; }
+    uint32_t get_address2() { return _handle.address2; }
+    uint32_t get_frequency() { return _handle.frequency; }
+    void *get_handle() { return _handle.i2c.handle; }
 
-        uint32_t get_mode() { return _i2c.mode; }
-        uint32_t get_address1() { return _i2c.address1; }
-        uint32_t get_address2() { return _i2c.address2; }
-        uint32_t get_frequency() { return _i2c.frequency; }
-        void *get_handle() { return _i2c.i2c.handle; }
+    bool init(i2c_t obj);
+    bool free();
+    bool recovery();
+    bool write(uint16_t address, uint8_t *data, uint16_t size, uint32_t timeout);
+    bool read(uint16_t address, uint8_t *data, uint16_t size, uint32_t timeout);
+    bool enable_listen(uint16_t size);
+    bool disable_listen();
+    void attach(void (*func)(void), uint32_t id);
 
-        bool init(i2c_t obj);
-        bool free();
-        bool recovery();
-        bool write(uint16_t address, uint8_t *data, uint16_t size, uint32_t timeout);
-        bool read(uint16_t address, uint8_t *data, uint16_t size, uint32_t timeout);
-        bool listen(uint16_t size);
-        bool listen_stop();
-        void attach(void (*func)(void), uint32_t id);
-
-    protected:
-
-
-    private:
-        i2c_t _i2c{};
-        bool _is_initialized = false;
-    }; // class I2C
-} // namespace omni
+ private:
+    i2c_t _handle{};
+    bool _is_initialized = false;
+};  // class I2C
+}  // namespace omni
 
 #endif /* OMNI_I2C_H */

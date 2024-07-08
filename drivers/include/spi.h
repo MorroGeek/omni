@@ -25,46 +25,45 @@
 #define OMNI_SPI_H
 
 /* Includes ------------------------------------------------------------------*/
-#include "spi_hal.h"
+#include "hal/spi_hal.h"
 
 namespace omni {
-    class SPI {
+class SPI {
+ public:
+    /**
+     * @brief Construct a new SPI object
+     *
+     * @param spi
+     */
+    SPI(pin_name_t mosi,
+        pin_name_t miso,
+        pin_name_t sclk,
+        pin_name_t cs,
+        int frequency);
 
-    public:
-        /**
-         * @brief Construct a new SPI object
-         *
-         * @param spi
-         */
-        SPI(pin_name_t mosi,
-            pin_name_t miso,
-            pin_name_t sclk,
-            pin_name_t cs,
-            int frequency);
+    explicit SPI(spi_t obj) : _handle(obj) {}
 
-        SPI(spi_t obj) : _spi(obj) {}
+    /**
+     * @brief Destroy the SPI object
+     */
+    virtual ~SPI() {}
 
-        /**
-         * @brief Destroy the SPI object
-         */
-        virtual ~SPI() {}
+    // Get the SPI driver APIs
+    struct spi_driver_api *spi = spi_driver();
 
-        // Get the SPI driver APIs
-        struct spi_driver_api *spi = spi_driver();
+    void *get_handle() { return _handle.spi.handle; }
 
-        void *get_handle() { return _spi.spi.handle; }
+    bool init(spi_t obj);
+    bool free();
+    bool write(uint8_t *data, uint16_t size, uint32_t timeout);
+    bool read(uint8_t *data, uint16_t size, uint32_t timeout);
+    bool transfer(uint8_t *txData, uint8_t *rxData, uint16_t size, uint32_t timeout);
+    void attach(void (*func)(void), uint32_t id);
 
-        bool init(spi_t obj);
-        bool free();
-        bool write(uint8_t *data, uint16_t size, uint32_t timeout);
-        bool read(uint8_t *data, uint16_t size, uint32_t timeout);
-        bool transfer(uint8_t *txData, uint8_t *rxData, uint16_t size, uint32_t timeout);
-        void attach(void (*func)(void), uint32_t id);
-
-    private:
-        spi_t _spi{};
-        bool _is_initialized = false;
-    }; // class SPI
-} // namespace omni
+ private:
+    spi_t _handle{};
+    bool _is_initialized = false;
+};  // class SPI
+}  // namespace omni
 
 #endif /* OMNI_SPI_H */

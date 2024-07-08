@@ -21,40 +21,38 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef OMNI_SERIAL_H
-#define OMNI_SERIAL_H
+#ifndef OMNI_handle_H
+#define OMNI_handle_H
 
 /* Includes ------------------------------------------------------------------*/
-#include "serial_hal.h"
+#include "hal/serial_hal.h"
 
 namespace omni {
-    class Serial {
+class Serial {
+ public:
+    Serial(pin_name_t tx,
+            pin_name_t rx,
+            int baud_rate = 115200);
 
-    public:
+    explicit Serial(serial_t obj) : _handle(obj) {}
 
-        Serial(pin_name_t tx,
-               pin_name_t rx,
-               int baud_rate = 115200);
+    virtual ~Serial() {}
 
-        Serial(serial_t obj) : _serial(obj) {}
+    // Get the serial driver APIs
+    struct serial_driver_api *serial = serial_driver();
 
-        virtual ~Serial() {}
+    void *get_handle() { return _handle.serial.handle; }
 
-        // Get the serial driver APIs
-        struct serial_driver_api *serial = serial_driver();
+    bool init(serial_t obj);
+    bool free();
+    bool write(uint8_t *data, uint16_t size, uint32_t timeout);
+    bool read(uint8_t *data, uint16_t size, uint32_t timeout);
+    void attach(void (*func)(void), uint32_t id);
 
-        void *get_handle() { return _serial.serial.handle; }
+ private:
+    serial_t _handle;  // Serial handle structure
+    bool _is_initialized = false;
+};  // class Serial
+}  // namespace omni
 
-        bool init(serial_t obj);
-        bool free();
-        bool write(uint8_t *data, uint16_t size, uint32_t timeout);
-        bool read(uint8_t *data, uint16_t size, uint32_t timeout);
-        void attach(void (*func)(void), uint32_t id);
-
-    private:
-        serial_t _serial; // Serial handle structure
-        bool _is_initialized = false;
-    }; // class Serial
-} // namespace omni
-
-#endif /* OMNI_SERIAL_H */
+#endif /* OMNI_handle_H */

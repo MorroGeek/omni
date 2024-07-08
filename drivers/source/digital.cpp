@@ -22,10 +22,10 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "drivers/include/digital.h"
-#include "platform.h"
-#include "assert.h"
+#include "drivers/platform.h"
+#include "drivers/assert.h"
 
 namespace omni {
 
 
-} // namespace omni
+}  // namespace omni
