@@ -15,13 +15,23 @@
 
 add_library(omni-apm32f4 INTERFACE)
 
-# add_subdirectory(stm32cube_fw)
+add_subdirectory(apm32dal_fw)
 
-# add_subdirectory(stm32f405xg EXCLUDE_FROM_ALL)
-# add_subdirectory(stm32f407xg EXCLUDE_FROM_ALL)
+add_subdirectory(apm32f405xx EXCLUDE_FROM_ALL)
+# add_subdirectory(stm32f407xx EXCLUDE_FROM_ALL)
 
 target_include_directories(omni-apm32f4 INTERFACE
-        .
+    .
+)
+
+# Set CPU defined according to OMNI_CPU
+string(SUBSTRING ${OMNI_CPU} 0 9 PREFIX)
+string(SUBSTRING ${OMNI_CPU} 9 -1 SUFFIX)
+string(TOUPPER ${PREFIX} PREFIX_UPPER)
+string(CONCAT CPU_DEFINED ${PREFIX_UPPER} ${SUFFIX})
+
+target_compile_definitions(omni-stm32f4 INTERFACE
+    ${CPU_DEFINED}
 )
 
 if(NOT ${OMNI_CPU} STREQUAL "")
@@ -32,5 +42,5 @@ endif()
 
 target_link_libraries(omni-apm32f4 INTERFACE
     ${CPU_TYPE}
-    # omni-stm32f4cube-fw
+    omni-apm32f4dal-fw
 )

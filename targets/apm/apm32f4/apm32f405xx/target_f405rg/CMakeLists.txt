@@ -13,22 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_subdirectory(apm32f4)
+add_library(omni-apm32f405xx-f405rg INTERFACE)
 
-add_library(omni-apm INTERFACE)
-
-file(GLOB OMNI_TARGET_SOURCES "*.c")
-
-target_sources(omni-apm INTERFACE
-    ${OMNI_TARGET_SOURCES}
+target_sources(omni-apm32f405xx-f405rg INTERFACE
+    omni_board.c
 )
 
-target_include_directories(omni-apm INTERFACE
+target_include_directories(omni-apm32f405xx-f405rg INTERFACE
     .
-)
-
-# link omni-cmsis-cortex-m to omni-apm
-target_link_libraries(omni-apm INTERFACE 
-    omni-cmsis-cortex-m
-    omni-apm32f4
 )

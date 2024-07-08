@@ -13,22 +13,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_subdirectory(apm32f4)
+add_library(omni-apm32f4dal-fw INTERFACE)
 
-add_library(omni-apm INTERFACE)
-
-file(GLOB OMNI_TARGET_SOURCES "*.c")
-
-target_sources(omni-apm INTERFACE
-    ${OMNI_TARGET_SOURCES}
+file(GLOB APM32F4DAL_FW_SOURCES
+    "APM32F4xx_DAL_Driver/Source/*.c"
 )
 
-target_include_directories(omni-apm INTERFACE
-    .
+target_sources(omni-apm32f4dal-fw INTERFACE
+    ${APM32F4DAL_FW_SOURCES}
 )
 
-# link omni-cmsis-cortex-m to omni-apm
-target_link_libraries(omni-apm INTERFACE 
-    omni-cmsis-cortex-m
-    omni-apm32f4
+target_include_directories(omni-apm32f4dal-fw INTERFACE
+    APM32F4xx_DAL_Driver/Include
+    APM32F4xx_DAL_Driver/Include/Legacy
+    CMSIS/Device/Geehy/APM32F4xx/Include
 )
