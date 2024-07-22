@@ -10,3 +10,6 @@
 [submodule "targets/stm/stm32f4/stm32cubef4_fw"]
 	path = targets/stm/stm32f4/stm32cubef4_fw
 	url = https://github.com/MorroGeek/stm32cubef4_fw
+[submodule "targets/apm/apm32f4/apm32dalf4_fw"]
+	path = targets/apm/apm32f4/apm32dalf4_fw
+	url = https://github.com/MorroGeek/apm32dalf4_fw
