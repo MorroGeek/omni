@@ -1,0 +1,9 @@
+menuconfig OMNI_COMPONENTS_COMMAND
+    bool "Command component"
+    default n
+    help
+        Enable the command component configuration.
+
+if OMNI_COMPONENTS_COMMAND
+
+endif # OMNI_COMPONENTS_COMMAND

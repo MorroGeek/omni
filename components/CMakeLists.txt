@@ -13,25 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_library(omni-drivers INTERFACE)
+add_subdirectory(command)
+add_subdirectory(ring_buffer)
 
-file(GLOB OMNI_DRIVER_SOURCES 
-    "cli/cli.c"
-    # "i2c/i2c.cpp"
-    # "spi/spi.cpp"
-    "uart/uart.c"
-    "gpio/gpio.c"
-)
+add_library(omni-components INTERFACE)
 
-target_sources(omni-drivers INTERFACE
-    ${OMNI_DRIVER_SOURCES}
-)
-
-target_include_directories(omni-drivers INTERFACE
-    .
-    cli
-    gpio
-    i2c
-    spi
-    uart
+target_link_libraries(omni-components INTERFACE
+    omni-components-command
+    omni-components-ringbuffer
 )

@@ -1,7 +1,7 @@
 /**
-  * @file    common.h
+  * @file    omni_target.h
   * @author  MorroMaker
-  * @brief   Header for common.c file
+  * @brief   Target specific header file
   * @attention
   *
   * Copyright (c) 2024 MorroMaker
@@ -21,50 +21,58 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef OMNI_COMMON_H
-#define OMNI_COMMON_H
+#ifndef OMNI_TARGETS_H
+#define OMNI_TARGETS_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include <stdbool.h>
-#include <stdint.h>
+#include "apm32f4xx_dal.h"
+#include "apm32f4xx_ddl_gpio.h"
 
 /* Exported defines ----------------------------------------------------------*/
-#define OMNI_OK 0
-#define OMNI_FAIL -1
-
-/* Exported typedef ----------------------------------------------------------*/
-/**
- * @brief Pin map structure
- */
-typedef struct {
-    pin_name_t pin;
-    uint32_t peripheral;
-    union {
-        struct {
-            uint32_t mode       : 4;
-            uint32_t dir        : 2;
-            uint32_t speed      : 2;
-            uint32_t alternate  : 4;
-            uint32_t channel    : 5;
-            uint32_t inverted   : 1;
-            uint32_t status     : 1;
-            uint32_t reserved   : 13;
-        } feature;
-
-        uint32_t _feature;
-    };
-} pin_map_t;
-
-/* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
-/* Exported functions prototypes ---------------------------------------------*/
+/* Exported typedef ----------------------------------------------------------*/
+
+/**
+ * @brief  Port name type definition
+ */
+typedef enum {
+    PORTA = 0x00,
+    PORTB = 0x10,
+    PORTC = 0x20,
+    PORTD = 0x30,
+    PORTE = 0x40,
+    PORTF = 0x50,
+    PORTG = 0x60,
+    PORTH = 0x70,
+    PORTI = 0x80,
+    PORTJ = 0x90,
+    PORTK = 0xA0,
+} port_name_t;
+
+struct serial_s {
+    UART_HandleTypeDef *handle;
+    USART_TypeDef *ins;
+    uint32_t max_speed;   // Maximum speed (Unit: Kbps)
+};
+
+struct i2c_s {
+    I2C_HandleTypeDef *handle;
+    I2C_TypeDef *ins;
+    uint32_t max_freq;   // Maximum frequency (Unit: KHz)
+};
+
+struct spi_s {
+    SPI_HandleTypeDef *handle;
+    SPI_TypeDef *ins;
+    uint32_t max_freq;   // Maximum frequency (Unit: KHz)
+};
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* OMNI_COMMON_H */
+#endif /* OMNI_TARGETS_H */

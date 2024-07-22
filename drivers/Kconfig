@@ -1,0 +1,7 @@
+menu "Drivers Options"
+
+rsource "cli/Kconfig"
+rsource "gpio/Kconfig"
+rsource "uart/Kconfig"
+
+endmenu

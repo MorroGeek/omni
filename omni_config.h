@@ -1,7 +1,7 @@
 /**
-  * @file    device.h
+  * @file    omni_config.h
   * @author  MorroMaker
-  * @brief   Device header file
+  * @brief   Omni configuration file
   * @attention
   *
   * Copyright (c) 2024 MorroMaker
@@ -21,11 +21,23 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef OMNI_DEVICE_H
-#define OMNI_DEVICE_H
+#ifndef OMNI_CONFIG_H
+#define OMNI_CONFIG_H
 
-/* Includes ------------------------------------------------------------------*/
-#include "targets.h"
-#include "omni_board.h"
+#include <stdlib.h>
 
-#endif /* OMNI_DEVICE_H */
+#include "omni/omni_kconfig.h"
+
+#ifndef OMNI_MALLOC
+#define OMNI_MALLOC malloc
+#endif /* OMNI_MALLOC */
+
+#ifndef OMNI_FREE
+#define OMNI_FREE free
+#endif /* OMNI_FREE */
+
+#ifndef UNUSED
+#define UNUSED(X) (void)X
+#endif /* UNUSED */
+
+#endif /* OMNI_CONFIG_H */

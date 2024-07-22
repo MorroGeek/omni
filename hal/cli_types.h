@@ -1,7 +1,7 @@
 /**
-  * @file    omni.h
+  * @file    cli_types.h
   * @author  MorroMaker
-  * @brief   Omni header file
+  * @brief   CLI HAL types
   * @attention
   *
   * Copyright (c) 2024 MorroMaker
@@ -21,26 +21,44 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef OMNI_TEST_H
-#define OMNI_TEST_H
-
-/* Includes ------------------------------------------------------------------*/
-/* Omni drivers */
-#include "drivers/cli/cli.h"
-#include "drivers/gpio/gpio.h"
-#include "drivers/uart/uart.h"
-
-/* Omni components */
-#include "components/ring_buffer/ring_buffer.h"
-#include "components/command/command.h"
+#ifndef OMNI_HAL_CLI_TYPES_H
+#define OMNI_HAL_CLI_TYPES_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+/* Includes ------------------------------------------------------------------*/
+#include "hal/device.h"
+
+#include "libraries/letter_shell/include/shell.h"
+#include "libraries/letter_shell/extensions/log/log.h"
+
+typedef Shell cli_shell_t;
+typedef Log cli_log_t;
+typedef LogLevel cli_log_level_t;
+
+// Alias for log functions
+#define log_error       logError
+#define log_warning     logWarning
+#define log_info        logInfo
+#define log_debug       logDebug
+
+/**
+ * @brief CLI number
+ */
+typedef enum {
+#ifdef CONFIG_CLI_NUM_1
+    CLI_NUM_1 = 0x01,
+#endif /* CONFIG_CLI_NUM_1 */
+#ifdef CONFIG_CLI_NUM_2
+    CLI_NUM_2 = 0x02,
+#endif /* CONFIG_CLI_NUM_2 */
+    CLI_NUM_MAX,
+} cli_num_t;
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
 
-#endif /* OMNI_TEST_H */
+#endif /* OMNI_HAL_CLI_TYPES_H */

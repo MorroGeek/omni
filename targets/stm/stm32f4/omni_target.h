@@ -1,5 +1,5 @@
 /**
-  * @file    targets.h
+  * @file    omni_target.h
   * @author  MorroMaker
   * @brief   Target specific header file
   * @attention
@@ -29,8 +29,10 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "apm32f4xx_dal.h"
-#include "apm32f4xx_ddl_gpio.h"
+#include "stm32f4xx_hal.h"
+#include "stm32f4xx_ll_gpio.h"
+#include "stm32f4xx_ll_usart.h"
+#include "stm32f4xx_ll_cortex.h"
 
 /* Exported defines ----------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
@@ -70,6 +72,22 @@ struct spi_s {
     SPI_TypeDef *ins;
     uint32_t max_freq;   // Maximum frequency (Unit: KHz)
 };
+
+typedef struct gpio_pin {
+    uint32_t index;
+    uint32_t alternate;
+} gpio_pin_t;
+
+typedef struct gpio_dev {
+    GPIO_TypeDef *ins;
+    uint32_t pin;
+} gpio_dev_t;
+
+typedef struct uart_dev {
+    USART_TypeDef *ins;
+    gpio_pin_t tx_pin;
+    gpio_pin_t rx_pin;
+} uart_dev_t;
 
 #ifdef __cplusplus
 }

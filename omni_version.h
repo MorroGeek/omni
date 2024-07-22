@@ -1,7 +1,7 @@
 /**
   * @file    omni_version.h
   * @author  MorroMaker
-  * @brief   Version information for OmniOS
+  * @brief   Version information for Omni
   * @attention
   *
   * Copyright (c) 2024 MorroMaker
@@ -25,8 +25,8 @@
 #define OMNI_VERSION_H
 
 #define OMNI_VER_MAJOR                               0
-#define OMNI_VER_MINOR                               1
-#define OMNI_VER_PATCH                               5
+#define OMNI_VER_MINOR                               2
+#define OMNI_VER_PATCH                               0
 #define OMNI_VER                                     (OMNI_VER_MAJOR * 10000 + OMNI_VER_MINOR * 100 + OMNI_VER_PATCH)
 #define OMNI_STR(x)                                  #x
 #define OMNI_PROJECT_VERSION(major, minor, patch)    "v" APP_STR(major, minor, patch)

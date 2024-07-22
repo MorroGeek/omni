@@ -16,9 +16,9 @@
 add_library(omni-stm32f407xx-f407ig INTERFACE)
 
 target_sources(omni-stm32f407xx-f407ig INTERFACE
-        omni_board.c
+    omni_board.c
 )
 
 target_include_directories(omni-stm32f407xx-f407ig INTERFACE
-        .
+    .
 )

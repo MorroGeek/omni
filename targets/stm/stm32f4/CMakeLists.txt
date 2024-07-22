@@ -15,7 +15,7 @@
 
 add_library(omni-stm32f4 INTERFACE)
 
-add_subdirectory(stm32cube_fw)
+add_subdirectory(stm32cubef4_fw)
 
 add_subdirectory(stm32f405xx EXCLUDE_FROM_ALL)
 add_subdirectory(stm32f407xx EXCLUDE_FROM_ALL)

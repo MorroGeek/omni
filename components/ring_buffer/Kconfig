@@ -1,0 +1,9 @@
+menuconfig OMNI_COMPONENTS_RING_BUFFER
+    bool "ring buffer component"
+    default n
+    help
+        Enable the ring buffer component configuration.
+
+if OMNI_COMPONENTS_RING_BUFFER
+
+endif # OMNI_COMPONENTS_RING_BUFFER

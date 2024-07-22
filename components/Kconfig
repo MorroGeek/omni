@@ -1,0 +1,6 @@
+menu "Components Options"
+
+rsource "command/Kconfig"
+rsource "ring_buffer/Kconfig"
+
+endmenu

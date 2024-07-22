@@ -22,7 +22,7 @@ if(NOT DEFINED OMNI_PLATFORM)
 endif()
 
 if(NOT DEFINED OMNI_CPU)
-    set(OMNI_CPU "stm32f405xg" CACHE STRING "Omni CPU")
+    set(OMNI_CPU "stm32f405xx" CACHE STRING "Omni CPU")
 endif()
 
 if(NOT DEFINED OMNI_BOARD)
@@ -78,7 +78,7 @@ add_subdirectory(cmsis)
 add_subdirectory(drivers)
 add_subdirectory(hal)
 add_subdirectory(targets)
-add_subdirectory(utilities)
+add_subdirectory(components)
 add_subdirectory(libraries)
 
 if(OMNI_TEST STREQUAL ON)
@@ -90,7 +90,7 @@ target_link_libraries(omni-core INTERFACE
         omni-drivers
         omni-hal
         omni-targets
-        omni-utilities
+        omni-components
 )
 
 if(OMNI_RTOS STREQUAL "freertos")

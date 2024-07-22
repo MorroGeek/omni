@@ -15,7 +15,7 @@
 
 add_library(omni-apm32f4 INTERFACE)
 
-add_subdirectory(apm32dal_fw)
+add_subdirectory(apm32dalf4_fw)
 
 add_subdirectory(apm32f405xx EXCLUDE_FROM_ALL)
 # add_subdirectory(stm32f407xx EXCLUDE_FROM_ALL)
