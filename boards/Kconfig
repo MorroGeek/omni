@@ -1,0 +1,15 @@
+menu "Boards Options"
+
+if OMNI_BOARD_SECTION_STM32F405RG
+menu "ST STM32F405RG"
+    rsource "st/stm32f405rg/Kconfig"
+endmenu
+endif
+
+if OMNI_BOARD_SECTION_STM32F407IG
+menu "ST STM32F407IG"
+    rsource "st/stm32f407ig/Kconfig"
+endmenu
+endif
+
+endmenu
