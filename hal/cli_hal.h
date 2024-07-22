@@ -21,32 +21,47 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef OMNI_CLI_HAL_H
-#define OMNI_CLI_HAL_H
+#ifndef OMNI_HAL_CLI_H
+#define OMNI_HAL_CLI_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "device.h"
-#include "common.h"
+#include "hal/cli_types.h"
 
-#include "shell.h"
-#include "log.h"
+typedef struct cli_dev {
+    cli_shell_t *shell;
+    cli_log_t *log;
+} cli_dev_t;
 
-#define cli_s       shell_def
+typedef struct cli_hal_context {
+    cli_dev_t dev;
+    cli_num_t cli_num;
+    void *buffer;               /**< Shell buffer */
+    uint32_t buffer_size;       /**< Shell buffer size */
+    bool is_initiated;
+} cli_hal_context_t;
 
 /**
- * @brief CLI handle structure
+ * @brief CLI controller HAL API structure
  */
-typedef struct {
-    struct cli_s cli;
-    void (*init_callback)();
-} cli_t;
+struct cli_hal_api {
+    int (*shell_init)(cli_hal_context_t *context);
+    int (*shell_deinit)(cli_hal_context_t *context);
+    // int (*register_command)(cli_hal_context_t *context, const char *command, ShellCommandFunction function, const char *description);
+    // int (*unregister_command)(cli_hal_context_t *context, const char *command);
+    int (*shell_start)(cli_hal_context_t *context);
+    int (*log_init)(cli_hal_context_t *context);
+    int (*log_deinit)(cli_hal_context_t *context);
+    int (*log_set_level)(cli_hal_context_t *context, cli_log_level_t level);
+};
+
+extern const struct cli_hal_api cli_hal;
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
 
-#endif /* OMNI_CLI_HAL_H */
+#endif /* OMNI_HAL_CLI_H */

@@ -15,13 +15,23 @@
 
 add_library(omni-drivers INTERFACE)
 
-file(GLOB OMNI_DRIVER_SOURCES "source/*.cpp")
+file(GLOB OMNI_DRIVER_SOURCES 
+    "cli/cli.c"
+    # "i2c/i2c.cpp"
+    # "spi/spi.cpp"
+    "uart/uart.c"
+    "gpio/gpio.c"
+)
 
 target_sources(omni-drivers INTERFACE
     ${OMNI_DRIVER_SOURCES}
 )
 
 target_include_directories(omni-drivers INTERFACE
-    include
     .
+    cli
+    gpio
+    i2c
+    spi
+    uart
 )

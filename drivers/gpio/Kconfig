@@ -1,0 +1,9 @@
+menuconfig OMNI_DRIVERS_GPIO
+    bool "GPIO driver"
+    default n
+    help
+        Enable the GPIO driver configuration.
+
+if OMNI_DRIVERS_GPIO
+
+endif # OMNI_DRIVERS_GPIO

@@ -1,0 +1,5 @@
+
+rsource "Kconfig.cli"
+rsource "Kconfig.uart"
+rsource "Kconfig.i2c"
+

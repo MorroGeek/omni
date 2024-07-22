@@ -21,22 +21,26 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef OMNI_H
-#define OMNI_H
+#ifndef OMNI_TEST_H
+#define OMNI_TEST_H
 
 /* Includes ------------------------------------------------------------------*/
 /* Omni drivers */
-#include "drivers/include/cli.h"
-#include "drivers/include/digital.h"
-#include "drivers/include/serial.h"
-#include "drivers/include/i2c.h"
-#include "drivers/include/spi.h"
+#include "drivers/cli/cli.h"
+#include "drivers/gpio/gpio.h"
+#include "drivers/uart/uart.h"
 
-/* Omni utilities */
-#include "utilities/command/command.h"
-#include "utilities/ring_buffer/ring_buffer.h"
+/* Omni components */
+#include "components/ring_buffer/ring_buffer.h"
+#include "components/command/command.h"
 
-/* Exported defines ----------------------------------------------------------*/
-using namespace omni;
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-#endif /* OMNI_H */
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+#endif /* OMNI_TEST_H */

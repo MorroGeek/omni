@@ -20,11 +20,11 @@ add_library(omni-apm INTERFACE)
 file(GLOB OMNI_TARGET_SOURCES "*.c")
 
 target_sources(omni-apm INTERFACE
-        ${OMNI_TARGET_SOURCES}
+    ${OMNI_TARGET_SOURCES}
 )
 
 target_include_directories(omni-apm INTERFACE
-        .
+    .
 )
 
 # link omni-cmsis-cortex-m to omni-apm

@@ -1,7 +1,7 @@
 /**
-  * @file    gpio.c
+  * @file    gpio_hal.c
   * @author  MorroMaker
-  * @brief   GPIO driver for STM32F4
+  * @brief   GPIO HAL for STM32
   * @attention
   *
   * Copyright (c) 2024 MorroMaker
@@ -21,7 +21,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "gpio_hal.h"
+#include "hal/gpio_hal.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* Private typedef -----------------------------------------------------------*/
@@ -48,130 +48,209 @@ static const uint32_t ll_pin[] = {
     LL_GPIO_PIN_14,
     LL_GPIO_PIN_15,
 };
-/* Private function prototypes -----------------------------------------------*/
-static void set_gpio_clock(pin_name_t pin);
-static GPIO_TypeDef *get_gpio_port(pin_name_t pin);
-static uint32_t get_gpio_pin(pin_name_t pin);
 
-static int gpio_init(gpio_t *obj, pin_map_t map);
-static int gpio_mode(gpio_t *obj, gpio_mode_t mode);
-static int gpio_dir(gpio_t *obj, gpio_dir_t dir);
-static int gpio_speed(gpio_t *obj, gpio_speed_t speed);
-static int gpio_write(gpio_t *obj, int value);
-static int gpio_toggle(gpio_t *obj);
-static int gpio_read(gpio_t *obj, uint32_t *value);
-
-/* External variables --------------------------------------------------------*/
-/* External functions --------------------------------------------------------*/
-
-static struct gpio_driver_api gpio_stm32_driver = {
-    .init = gpio_init,
-    .mode = gpio_mode,
-    .dir = gpio_dir,
-    .speed = gpio_speed,
-    .write = gpio_write,
-    .toggle = gpio_toggle,
-    .read = gpio_read,
+// Low level pin alternate function
+static const uint32_t ll_pin_af[] = {
+    LL_GPIO_AF_0,
+    LL_GPIO_AF_1,
+    LL_GPIO_AF_2,
+    LL_GPIO_AF_3,
+    LL_GPIO_AF_4,
+    LL_GPIO_AF_5,
+    LL_GPIO_AF_6,
+    LL_GPIO_AF_7,
+    LL_GPIO_AF_8,
+    LL_GPIO_AF_9,
+    LL_GPIO_AF_10,
+    LL_GPIO_AF_11,
+    LL_GPIO_AF_12,
+    LL_GPIO_AF_13,
+    LL_GPIO_AF_14,
+    LL_GPIO_AF_15,
 };
 
-struct gpio_driver_api *gpio_driver(void) {
-    return &gpio_stm32_driver;
-}
+/* Private function prototypes -----------------------------------------------*/
+static void enable_gpio_clock(gpio_num_t gpio_num);
+static GPIO_TypeDef *get_gpio_port(gpio_num_t gpio_num);
+static uint32_t get_gpio_pin(gpio_num_t gpio_num);
+
+static int gpio_hal_init(gpio_hal_context_t *context);
+static int gpio_hal_deinit(gpio_hal_context_t *context);
+static int gpio_hal_mode(gpio_hal_context_t *context, gpio_mode_t mode);
+static int gpio_hal_alternate(gpio_hal_context_t *context, uint32_t alternate);
+static int gpio_hal_pull(gpio_hal_context_t *context, gpio_pull_t pull);
+static int gpio_hal_speed(gpio_hal_context_t *context, gpio_speed_t speed);
+static int gpio_hal_write(gpio_hal_context_t *context, uint32_t value);
+static int gpio_hal_read(gpio_hal_context_t *context, uint32_t *value);
+static int gpio_hal_toggle(gpio_hal_context_t *context);
+
+const struct gpio_hal_api gpio_hal = {
+    .init = gpio_hal_init,
+    .deinit = gpio_hal_deinit,
+    .mode = gpio_hal_mode,
+    .alternate = gpio_hal_alternate,
+    .pull = gpio_hal_pull,
+    .speed = gpio_hal_speed,
+    .write = gpio_hal_write,
+    .read = gpio_hal_read,
+    .toggle = gpio_hal_toggle,
+};
 
 /**
- * @brief Initialize the GPIO
- * @param obj: GPIO handle structure
- * @param map: GPIO pin map
+ * @brief Initialize GPIO
+ * @param context: Pointer to GPIO HAL context structure
  * @return Operation status
- *         @arg OMNI_OK: Operation successful
- *         @arg OMNI_FAIL: Operation failed
  */
-static int gpio_init(gpio_t *obj, pin_map_t map)
-{
+static int gpio_hal_init(gpio_hal_context_t *context) {
     int res;
 
-    if (map.pin == NC) {
+    if (context == NULL) {
         return OMNI_FAIL;
     }
 
+    if (context->gpio_num == GPIO_NUM_NC) {
+        return OMNI_FAIL;
+    }
+
+    // if (context->gpio_num != gpio_num) {
+    //     // Get GPIO port
+    //     context->dev.ins = get_gpio_port(gpio_num);
+
+    //     // Get GPIO pin
+    //     context->dev.pin = get_gpio_pin(gpio_num);
+    // }
+
     // Get GPIO port
-    obj->ins = get_gpio_port(map.pin);
+    context->dev.ins = get_gpio_port(context->gpio_num);
 
     // Get GPIO pin
-    obj->pin = get_gpio_pin(map.pin);
+    context->dev.pin = get_gpio_pin(context->gpio_num);
 
     // Enable GPIO clock
-    set_gpio_clock(map.pin);
+    enable_gpio_clock(context->gpio_num);
 
-    // Set GPIO initial value
-    res = gpio_write(obj, map.feature.status);
-    if (res != OMNI_OK) {
-        return res;
+    context->is_initiated = true;
+
+    return OMNI_OK;
+}
+
+/**
+ * @brief Deinitialize GPIO
+ * @param context: Pointer to GPIO HAL context structure
+ * @return Operation status
+ */
+static int gpio_hal_deinit(gpio_hal_context_t *context) {
+    if (context == NULL) {
+        return OMNI_FAIL;
     }
 
-    // GPIO configuration
-    res = gpio_speed(obj, map.feature.speed);
-    if (res != OMNI_OK) {
-        return res;
+    if (context->gpio_num == GPIO_NUM_NC) {
+        return OMNI_FAIL;
     }
 
-    res = gpio_dir(obj, map.feature.dir);
-    if (res != OMNI_OK) {
-        return res;
-    }
-
-    res = gpio_mode(obj, map.feature.mode);
-    if (res != OMNI_OK) {
-        return res;
-    }
+    context->is_initiated = false;
 
     return OMNI_OK;
 }
 
 /**
  * @brief Set GPIO mode
- * @param obj: GPIO handle structure
+ * @param context: Pointer to GPIO HAL context structure
  * @param mode: GPIO mode
  * @return Operation status
- *         @arg OMNI_OK: Operation successful
- *         @arg OMNI_FAIL: Operation failed
  */
-static int gpio_mode(gpio_t *obj, gpio_mode_t mode)
-{
-    // Set GPIO output type
-    if ((mode == OMNI_GPIO_PP_PULLNONE) || (mode == OMNI_GPIO_PP_PULLUP) || (mode == OMNI_GPIO_PP_PULLDOWN)) {
-        LL_GPIO_SetPinOutputType(obj->ins, obj->pin, LL_GPIO_OUTPUT_PUSHPULL);
-    } else {
-        LL_GPIO_SetPinOutputType(obj->ins, obj->pin, LL_GPIO_OUTPUT_OPENDRAIN);
+static int gpio_hal_mode(gpio_hal_context_t *context, gpio_mode_t mode) {
+    if (context == NULL) {
+        return OMNI_FAIL;
     }
 
-    // Set GPIO pull
-    if ((mode == OMNI_GPIO_PP_PULLUP) || (mode == OMNI_GPIO_OD_PULLUP)) {
-        LL_GPIO_SetPinPull(obj->ins, obj->pin, LL_GPIO_PULL_UP);
-    } else if ((mode == OMNI_GPIO_PP_PULLDOWN) || (mode == OMNI_GPIO_OD_PULLDOWN)) {
-        LL_GPIO_SetPinPull(obj->ins, obj->pin, LL_GPIO_PULL_DOWN);
+    if (context->gpio_num == GPIO_NUM_NC) {
+        return OMNI_FAIL;
+    }
+
+    // Get GPIO port
+    context->dev.ins = get_gpio_port(context->gpio_num);
+
+    // Get GPIO pin
+    context->dev.pin = get_gpio_pin(context->gpio_num);
+
+    // Set GPIO output type
+    if ((mode == GPIO_MODE_OD_OUTPUT) || (mode == GPIO_MODE_OD_AF)) {
+        LL_GPIO_SetPinOutputType(context->dev.ins, context->dev.pin, LL_GPIO_OUTPUT_OPENDRAIN);
     } else {
-        LL_GPIO_SetPinPull(obj->ins, obj->pin, LL_GPIO_PULL_NO);
+        LL_GPIO_SetPinOutputType(context->dev.ins, context->dev.pin, LL_GPIO_OUTPUT_PUSHPULL);
+    }
+
+    // Set GPIO mode
+    if ((mode == GPIO_MODE_PP_OUTPUT) || (mode == GPIO_MODE_OD_OUTPUT)) {
+        LL_GPIO_SetPinMode(context->dev.ins, context->dev.pin, LL_GPIO_MODE_OUTPUT);
+    } else if ((mode == GPIO_MODE_PP_AF) || (mode == GPIO_MODE_OD_AF)) {
+        LL_GPIO_SetPinMode(context->dev.ins, context->dev.pin, LL_GPIO_MODE_ALTERNATE);
+    } else {
+        LL_GPIO_SetPinMode(context->dev.ins, context->dev.pin, LL_GPIO_MODE_INPUT);
     }
 
     return OMNI_OK;
 }
 
 /**
- * @brief Set GPIO direction
- * @param obj: GPIO handle structure
- * @param dir: GPIO direction
+ * @brief Set GPIO alternate function
+ * @param context: Pointer to GPIO HAL context structure
+ * @param alternate: GPIO alternate function
  * @return Operation status
- *         @arg OMNI_OK: Operation successful
- *         @arg OMNI_FAIL: Operation failed
  */
-static int gpio_dir(gpio_t *obj, gpio_dir_t dir)
-{
-    // Set GPIO direction
-    if (dir == OMNI_GPIO_INPUT) {
-        LL_GPIO_SetPinMode(obj->ins, obj->pin, LL_GPIO_MODE_INPUT);
+static int gpio_hal_alternate(gpio_hal_context_t *context, uint32_t alternate) {
+    if (context == NULL) {
+        return OMNI_FAIL;
+    }
+
+    if (context->gpio_num == GPIO_NUM_NC) {
+        return OMNI_FAIL;
+    }
+
+    // Get GPIO port
+    context->dev.ins = get_gpio_port(context->gpio_num);
+
+    // Get GPIO pin
+    context->dev.pin = get_gpio_pin(context->gpio_num);
+
+    if (POSITION_VAL(context->dev.pin) < 0x00000008U) {
+        LL_GPIO_SetAFPin_0_7(context->dev.ins, context->dev.pin, ll_pin_af[alternate]);
     } else {
-        LL_GPIO_SetPinMode(obj->ins, obj->pin, LL_GPIO_MODE_OUTPUT);
+        LL_GPIO_SetAFPin_8_15(context->dev.ins, context->dev.pin, ll_pin_af[alternate]);
+    }
+
+    return OMNI_OK;
+}
+
+/**
+ * @brief Set GPIO pull
+ * @param context: Pointer to GPIO HAL context structure
+ * @param pull: GPIO pull
+ * @return Operation status
+ */
+static int gpio_hal_pull(gpio_hal_context_t *context, gpio_pull_t pull) {
+    if (context == NULL) {
+        return OMNI_FAIL;
+    }
+
+    if (context->gpio_num == GPIO_NUM_NC) {
+        return OMNI_FAIL;
+    }
+
+    // Get GPIO port
+    context->dev.ins = get_gpio_port(context->gpio_num);
+
+    // Get GPIO pin
+    context->dev.pin = get_gpio_pin(context->gpio_num);
+
+    // Set GPIO pull
+    if (pull == GPIO_PULL_UP) {
+        LL_GPIO_SetPinPull(context->dev.ins, context->dev.pin, LL_GPIO_PULL_UP);
+    } else if (pull == GPIO_PULL_DOWN) {
+        LL_GPIO_SetPinPull(context->dev.ins, context->dev.pin, LL_GPIO_PULL_DOWN);
+    } else {
+        LL_GPIO_SetPinPull(context->dev.ins, context->dev.pin, LL_GPIO_PULL_NO);
     }
 
     return OMNI_OK;
@@ -179,87 +258,129 @@ static int gpio_dir(gpio_t *obj, gpio_dir_t dir)
 
 /**
  * @brief Set GPIO speed
- * @param obj: GPIO handle structure
+ * @param context: Pointer to GPIO HAL context structure
  * @param speed: GPIO speed
  * @return Operation status
- *         @arg OMNI_OK: Operation successful
- *         @arg OMNI_FAIL: Operation failed
  */
-static int gpio_speed(gpio_t *obj, gpio_speed_t speed)
-{
-    LL_GPIO_SetPinSpeed(obj->ins, obj->pin, speed);
+static int gpio_hal_speed(gpio_hal_context_t *context, gpio_speed_t speed) {
+    if (context == NULL) {
+        return OMNI_FAIL;
+    }
+
+    if (context->gpio_num == GPIO_NUM_NC) {
+        return OMNI_FAIL;
+    }
+
+    // Get GPIO port
+    context->dev.ins = get_gpio_port(context->gpio_num);
+
+    // Get GPIO pin
+    context->dev.pin = get_gpio_pin(context->gpio_num);
+
+    LL_GPIO_SetPinSpeed(context->dev.ins, context->dev.pin, speed);
 
     return OMNI_OK;
 }
 
 /**
- * @brief Set GPIO value
- * @param obj: GPIO handle structure
+ * @brief Write GPIO
+ * @param context: Pointer to GPIO HAL context structure
  * @param value: GPIO value
  * @return Operation status
- *         @arg OMNI_OK: Operation successful
- *         @arg OMNI_FAIL: Operation failed
  */
-static int gpio_write(gpio_t *obj, int value)
-{
+static int gpio_hal_write(gpio_hal_context_t *context, uint32_t value) {
+    if (context == NULL) {
+        return OMNI_FAIL;
+    }
+
+    if (context->gpio_num == GPIO_NUM_NC) {
+        return OMNI_FAIL;
+    }
+
+    // Get GPIO port
+    context->dev.ins = get_gpio_port(context->gpio_num);
+
+    // Get GPIO pin
+    context->dev.pin = get_gpio_pin(context->gpio_num);
+
     if (value) {
-        LL_GPIO_SetOutputPin(obj->ins, obj->pin);
+        LL_GPIO_SetOutputPin(context->dev.ins, context->dev.pin);
     } else {
-        LL_GPIO_ResetOutputPin(obj->ins, obj->pin);
+        LL_GPIO_ResetOutputPin(context->dev.ins, context->dev.pin);
     }
 
     return OMNI_OK;
 }
 
 /**
- * @brief Toggle GPIO value
- * @param obj: GPIO handle structure
+ * @brief Toggle GPIO
+ * @param context: Pointer to GPIO HAL context structure
  * @return Operation status
- *         @arg OMNI_OK: Operation successful
- *         @arg OMNI_FAIL: Operation failed
  */
-static int gpio_toggle(gpio_t *obj)
-{
-    LL_GPIO_TogglePin(obj->ins, obj->pin);
+static int gpio_hal_toggle(gpio_hal_context_t *context) {
+    if (context == NULL) {
+        return OMNI_FAIL;
+    }
+
+    if (context->gpio_num == GPIO_NUM_NC) {
+        return OMNI_FAIL;
+    }
+
+    // Get GPIO port
+    context->dev.ins = get_gpio_port(context->gpio_num);
+
+    // Get GPIO pin
+    context->dev.pin = get_gpio_pin(context->gpio_num);
+
+    LL_GPIO_TogglePin(context->dev.ins, context->dev.pin);
 
     return OMNI_OK;
 }
 
 /**
- * @brief Get GPIO value
- * @param obj: GPIO handle structure
- * @param value: GPIO value
+ * @brief Read GPIO
+ * @param context: Pointer to GPIO HAL context structure
+ * @param value: Pointer to GPIO value
  * @return Operation status
- *         @arg OMNI_OK: Operation successful
- *         @arg OMNI_FAIL: Operation failed
  */
-static int gpio_read(gpio_t *obj, uint32_t *value)
-{
-    *value = LL_GPIO_IsInputPinSet(obj->ins, obj->pin);
+static int gpio_hal_read(gpio_hal_context_t *context, uint32_t *value) {
+    if (context == NULL) {
+        return OMNI_FAIL;
+    }
+
+    if (context->gpio_num == GPIO_NUM_NC) {
+        return OMNI_FAIL;
+    }
+
+    // Get GPIO port
+    context->dev.ins = get_gpio_port(context->gpio_num);
+
+    // Get GPIO pin
+    context->dev.pin = get_gpio_pin(context->gpio_num);
+
+    *value = LL_GPIO_IsInputPinSet(context->dev.ins, context->dev.pin);
 
     return OMNI_OK;
 }
-
-/* Private functions ---------------------------------------------------------*/
 
 /**
  * @brief Get GPIO pin
- * @param pin: GPIO pin
+ * 
+ * @param gpio_num: GPIO pin number
  * @return GPIO pin
  */
-static uint32_t get_gpio_pin(pin_name_t pin)
-{
-    return ll_pin[pin & 0x0F];
+static uint32_t get_gpio_pin(gpio_num_t gpio_num) {
+    return ll_pin[gpio_num & 0x0F];
 }
 
 /**
  * @brief Get GPIO port
- * @param pin: GPIO pin
+ * 
+ * @param gpio_num: GPIO pin number
  * @return GPIO port
  */
-static GPIO_TypeDef *get_gpio_port(pin_name_t pin)
-{
-    switch (pin & 0xF0U) {
+static GPIO_TypeDef *get_gpio_port(gpio_num_t gpio_num) {
+    switch (gpio_num & 0xF0U) {
         case PORTA:
             return GPIOA;
 
@@ -310,18 +431,17 @@ static GPIO_TypeDef *get_gpio_port(pin_name_t pin)
 #endif /* GPIOK */
 
         default:
-            return 0;
+            return NULL;
     }
 }
 
 /**
- * @brief Set GPIO clock
- * @param pin: GPIO pin
- * @return GPIO port
+ * @brief Enable GPIO clock
+ * 
+ * @param gpio_num: GPIO pin number
  */
-static void set_gpio_clock(pin_name_t pin)
-{
-    switch (pin & 0xF0U) {
+static void enable_gpio_clock(gpio_num_t gpio_num) {
+    switch (gpio_num & 0xF0U) {
         case PORTA:
             __HAL_RCC_GPIOA_CLK_ENABLE();
             break;

@@ -1,0 +1,9 @@
+menuconfig OMNI_DRIVERS_UART
+    bool "UART driver"
+    default n
+    help
+        Enable the UART driver configuration.
+
+if OMNI_DRIVERS_UART
+
+endif # OMNI_DRIVERS_UART
