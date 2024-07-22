@@ -36,6 +36,7 @@
     - -:test/support
   :source:
     - src/**
+    - ../cmsis/**
     - ../drivers/**
     - ../hal/**
     # - ../targets/**
