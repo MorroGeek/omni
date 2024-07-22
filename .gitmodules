@@ -7,3 +7,6 @@
 [submodule "libraries/letter_shell"]
 	path = libraries/letter_shell
 	url = https://github.com/MorroGeek/letter_shell
+[submodule "targets/stm/stm32f4/stm32cubef4_fw"]
+	path = targets/stm/stm32f4/stm32cubef4_fw
+	url = https://github.com/MorroGeek/stm32cubef4_fw
