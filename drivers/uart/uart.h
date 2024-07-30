@@ -48,14 +48,24 @@ typedef struct uart_driver_config {
 } uart_driver_config_t;
 
 /**
- * @brief Initialize UART driver
+ * @brief Open UART driver
  */
-typedef int (*uart_init_t)(uart_num_t uart_num, uart_driver_config_t *config);
+typedef int (*uart_open_t)(uart_num_t uart_num, uart_driver_config_t *config);
 
 /**
- * @brief Deinitialize UART driver
+ * @brief Close UART driver
  */
-typedef int (*uart_deinit_t)(uart_num_t uart_num);
+typedef int (*uart_close_t)(uart_num_t uart_num);
+
+/**
+ * @brief Start UART port
+ */
+typedef int (*uart_start_t)(uart_num_t uart_num);
+
+/**
+ * @brief Stop UART port
+ */
+typedef int (*uart_stop_t)(uart_num_t uart_num);
 
 /**
  * @brief Write bytes to UART port
@@ -71,8 +81,10 @@ typedef int (*uart_read_bytes_t)(uart_num_t uart_num, uint8_t *data, uint32_t le
  * @brief UART driver API
  */
 struct uart_driver_api {
-    uart_init_t init;
-    uart_deinit_t deinit;
+    uart_open_t open;
+    uart_close_t close;
+    uart_start_t start;
+    uart_stop_t stop;
     uart_write_bytes_t write_bytes;
     uart_read_bytes_t read_bytes;
 };

@@ -1,7 +1,7 @@
 /**
   * @file    cli.c
   * @author  MorroMaker
-  * @brief   CLI driver for Omni
+  * @brief   CLI driver for omni
   * @attention
   *
   * Copyright (c) 2024 MorroMaker
@@ -41,24 +41,24 @@ typedef struct {
 
 static cli_obj_t *p_cli_obj[CLI_NUM_MAX];
 
-static int cli_init(cli_num_t cli_num, cli_driver_config_t *config);
-static int cli_deinit(cli_num_t cli_num);
+static int cli_open(cli_num_t cli_num, cli_driver_config_t *config);
+static int cli_close(cli_num_t cli_num);
 static int cli_start(cli_num_t cli_num);
 
 struct cli_driver_api cli_driver = {
-    .init = cli_init,
-    .deinit = cli_deinit,
+    .open = cli_open,
+    .close = cli_close,
     .start = cli_start,
 };
 
 /**
- * @brief Initialize CLI port
+ * @brief Open CLI
  * 
- * @param cli_num CLI port number
+ * @param cli_num CLI number
  * @param config Pointer to CLI driver configuration structure
  * @return Operation status
  */
-static int cli_init(cli_num_t cli_num, cli_driver_config_t *config) {
+static int cli_open(cli_num_t cli_num, cli_driver_config_t *config) {
     int res;
 
     p_cli_obj[cli_num] = (cli_obj_t *)malloc(sizeof(cli_obj_t));
@@ -81,12 +81,18 @@ static int cli_init(cli_num_t cli_num, cli_driver_config_t *config) {
 
     res = cli_hal.shell_init(&p_cli_obj[cli_num]->hal_context);
     if (res != OMNI_OK) {
+        OMNI_FREE(p_cli_obj[cli_num]->driver_data.buffer);
+        OMNI_FREE(p_cli_obj[cli_num]);
+        p_cli_obj[cli_num] = NULL;
         return res;
     }
 
     if (config->log->active) {
         res = cli_hal.log_init(&p_cli_obj[cli_num]->hal_context);
         if (res != OMNI_OK) {
+            OMNI_FREE(p_cli_obj[cli_num]->driver_data.buffer);
+            OMNI_FREE(p_cli_obj[cli_num]);
+            p_cli_obj[cli_num] = NULL;
             return res;
         }
     }
@@ -95,12 +101,12 @@ static int cli_init(cli_num_t cli_num, cli_driver_config_t *config) {
 }
 
 /**
- * @brief Deinitialize CLI port
+ * @brief Close CLI
  * 
- * @param cli_num CLI port number
+ * @param cli_num CLI number
  * @return Operation status
  */
-static int cli_deinit(cli_num_t cli_num) {
+static int cli_close(cli_num_t cli_num) {
     int res;
 
     res = cli_hal.shell_deinit(&p_cli_obj[cli_num]->hal_context);
@@ -117,10 +123,12 @@ static int cli_deinit(cli_num_t cli_num) {
 
     if (p_cli_obj[cli_num]->driver_data.buffer != NULL) {
         OMNI_FREE(p_cli_obj[cli_num]->driver_data.buffer);
+        p_cli_obj[cli_num]->driver_data.buffer = NULL;
     }
 
     if (p_cli_obj[cli_num] != NULL) {
         OMNI_FREE(p_cli_obj[cli_num]);
+        p_cli_obj[cli_num] = NULL;
     }
 
     return OMNI_OK;
@@ -135,7 +143,7 @@ static int cli_deinit(cli_num_t cli_num) {
 static int cli_start(cli_num_t cli_num) {
     int res;
 
-    res = cli_hal.shell_start(&p_cli_obj[cli_num]->hal_context);
+    res = cli_hal.shell_enable(&p_cli_obj[cli_num]->hal_context);
     if (res != OMNI_OK) {
         return res;
     }

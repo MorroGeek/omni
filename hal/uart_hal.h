@@ -34,6 +34,9 @@ extern "C" {
 #define UART_TX_TIMEOUT_MS 10
 #define UART_RX_TIMEOUT_MS 10
 
+/**
+ * @brief UART HAL context structure
+ */
 typedef struct uart_hal_context {
     uart_dev_t dev;
     uart_mode_t mode;
@@ -49,13 +52,13 @@ typedef struct uart_hal_context {
 struct uart_hal_api {
     int (*init)(uart_hal_context_t *context);
     int (*deinit)(uart_hal_context_t *context);
+    int (*enable)(uart_hal_context_t *context);
+    int (*disable)(uart_hal_context_t *context);
     int (*set_baud_rate)(uart_hal_context_t *context, uint32_t baudrate);
     int (*set_data_bits)(uart_hal_context_t *context, uart_data_bits_t data_bits);
     int (*set_stop_bits)(uart_hal_context_t *context, uart_stop_bits_t stop_bits);
     int (*set_parity)(uart_hal_context_t *context, uart_parity_t parity);
     int (*set_flow_ctrl)(uart_hal_context_t *context, uart_flow_ctrl_t flow_ctrl);
-    int (*start)(uart_hal_context_t *context);
-    int (*stop)(uart_hal_context_t *context);
     int (*write)(uart_hal_context_t *context, uint8_t *data, uint32_t len);
     int (*read)(uart_hal_context_t *context, uint8_t *data, uint32_t len);
 };

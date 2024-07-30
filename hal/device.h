@@ -55,28 +55,6 @@ struct device {
 };
 
 /**
- * @brief Pin map structure
- */
-typedef struct {
-    pin_name_t pin;
-    uint32_t peripheral;
-    union {
-        struct {
-            uint32_t mode       : 4;
-            uint32_t dir        : 2;
-            uint32_t speed      : 2;
-            uint32_t alternate  : 4;
-            uint32_t channel    : 5;
-            uint32_t inverted   : 1;
-            uint32_t status     : 1;
-            uint32_t reserved   : 13;
-        } feature;
-
-        uint32_t _feature;
-    };
-} pin_map_t;
-
-/**
  * @brief Buffer structure
  */
 typedef struct {
