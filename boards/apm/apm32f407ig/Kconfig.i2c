@@ -1,0 +1,194 @@
+menuconfig I2C
+    bool "I2C board configuration"
+    default y
+    help
+        Enable the I2C board configuration.
+
+if I2C
+
+menu "I2C Enable Configuration"
+
+    config I2C_NUM_1
+        bool "Enable I2C 1"
+        default y
+        help
+            Enable I2C 1 port.
+
+    config I2C_NUM_2
+        bool "Enable I2C 2"
+        default n
+        help
+            Enable I2C 2 port.
+
+    config I2C_NUM_3
+        bool "Enable I2C 3"
+        default n
+        help
+            Enable I2C 3 port.
+
+endmenu # I2C Enable Configuration
+
+menu "I2C IO Configuration"
+
+    menu "I2C1 IO"
+        depends on I2C_NUM_1
+
+        choice I2C1_SCL_PIN_SELECTION
+            prompt "I2C1 SCL PIN"
+            config I2C1_SCL_PIN_PB6
+                bool "PB6"
+            config I2C1_SCL_PIN_PB8
+                bool "PB8"
+        endchoice
+
+        config I2C1_SCL_PIN
+            hex
+            default 0x16 if I2C1_SCL_PIN_PB6
+            default 0x18 if I2C1_SCL_PIN_PB8
+            depends on I2C_NUM_1
+            help
+                The hex value for the selected I2C1 SCL pin, based on user selection.
+
+        choice I2C1_SDA_PIN_SELECTION
+            prompt "I2C1 SDA PIN"
+            config I2C1_SDA_PIN_PB7
+                bool "PB7"
+            config I2C1_SDA_PIN_PB9
+                bool "PB9"
+        endchoice
+
+        config I2C1_SDA_PIN
+            hex
+            default 0x17 if I2C1_SDA_PIN_PB7
+            default 0x19 if I2C1_SDA_PIN_PB9
+            depends on I2C_NUM_1
+            help
+                The hex value for the selected I2C1 SDA pin, based on user selection.
+
+        config I2C1_SCL_PIN_AF
+            int
+            default 4
+            depends on I2C_NUM_1
+            help
+                Set the I2C1 SCL pin alternate function.
+
+        config I2C1_SDA_PIN_AF
+            int
+            default 4
+            depends on I2C_NUM_1
+            help
+                Set the I2C1 SDA pin alternate function.
+
+    endmenu # I2C1 IO
+
+    menu "I2C2 IO"
+        depends on I2C_NUM_2
+
+        choice I2C2_SCL_PIN_SELECTION
+            prompt "I2C2 SCL PIN"
+            config I2C2_SCL_PIN_PB10
+                bool "PB10"
+            config I2C2_SCL_PIN_PF1
+                bool "PF1"
+            config I2C2_SCL_PIN_PH4
+                bool "PH4"
+        endchoice
+
+        config I2C2_SCL_PIN
+            hex
+            default 0x1A if I2C2_SCL_PIN_PB10
+            default 0x51 if I2C2_SCL_PIN_PF1
+            default 0x74 if I2C2_SCL_PIN_PH4
+            depends on I2C_NUM_2
+            help
+                The hex value for the selected I2C2 SCL pin, based on user selection.
+
+        choice I2C2_SDA_PIN_SELECTION
+            prompt "I2C2 SDA PIN"
+            config I2C2_SDA_PIN_PB11
+                bool "PB11"
+            config I2C2_SDA_PIN_PF0
+                bool "PF0"
+            config I2C2_SDA_PIN_PH5
+                bool "PH5"
+        endchoice
+
+        config I2C2_SDA_PIN
+            hex
+            default 0x1B if I2C2_SDA_PIN_PB11
+            default 0x50 if I2C2_SDA_PIN_PF0
+            default 0x75 if I2C2_SDA_PIN_PH5
+            depends on I2C_NUM_2
+            help
+                The hex value for the selected I2C2 SDA pin, based on user selection.
+
+        config I2C2_SCL_PIN_AF
+            int
+            default 4
+            depends on I2C_NUM_2
+            help
+                Set the I2C2 SCL pin alternate function.
+
+        config I2C2_SDA_PIN_AF
+            int
+            default 4
+            depends on I2C_NUM_2
+            help
+                Set the I2C2 SDA pin alternate function.
+
+    endmenu # I2C2 IO
+
+    menu "I2C3 IO"
+        depends on I2C_NUM_3
+
+        choice I2C3_SCL_PIN_SELECTION
+            prompt "I2C3 SCL PIN"
+            config I2C3_SCL_PIN_PA8
+                bool "PA8"
+            config I2C3_SCL_PIN_PH7
+                bool "PH7"
+        endchoice
+
+        config I2C3_SCL_PIN
+            hex
+            default 0x08 if I2C3_SCL_PIN_PA8
+            default 0x77 if I2C3_SCL_PIN_PH7
+            depends on I2C_NUM_3
+            help
+                The hex value for the selected I2C3 SCL pin, based on user selection.
+
+        choice I2C3_SDA_PIN_SELECTION
+            prompt "I2C3 SDA PIN"
+            config I2C3_SDA_PIN_PC9
+                bool "PC9"
+            config I2C3_SDA_PIN_PH8
+                bool "PH8"
+        endchoice
+
+        config I2C3_SDA_PIN
+            hex
+            default 0x09 if I2C3_SDA_PIN_PC9
+            default 0x78 if I2C3_SDA_PIN_PH8
+            depends on I2C_NUM_3
+            help
+                The hex value for the selected I2C3 SDA pin, based on user selection.
+
+        config I2C3_SCL_PIN_AF
+            int
+            default 4
+            depends on I2C_NUM_3
+            help
+                Set the I2C3 SCL pin alternate function.
+
+        config I2C3_SDA_PIN_AF
+            int
+            default 4
+            depends on I2C_NUM_3
+            help
+                Set the I2C3 SDA pin alternate function.
+
+    endmenu # I2C3 IO
+
+endmenu # I2C IO Configuration
+
+endif # I2C

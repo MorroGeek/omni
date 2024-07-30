@@ -24,6 +24,12 @@ if(${OMNI_PLATFORM} STREQUAL "stm")
     )
 endif()
 
+file(GLOB OMNI_TARGET_SOURCES "*.c")
+
+target_sources(omni-targets INTERFACE
+    ${OMNI_TARGET_SOURCES}
+)
+
 target_include_directories(omni-targets INTERFACE
     .
 )

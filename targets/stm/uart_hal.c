@@ -29,26 +29,26 @@ static uart_dev_t get_uart_dev_info(uart_num_t uart_num);
 
 static int uart_hal_init(uart_hal_context_t *context);
 static int uart_hal_deinit(uart_hal_context_t *context);
+static int uart_hal_enable(uart_hal_context_t *context);
+static int uart_hal_disable(uart_hal_context_t *context);
 static int uart_set_baud_rate(uart_hal_context_t *context, uint32_t baudrate);
 static int uart_set_data_bits(uart_hal_context_t *context, uart_data_bits_t data_bits);
 static int uart_set_stop_bits(uart_hal_context_t *context, uart_stop_bits_t stop_bits);
 static int uart_set_parity(uart_hal_context_t *context, uart_parity_t parity);
 static int uart_set_flow_ctrl(uart_hal_context_t *context, uart_flow_ctrl_t flow_ctrl);
-static int uart_hal_start(uart_hal_context_t *context);
-static int uart_hal_stop(uart_hal_context_t *context);
 static int uart_hal_write(uart_hal_context_t *context, uint8_t *data, uint32_t len);
 static int uart_hal_read(uart_hal_context_t *context, uint8_t *data, uint32_t len);
 
 const struct uart_hal_api uart_hal = {
     .init = uart_hal_init,
     .deinit = uart_hal_deinit,
+    .enable = uart_hal_enable,
+    .disable = uart_hal_disable,
     .set_baud_rate = uart_set_baud_rate,
     .set_data_bits = uart_set_data_bits,
     .set_stop_bits = uart_set_stop_bits,
     .set_parity = uart_set_parity,
     .set_flow_ctrl = uart_set_flow_ctrl,
-    .start = uart_hal_start,
-    .stop = uart_hal_stop,
     .write = uart_hal_write,
     .read = uart_hal_read,
 };
@@ -107,6 +107,46 @@ static int uart_hal_deinit(uart_hal_context_t *context) {
     reset_uart_clock(context->uart_num);
 
     context->is_initiated = false;
+
+    return OMNI_OK;
+}
+
+/**
+ * @brief Enable UART
+ * 
+ * @param context Pointer to UART HAL context structure
+ * @return Operation status
+ */
+static int uart_hal_enable(uart_hal_context_t *context) {
+    if (context == NULL) {
+        return OMNI_FAIL;
+    }
+
+    if (context->uart_num >= UART_NUM_MAX) {
+        return OMNI_FAIL;
+    }
+
+    LL_USART_Enable(context->dev.ins);
+
+    return OMNI_OK;
+}
+
+/**
+ * @brief Disable UART
+ * 
+ * @param context Pointer to UART HAL context structure
+ * @return Operation status
+ */
+static int uart_hal_disable(uart_hal_context_t *context) {
+    if (context == NULL) {
+        return OMNI_FAIL;
+    }
+
+    if (context->uart_num >= UART_NUM_MAX) {
+        return OMNI_FAIL;
+    }
+
+    LL_USART_Disable(context->dev.ins);
 
     return OMNI_OK;
 }
@@ -261,46 +301,6 @@ static int uart_set_flow_ctrl(uart_hal_context_t *context, uart_flow_ctrl_t flow
     } else if (flow_ctrl == UART_FLOW_CTRL_RTS_CTS) {
         LL_USART_SetHWFlowCtrl(context->dev.ins, LL_USART_HWCONTROL_RTS_CTS);
     }
-
-    return OMNI_OK;
-}
-
-/**
- * @brief Start UART
- * 
- * @param context Pointer to UART HAL context structure
- * @return Operation status
- */
-static int uart_hal_start(uart_hal_context_t *context) {
-    if (context == NULL) {
-        return OMNI_FAIL;
-    }
-
-    if (context->uart_num >= UART_NUM_MAX) {
-        return OMNI_FAIL;
-    }
-
-    LL_USART_Enable(context->dev.ins);
-
-    return OMNI_OK;
-}
-
-/**
- * @brief Stop UART
- * 
- * @param context Pointer to UART HAL context structure
- * @return Operation status
- */
-static int uart_hal_stop(uart_hal_context_t *context) {
-    if (context == NULL) {
-        return OMNI_FAIL;
-    }
-
-    if (context->uart_num >= UART_NUM_MAX) {
-        return OMNI_FAIL;
-    }
-
-    LL_USART_Disable(context->dev.ins);
 
     return OMNI_OK;
 }

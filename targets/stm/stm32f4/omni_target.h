@@ -34,10 +34,6 @@ extern "C" {
 #include "stm32f4xx_ll_usart.h"
 #include "stm32f4xx_ll_cortex.h"
 
-/* Exported defines ----------------------------------------------------------*/
-/* Exported macro ------------------------------------------------------------*/
-/* Exported typedef ----------------------------------------------------------*/
-
 /**
  * @brief  Port name type definition
  */
@@ -55,24 +51,6 @@ typedef enum {
     PORTK = 0xA0,
 } port_name_t;
 
-struct serial_s {
-    UART_HandleTypeDef *handle;
-    USART_TypeDef *ins;
-    uint32_t max_speed;   // Maximum speed (Unit: Kbps)
-};
-
-struct i2c_s {
-    I2C_HandleTypeDef *handle;
-    I2C_TypeDef *ins;
-    uint32_t max_freq;   // Maximum frequency (Unit: KHz)
-};
-
-struct spi_s {
-    SPI_HandleTypeDef *handle;
-    SPI_TypeDef *ins;
-    uint32_t max_freq;   // Maximum frequency (Unit: KHz)
-};
-
 typedef struct gpio_pin {
     uint32_t index;
     uint32_t alternate;
@@ -82,6 +60,18 @@ typedef struct gpio_dev {
     GPIO_TypeDef *ins;
     uint32_t pin;
 } gpio_dev_t;
+
+typedef struct i2c_dev {
+    I2C_TypeDef *ins;
+    gpio_pin_t sda_pin;
+    gpio_pin_t scl_pin;
+} i2c_dev_t;
+
+struct spi_s {
+    SPI_HandleTypeDef *handle;
+    SPI_TypeDef *ins;
+    uint32_t max_freq;   // Maximum frequency (Unit: KHz)
+};
 
 typedef struct uart_dev {
     USART_TypeDef *ins;

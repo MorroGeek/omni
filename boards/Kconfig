@@ -1,15 +1,31 @@
-menu "Boards Options"
+menu "Pheripherals Options"
+
+############ STM32 Peripheral Selection ############
 
 if OMNI_BOARD_SECTION_STM32F405RG
-menu "ST STM32F405RG"
-    rsource "st/stm32f405rg/Kconfig"
-endmenu
-endif
+    menu "ST STM32F405RG"
+        rsource "st/stm32f405rg/Kconfig"
+    endmenu
+endif # OMNI_BOARD_SECTION_STM32F405RG
 
 if OMNI_BOARD_SECTION_STM32F407IG
-menu "ST STM32F407IG"
-    rsource "st/stm32f407ig/Kconfig"
-endmenu
-endif
+    menu "ST STM32F407IG"
+        rsource "st/stm32f407ig/Kconfig"
+    endmenu
+endif # OMNI_BOARD_SECTION_STM32F407IG
 
-endmenu
+############ APM32 Peripheral Selection ############
+
+if OMNI_BOARD_SECTION_APM32F405RG
+    menu "APM APM32F405RG"
+        rsource "apm/apm32f405rg/Kconfig"
+    endmenu
+endif # OMNI_BOARD_SECTION_APM32F405RG
+
+if OMNI_BOARD_SECTION_APM32F407IG
+    menu "APM APM32F407IG"
+        rsource "apm/apm32f407ig/Kconfig"
+    endmenu
+endif # OMNI_BOARD_SECTION_APM32F407IG
+
+endmenu # Boards Pheripherals Options

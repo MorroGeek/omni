@@ -32,30 +32,22 @@ target_sources(omni-stm32f405xx INTERFACE
     ${STARTUP_FILE}
 )
 
-#set(LINKER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/${LINKER_FILE} CACHE INTERNAL "Linker script")
-#
-#message(STATUS "Linker script1: ${LINKER_SCRIPT}")
-
-# target_link_options(omni-stm32f405xg INTERFACE
-#     -T${CMAKE_CURRENT_SOURCE_DIR}/${LINKER_FILE}
-# )
-
-if(${OMNI_CPU} STREQUAL "stm32f405xx")
+if(${OMNI_TARGET} STREQUAL "stm32f405xx")
     if(NOT ${OMNI_LINKER_SCRIPT} STREQUAL "custom")
         omni_set_linker_script(omni-stm32f405xx ${CMAKE_CURRENT_SOURCE_DIR}/${LINKER_FILE})
     endif()
 
-    # 获取所有子目录
+    # Get all subdirectories
     omni_get_subdirectories(${CMAKE_CURRENT_SOURCE_DIR} OMNI_BOARDS)
 
-    # 检查OMNI_BOARD是否在数组中
+    # Check if the board is supported
     list(FIND OMNI_BOARDS ${OMNI_BOARD} BOARD_INDEX)
 
     if(${BOARD_INDEX} GREATER -1)
         # message(STATUS "${OMNI_BOARD} is in the list.")
         set(BOARD_TYPE "omni-stm32f405xx-${OMNI_BOARD}")
     else()
-        # 输出结果
+        # Output all supported boards
         message("---------- Supported Board ----------")
         foreach(board ${OMNI_BOARDS})
             message(STATUS "${board}")

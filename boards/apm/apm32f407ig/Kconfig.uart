@@ -1,0 +1,401 @@
+menuconfig UART
+    bool "UART board configuration"
+    default y
+    help
+        Enable the UART board configuration.
+
+if UART
+
+menu "UART Enable Configuration"
+    config UART_NUM_1
+        bool "Enable UART 1"
+        default y
+        help
+            Enable UART 1 port.
+
+    config UART_NUM_2
+        bool "Enable UART 2"
+        default n
+        help
+            Enable UART 2 port.
+
+    config UART_NUM_3
+        bool "Enable UART 3"
+        default n
+        help
+            Enable UART 3 port.
+
+    config UART_NUM_4
+        bool "Enable UART 4"
+        default n
+        help
+            Enable UART 4 port.
+
+    config UART_NUM_5
+        bool "Enable UART 5"
+        default n
+        help
+            Enable UART 5 port.
+
+    config UART_NUM_6
+        bool "Enable UART 6"
+        default n
+        help
+            Enable UART 6 port.
+
+endmenu # UART Enable Configuration
+
+# menu "UART Configuration"
+# depends on UART_NUM_1
+
+#     config UART_BAUDRATE
+#         int "UART Baudrate"
+#         range 1200 115200
+#         default 115200
+#         help
+#             Set the UART baudrate.
+
+#     config UART_WORDLENGTH
+#         int "UART Word Length"
+#         default 8
+#         help
+#             Set the UART word length.
+
+#     config UART_STOPBITS
+#         int "UART Stop Bits"
+#         default 1
+#         help
+#             Set the UART stop bits.
+
+#     config UART_PARITY
+#         int "UART Parity"
+#         default 0
+#         help
+#             Set the UART parity.
+
+#     config UART_MODE
+#         int "UART Mode"
+#         default 0
+#         help
+#             Set the UART mode.
+
+#     config UART_HARDWARE_FLOW_CONTROL
+#         int "UART Hardware Flow Control"
+#         default 0
+#         help
+#             Set the UART hardware flow control.
+
+# endmenu # UART Configuration
+
+menu "UART IO Configuration"
+
+    menu "UART1 IO"
+        depends on UART_NUM_1
+
+        choice UART1_TX_PIN_SELECTION
+            prompt "UART1 TX PIN"
+            config UART1_TX_PIN_PA9
+                bool "PA9"
+            config UART1_TX_PIN_PB6
+                bool "PB6"
+        endchoice
+
+        config UART1_TX_PIN
+            hex
+            default 0x09 if UART1_TX_PIN_PA9
+            default 0x16 if UART1_TX_PIN_PB6
+            depends on UART_NUM_1
+            help
+                The hex value for the selected UART1 TX pin, based on user selection.
+
+        choice UART1_RX_PIN_SELECTION
+            prompt "UART1 RX PIN"
+            config UART1_RX_PIN_PA10
+                bool "PA10"
+            config UART1_RX_PIN_PB7
+                bool "PB7"
+
+        endchoice
+
+        config UART1_RX_PIN
+            hex
+            default 0x0A if UART1_RX_PIN_PA10
+            default 0x17 if UART1_RX_PIN_PB7
+            depends on UART_NUM_1
+            help
+                The hex value for the selected UART1 RX pin, based on user selection.
+
+        config UART1_TX_PIN_AF
+            int
+            default 7
+            depends on UART_NUM_1
+            help
+                Set the UART1 TX pin alternate function.
+
+        config UART1_RX_PIN_AF
+            int
+            default 7
+            depends on UART_NUM_1
+            help
+                Set the UART1 RX pin alternate function.
+
+    endmenu # UART1 IO
+
+    menu "UART2 IO"
+        depends on UART_NUM_2
+
+        choice UART2_TX_PIN_SELECTION
+            prompt "UART2 TX PIN"
+            config UART2_TX_PIN_PA2
+                bool "PA2"
+            config UART2_TX_PIN_PD5
+                bool "PD5"
+        endchoice
+
+        config UART2_TX_PIN
+            hex
+            default 0x02 if UART2_TX_PIN_PA2
+            default 0x35 if UART2_TX_PIN_PD5
+            depends on UART_NUM_2
+            help
+                The hex value for the selected UART2 TX pin, based on user selection.
+
+        choice UART2_RX_PIN_SELECTION
+            prompt "UART2 RX PIN"
+            config UART2_RX_PIN_PA3
+                bool "PA3"
+            config UART2_RX_PIN_PD6
+                bool "PD6"
+        endchoice
+
+        config UART2_RX_PIN
+            hex
+            default 0x03 if UART2_RX_PIN_PA3
+            default 0x36 if UART2_RX_PIN_PD6
+            depends on UART_NUM_2
+            help
+                The hex value for the selected UART2 RX pin, based on user selection.
+
+        config UART2_TX_PIN_AF
+            int
+            default 7
+            depends on UART_NUM_2
+            help
+                Set the UART2 TX pin alternate function.
+
+        config UART2_RX_PIN_AF
+            int
+            default 7
+            depends on UART_NUM_2
+            help
+                Set the UART2 RX pin alternate function.
+
+    endmenu # UART2 IO
+
+    menu "UART3 IO"
+        depends on UART_NUM_3
+
+        choice UART3_TX_PIN_SELECTION
+            prompt "UART3 TX PIN"
+            config UART3_TX_PIN_PB10
+                bool "PB10"
+            config UART3_TX_PIN_PC10
+                bool "PC10"
+            config UART3_TX_PIN_PD8
+                bool "PD8"
+        endchoice
+
+        config UART3_TX_PIN
+            hex
+            default 0x1A if UART3_TX_PIN_PB10
+            default 0x2A if UART3_TX_PIN_PC10
+            default 0x38 if UART3_TX_PIN_PD8
+            depends on UART_NUM_3
+            help
+                The hex value for the selected UART3 TX pin, based on user selection.
+
+        choice UART3_RX_PIN_SELECTION
+            prompt "UART3 RX PIN"
+            config UART3_RX_PIN_PB11
+                bool "PB11"
+            config UART3_RX_PIN_PC11
+                bool "PC11"
+            config UART3_RX_PIN_PD9
+                bool "PD9"
+        endchoice
+
+        config UART3_RX_PIN
+            hex
+            default 0x1B if UART3_RX_PIN_PB11
+            default 0x2B if UART3_RX_PIN_PC11
+            default 0x39 if UART3_RX_PIN_PD9
+            depends on UART_NUM_3
+            help
+                The hex value for the selected UART3 RX pin, based on user selection.
+
+        config UART3_TX_PIN_AF
+            int
+            default 7
+            depends on UART_NUM_3
+            help
+                Set the UART3 TX pin alternate function.
+
+        config UART3_RX_PIN_AF
+            int
+            default 7
+            depends on UART_NUM_3
+            help
+                Set the UART3 RX pin alternate function.
+
+    endmenu # UART3 IO
+
+    menu "UART4 IO"
+        depends on UART_NUM_4
+
+        choice UART4_TX_PIN_SELECTION
+            prompt "UART4 TX PIN"
+            config UART4_TX_PIN_PA0
+                bool "PA0"
+            config UART4_TX_PIN_PC10
+                bool "PC10"
+        endchoice
+
+        config UART4_TX_PIN
+            hex
+            default 0x00 if UART4_TX_PIN_PA0
+            default 0x2A if UART4_TX_PIN_PC10
+            depends on UART_NUM_4
+            help
+                The hex value for the selected UART4 TX pin, based on user selection.
+
+        choice UART4_RX_PIN_SELECTION
+            prompt "UART4 RX PIN"
+            config UART4_RX_PIN_PA1
+                bool "PA1"
+            config UART4_RX_PIN_PC11
+                bool "PC11"
+        endchoice
+
+        config UART4_RX_PIN
+            hex
+            default 0x01 if UART4_RX_PIN_PA1
+            default 0x2B if UART4_RX_PIN_PC11
+            depends on UART_NUM_4
+            help
+                The hex value for the selected UART4 RX pin, based on user selection.
+
+        config UART4_TX_PIN_AF
+            int
+            default 8
+            depends on UART_NUM_4
+            help
+                Set the UART4 TX pin alternate function.
+
+        config UART4_RX_PIN_AF
+            int
+            default 8
+            depends on UART_NUM_4
+            help
+                Set the UART4 RX pin alternate function.
+
+    endmenu # UART4 IO
+
+    menu "UART5 IO"
+        depends on UART_NUM_5
+
+        choice UART5_TX_PIN_SELECTION
+            prompt "UART5 TX PIN"
+            config UART5_TX_PIN_PC12
+                bool "PC12"
+        endchoice
+
+        config UART5_TX_PIN
+            hex
+            default 0x2C if UART5_TX_PIN_PC12
+            depends on UART_NUM_5
+            help
+                The hex value for the selected UART5 TX pin, based on user selection.
+
+        choice UART5_RX_PIN_SELECTION
+            prompt "UART5 RX PIN"
+            config UART5_RX_PIN_PD2
+                bool "PD2"
+        endchoice
+
+        config UART5_RX_PIN
+            hex
+            default 0x32 if UART5_RX_PIN_PD2
+            depends on UART_NUM_5
+            help
+                The hex value for the selected UART5 RX pin, based on user selection.
+
+        config UART5_TX_PIN_AF
+            int
+            default 8
+            depends on UART_NUM_5
+            help
+                Set the UART5 TX pin alternate function.
+
+        config UART5_RX_PIN_AF
+            int
+            default 8
+            depends on UART_NUM_5
+            help
+                Set the UART5 RX pin alternate function.
+
+    endmenu # UART5 IO
+
+    menu "UART6 IO"
+        depends on UART_NUM_6
+
+        choice UART6_TX_PIN_SELECTION
+            prompt "UART6 TX PIN"
+            config UART6_TX_PIN_PC6
+                bool "PC6"
+            config UART6_TX_PIN_PG14
+                bool "PG14"
+        endchoice
+
+        config UART6_TX_PIN
+            hex
+            default 0x26 if UART6_TX_PIN_PC6
+            default 0x6E if UART6_TX_PIN_PG14
+            depends on UART_NUM_6
+            help
+                The hex value for the selected UART6 TX pin, based on user selection.
+
+        choice UART6_RX_PIN_SELECTION
+            prompt "UART6 RX PIN"
+            config UART6_RX_PIN_PC7
+                bool "PC7"
+            config UART6_RX_PIN_PG9
+                bool "PG9"
+        endchoice
+
+        config UART6_RX_PIN
+            hex
+            default 0x27 if UART6_RX_PIN_PC7
+            default 0x69 if UART6_RX_PIN_PG9
+            depends on UART_NUM_6
+            help
+                The hex value for the selected UART6 RX pin, based on user selection.
+
+        config UART6_TX_PIN_AF
+            int
+            default 8
+            depends on UART_NUM_6
+            help
+                Set the UART6 TX pin alternate function.
+
+        config UART6_RX_PIN_AF
+            int
+            default 8
+            depends on UART_NUM_6
+            help
+                Set the UART6 RX pin alternate function.
+
+    endmenu # UART6 IO
+
+endmenu # UART IO Configuration
+
+endif # UART

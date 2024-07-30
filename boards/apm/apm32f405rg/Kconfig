@@ -1,0 +1,95 @@
+menuconfig UART
+    bool "UART board configuration"
+    help
+        Enable the UART board configuration.
+
+if UART
+
+menu "UART Port Configuration"
+    config UART_NUM_1
+        bool "Enable UART 1"
+        default y
+        help
+            Enable UART 1 port.
+
+    config UART_NUM_2
+        bool "Enable UART 2"
+        default n
+        help
+            Enable UART 2 port.
+
+    config UART_NUM_3
+        bool "Enable UART 3"
+        default n
+        help
+            Enable UART 3 port.
+
+    config UART_NUM_4
+        bool "Enable UART 4"
+        default n
+        help
+            Enable UART 4 port.
+
+endmenu # UART Configuration
+
+menu "UART IO Configuration"
+
+    config UART1_TX_PIN
+        depends on UART_NUM_1
+        hex "UART 1 TX Pin"
+        default 0x09
+        help
+            Set the UART 1 TX pin.
+
+    config UART1_RX_PIN
+        depends on UART_NUM_1
+        hex "UART 1 RX Pin"
+        default 0x0A
+        help
+            Set the UART 1 RX pin.
+
+    config UART2_TX_PIN
+        depends on UART_NUM_2
+        hex "UART 2 TX Pin"
+        default 0x02
+        help
+            Set the UART 2 TX pin.
+
+    config UART2_RX_PIN
+        depends on UART_NUM_2
+        hex "UART 2 RX Pin"
+        default 0x03
+        help
+            Set the UART 2 RX pin.
+
+    config UART3_TX_PIN
+        depends on UART_NUM_3
+        hex "UART 3 TX Pin"
+        default 0x1A
+        help
+            Set the UART 3 TX pin.
+
+    config UART3_RX_PIN
+        depends on UART_NUM_3
+        hex "UART 3 RX Pin"
+        default 0x1B
+        help
+            Set the UART 3 RX pin.
+
+    config UART4_TX_PIN
+        depends on UART_NUM_4
+        hex "UART 4 TX Pin"
+        default 0x2A
+        help
+            Set the UART 4 TX pin.
+
+    config UART4_RX_PIN
+        depends on UART_NUM_4
+        hex "UART 4 RX Pin"
+        default 0x2B
+        help
+            Set the UART 4 RX pin.
+
+endmenu # UART IO Configuration
+
+endif # UART
