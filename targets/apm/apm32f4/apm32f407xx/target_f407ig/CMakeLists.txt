@@ -13,8 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_library(omni-stm32f405xx-mcstools INTERFACE)
+add_library(omni-apm32f407xx-f407ig INTERFACE)
 
-target_include_directories(omni-stm32f405xx-mcstools INTERFACE
+target_include_directories(omni-apm32f407xx-f407ig INTERFACE
     .
 )

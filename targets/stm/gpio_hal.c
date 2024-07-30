@@ -98,6 +98,7 @@ const struct gpio_hal_api gpio_hal = {
 
 /**
  * @brief Initialize GPIO
+ * 
  * @param context: Pointer to GPIO HAL context structure
  * @return Operation status
  */
@@ -136,6 +137,7 @@ static int gpio_hal_init(gpio_hal_context_t *context) {
 
 /**
  * @brief Deinitialize GPIO
+ * 
  * @param context: Pointer to GPIO HAL context structure
  * @return Operation status
  */
@@ -155,6 +157,7 @@ static int gpio_hal_deinit(gpio_hal_context_t *context) {
 
 /**
  * @brief Set GPIO mode
+ * 
  * @param context: Pointer to GPIO HAL context structure
  * @param mode: GPIO mode
  * @return Operation status
@@ -195,6 +198,7 @@ static int gpio_hal_mode(gpio_hal_context_t *context, gpio_mode_t mode) {
 
 /**
  * @brief Set GPIO alternate function
+ * 
  * @param context: Pointer to GPIO HAL context structure
  * @param alternate: GPIO alternate function
  * @return Operation status
@@ -225,6 +229,7 @@ static int gpio_hal_alternate(gpio_hal_context_t *context, uint32_t alternate) {
 
 /**
  * @brief Set GPIO pull
+ * 
  * @param context: Pointer to GPIO HAL context structure
  * @param pull: GPIO pull
  * @return Operation status
@@ -258,6 +263,7 @@ static int gpio_hal_pull(gpio_hal_context_t *context, gpio_pull_t pull) {
 
 /**
  * @brief Set GPIO speed
+ * 
  * @param context: Pointer to GPIO HAL context structure
  * @param speed: GPIO speed
  * @return Operation status
@@ -284,6 +290,7 @@ static int gpio_hal_speed(gpio_hal_context_t *context, gpio_speed_t speed) {
 
 /**
  * @brief Write GPIO
+ * 
  * @param context: Pointer to GPIO HAL context structure
  * @param value: GPIO value
  * @return Operation status
@@ -314,6 +321,7 @@ static int gpio_hal_write(gpio_hal_context_t *context, uint32_t value) {
 
 /**
  * @brief Toggle GPIO
+ * 
  * @param context: Pointer to GPIO HAL context structure
  * @return Operation status
  */
@@ -339,6 +347,7 @@ static int gpio_hal_toggle(gpio_hal_context_t *context) {
 
 /**
  * @brief Read GPIO
+ * 
  * @param context: Pointer to GPIO HAL context structure
  * @param value: Pointer to GPIO value
  * @return Operation status

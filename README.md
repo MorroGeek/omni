@@ -3,7 +3,7 @@
 [![Version](https://img.shields.io/github/v/release/MorroGeek/omni)](https://github.com/MorroGeek/omni/releases/latest)
 [![License](https://img.shields.io/github/license/MorroGeek/omni)](https://github.com/MorroGeek/omni/blob/main/LICENSE)
 
-The Omni Project stands as a robust framework, adeptly utilizing CMake to orchestrate a diverse suite of middleware and libraries. It seamlessly integrates HAL and driver layer functionalities, bolstered by comprehensive frameworks for unit testing and sophisticated Kconfig configuration management. It includes:
+The Omni Project is a framework that uses CMake and Kconfig to manage a variety of middleware and libraries. It includes the Hardware Abstraction Layer (HAL) and driver layer interfaces, as well as tools for unit testing. It includes:
 
 - CMake Management: Utilizes CMake for project dependency management and build system.
 - HAL and Driver Layers: Provides support for hardware abstraction layer and driver layer.
@@ -27,10 +27,19 @@ The Omni Project stands as a robust framework, adeptly utilizing CMake to orches
 | [omni/tools](./tools)              | Tools for building and flashing                              |
 
 ## Supported Platforms
+
 | Platform      | Device                                                |
 | :------------ | :---------------------------------------------------- |
 | APM32F4       | APM32F405RG, APM32F407RG                              |
 | STM32F4       | STM32F405xG, STM32F407xG                              |
+
+## Dependencies
+
+- [CMake](https://cmake.org/)
+- [GNU Arm Embedded Toolchain](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm)
+- [Ruby](https://www.ruby-lang.org/en/)
+- [Ceedling](https://github.com/ThrowTheSwitch/Ceedling)
+- [Python](https://www.python.org/)
 
 ## Getting Started
 

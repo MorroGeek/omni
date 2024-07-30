@@ -43,14 +43,14 @@ typedef struct cli_driver_config {
 } cli_driver_config_t;
 
 /**
- * @brief Initialize CLI driver
+ * @brief Open CLI driver
  */
-typedef int (*cli_init_t)(cli_num_t cli_num, cli_driver_config_t *config);
+typedef int (*cli_open_t)(cli_num_t cli_num, cli_driver_config_t *config);
 
 /**
- * @brief Deinitialize CLI driver
+ * @brief Close CLI driver
  */
-typedef int (*cli_deinit_t)(cli_num_t cli_num);
+typedef int (*cli_close_t)(cli_num_t cli_num);
 
 /**
  * @brief Start CLI driver
@@ -66,8 +66,8 @@ typedef int (*cli_stop_t)(cli_num_t cli_num);
  * @brief CLI driver API
  */
 struct cli_driver_api {
-    cli_init_t init;
-    cli_deinit_t deinit;
+    cli_open_t open;
+    cli_close_t close;
     cli_start_t start;
 };
 

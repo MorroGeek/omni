@@ -1,177 +1,26 @@
 menuconfig OMNI_DRIVERS_CLI
-    bool "Command Line Interface (CLI) driver"
+    bool "CLI driver"
     default n
     help
         Enable the CLI (Command Line Interface) driver configuration.
 
 if OMNI_DRIVERS_CLI
 
-config SHELL_TASK_WHILE
-    bool "Supports shell task while"
-    default y
-    help
-        Enable this option to support shell task while.
+menu "CLI Enable Configuration"
+    config CLI_NUM_1
+        bool "Enable CLI 1"
+        default y
+        help
+            Enable CLI 1.
 
-config SHELL_USING_CMD_EXPORT
-    bool "Supports shell command export"
-    default y
-    help
-        Enable this option to support shell command export.
+    config CLI_NUM_2
+        bool "Enable CLI 2"
+        default n
+        help
+            Enable CLI 2.
 
-config SHELL_USING_COMPANION
-    bool "Supports shell companion"
-    default y
-    help
-        Enable this option to support shell companion.
+endmenu # CLI Enable Configuration
 
-config SHELL_SUPPORT_END_LINE
-    bool "Supports shell tailing mode"
-    default y
-    help
-        Enable this option to support shell tailing mode.
-
-config SHELL_HELP_LIST_USER
-    bool "Supports shell help list user"
-    default n
-    help
-        Enable this option to support shell help list user.
-
-config SHELL_HELP_LIST_VAR
-    bool "Supports shell help list var"
-    default n
-    help
-        Enable this option to support shell help list var.
-
-config SHELL_HELP_LIST_KEY
-    bool "Supports shell help list key"
-    default n
-    help
-        Enable this option to support shell help list key.
-
-config SHELL_HELP_SHOW_PERMISSION
-    bool "Supports shell help show permission"
-    default y
-    help
-        Enable this option to support shell help show permission.
-
-config SHELL_ENTER_LF
-    bool "Supports shell enter LF"
-    default y
-    help
-        Enable this option to support shell enter LF.
-
-config SHELL_ENTER_CR
-    bool "Supports shell enter CR"
-    default y
-    help
-        Enable this option to support shell enter CR.
-
-config SHELL_ENTER_CRLF
-    bool "Supports shell enter CRLF"
-    default n
-    help
-        Enable this option to support shell enter CRLF.
-
-config SHELL_EXEC_UNDEF_FUNC
-    bool "Supports shell execute undefined function"
-    default n
-    help
-        Enable this option to support shell execute undefined function.
-
-config SHELL_PARAMETER_MAX_NUMBER
-    int "Shell parameter max number"
-    default 8
-    help
-        Set the maximum number of shell parameters.
-
-config SHELL_HISTORY_MAX_NUMBER
-    int "Shell history max number"
-    default 5
-    help
-        Set the maximum number of shell history.
-
-config SHELL_DOUBLE_CLICK_TIME
-    int "Shell double click time"
-    default 200
-    help
-        Set the double click time of shell.
-
-config SHELL_QUICK_HELP
-    bool "Supports shell quick help"
-    default y
-    help
-        Enable this option to support shell quick help.
-
-config SHELL_KEEP_RETURN_VALUE
-    bool "Supports shell keep return value"
-    default n
-    help
-        Enable this option to support shell keep return value.
-
-config SHELL_MAX_NUMBER
-    int "Shell max number"
-    default 5
-    help
-        Set the maximum number of shell.
-
-config SHELL_PRINT_BUFFER
-    int "Shell print buffer"
-    default 128
-    help
-        Set the shell print buffer size.
-
-config SHELL_SCAN_BUFFER
-    int "Shell scan buffer"
-    default 0
-    help
-        Set the shell scan buffer size.
-
-config SHELL_USING_LOCK
-    bool "Supports shell lock"
-    default y
-    help
-        Enable this option to support shell lock.
-
-config SHELL_SHOW_INFO
-    bool "Supports shell show info"
-    default y
-    help
-        Enable this option to support shell show info.
-
-config SHELL_CLS_WHEN_LOGIN
-    bool "Supports shell clear screen when login"
-    default y
-    help
-        Enable this option to support shell clear screen when login.
-
-config SHELL_DEFAULT_USER
-    string "Shell default user"
-    default "omni"
-    help
-        Set the default user of shell.
-
-config SHELL_DEFAULT_USER_PASSWORD
-    string "Shell default user password"
-    default ""
-    help
-        Set the default user password of shell.
-
-config SHELL_LOCK_TIMEOUT
-    int "Shell lock timeout"
-    default 60000
-    help
-        Set the shell lock timeout.
-
-config SHELL_USING_FUNC_SIGNATURE
-    bool "Supports shell function signature"
-    default y
-    help
-        Enable this option to support shell function signature.
-
-config SHELL_SUPPORT_ARRAY_PARAM
-    bool "Supports shell array parameter"
-    default n
-    help
-        Enable this option to support shell array parameter.
+rsource "Kconfig.shell"
 
 endif # OMNI_DRIVERS_CLI

@@ -1,0 +1,87 @@
+menu "Targets Options"
+
+    ############ Platform Selection ############
+    choice OMNI_PLATFORM
+        prompt "Platform Selection"
+        default OMNI_PLATFORM_SECTION_STM
+
+        config OMNI_PLATFORM_SECTION_STM
+            bool "stm"
+
+        config OMNI_PLATFORM_SECTION_APM
+            bool "apm"
+
+    endchoice # OMNI_PLATFORM
+
+    ############ Target Selection ############
+    choice OMNI_TARGET_STM32
+        prompt "Target Selection"
+        depends on OMNI_PLATFORM_SECTION_STM
+        default OMNI_TARGET_SECTION_STM32F405XX
+
+        config OMNI_TARGET_SECTION_STM32F405XX
+            bool "stm32f405xx"
+
+        config OMNI_TARGET_SECTION_STM32F407XX
+            bool "stm32f407xx"
+
+    endchoice # OMNI_TARGET_STM32
+
+    choice OMNI_TARGET_APM32
+        prompt "Target Selection"
+        depends on OMNI_PLATFORM_SECTION_APM
+        default OMNI_TARGET_SECTION_APM32F405XX
+
+        config OMNI_TARGET_SECTION_APM32F405XX
+            bool "apm32f405xx"
+
+        config OMNI_TARGET_SECTION_APM32F407XX
+            bool "apm32f407xx"
+
+    endchoice # OMNI_TARGET_APM32
+
+    ############ Board Selection ############
+    choice OMNI_BOARD_STM32F405XX
+        prompt "Board Selection"
+        depends on OMNI_TARGET_SECTION_STM32F405XX
+        default OMNI_BOARD_SECTION_STM32F405RG
+
+        config OMNI_BOARD_SECTION_STM32F405RG
+            bool "stm32f405rg"
+
+        config OMNI_BOARD_SECTION_MCSTOOLS
+            bool "mcstools"
+
+    endchoice # OMNI_BOARD_STM32F405XX
+
+    choice OMNI_BOARD_STM32F407XX
+        prompt "Board Selection"
+        depends on OMNI_TARGET_SECTION_STM32F407XX
+        default OMNI_BOARD_SECTION_STM32F407IG
+
+        config OMNI_BOARD_SECTION_STM32F407IG
+            bool "stm32f407ig"
+
+    endchoice # OMNI_BOARD_STM32F407XX
+
+    choice OMNI_BOARD_APM32F405XX
+        prompt "Board Selection"
+        depends on OMNI_TARGET_SECTION_APM32F405XX
+        default OMNI_BOARD_SECTION_APM32F405RG
+
+        config OMNI_BOARD_SECTION_APM32F405RG
+            bool "apm32f405rg"
+
+    endchoice # OMNI_BOARD_APM32F405XX
+
+    choice OMNI_BOARD_APM32F407XX
+        prompt "Board Selection"
+        depends on OMNI_TARGET_SECTION_APM32F407XX
+        default OMNI_BOARD_SECTION_APM32F407IG
+
+        config OMNI_BOARD_SECTION_APM32F407IG
+            bool "apm32f407ig"
+
+    endchoice # OMNI_BOARD_APM32F407XX
+
+endmenu # Targets Options

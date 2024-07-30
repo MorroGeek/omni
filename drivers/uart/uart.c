@@ -1,7 +1,7 @@
 /**
   * @file    uart.c
   * @author  MorroMaker
-  * @brief   UART driver for Omni
+  * @brief   UART driver for omni
   * @attention
   *
   * Copyright (c) 2024 MorroMaker
@@ -50,26 +50,30 @@ typedef struct {
 
 static uart_obj_t *p_uart_obj[UART_NUM_MAX];
 
-static int uart_init(uart_num_t uart_num, uart_driver_config_t *config);
-static int uart_deinit(uart_num_t uart_num);
+static int uart_open(uart_num_t uart_num, uart_driver_config_t *config);
+static int uart_close(uart_num_t uart_num);
+static int uart_start(uart_num_t uart_num);
+static int uart_stop(uart_num_t uart_num);
 static int uart_write_bytes(uart_num_t uart_num, uint8_t *data, uint32_t len);
 static int uart_read_bytes(uart_num_t uart_num, uint8_t *data, uint32_t len);
 
 struct uart_driver_api uart_driver = {
-    .init = uart_init,
-    .deinit = uart_deinit,
+    .open = uart_open,
+    .close = uart_close,
+    .start = uart_start,
+    .stop = uart_stop,
     .write_bytes = uart_write_bytes,
     .read_bytes = uart_read_bytes,
 };
 
 /**
- * @brief Initialize the UART port
+ * @brief Open the UART port
  * 
  * @param uart_num UART port number
  * @param config Pointer to UART driver configuration structure
  * @return Operation status
  */
-static int uart_init(uart_num_t uart_num, uart_driver_config_t *config) {
+static int uart_open(uart_num_t uart_num, uart_driver_config_t *config) {
     int res;
     p_uart_obj[uart_num] = (uart_obj_t *)OMNI_MALLOC(sizeof(uart_obj_t));
     if (p_uart_obj[uart_num] == NULL) {
@@ -81,61 +85,50 @@ static int uart_init(uart_num_t uart_num, uart_driver_config_t *config) {
 
     res = uart_hal.init(&p_uart_obj[uart_num]->hal_context);
     if (res != OMNI_OK) {
+        OMNI_FREE(p_uart_obj[uart_num]);
+        p_uart_obj[uart_num] = NULL;
         return res;
     }
 
-    // Set UART pin
+    // Set UART pins
     gpio_driver_config_t gpio_config = {
         .mode = GPIO_MODE_PP_AF,
         .pull = GPIO_PULL_NONE,
         .speed = GPIO_SPEED_LEVEL_HIGH,
     };
 
+    // Set TX pin
     gpio_config.alternate = p_uart_obj[uart_num]->hal_context.dev.tx_pin.alternate;
-    res = gpio_driver.init(p_uart_obj[uart_num]->hal_context.dev.tx_pin.index, &gpio_config);
+    res = gpio_driver.open(p_uart_obj[uart_num]->hal_context.dev.tx_pin.index, &gpio_config);
     if (res != OMNI_OK) {
+        OMNI_FREE(p_uart_obj[uart_num]);
+        p_uart_obj[uart_num] = NULL;
         return res;
     }
 
+    // Set RX pin
     gpio_config.alternate = p_uart_obj[uart_num]->hal_context.dev.rx_pin.alternate;
-    res = gpio_driver.init(p_uart_obj[uart_num]->hal_context.dev.rx_pin.index, &gpio_config);
+    res = gpio_driver.open(p_uart_obj[uart_num]->hal_context.dev.rx_pin.index, &gpio_config);
     if (res != OMNI_OK) {
+        OMNI_FREE(p_uart_obj[uart_num]);
+        p_uart_obj[uart_num] = NULL;
         return res;
     }
 
     // Set UART parameters
-    res = uart_hal.stop(&p_uart_obj[uart_num]->hal_context);
-    if (res != OMNI_OK) {
-        return res;
-    }
-
-    res = uart_hal.set_stop_bits(&p_uart_obj[uart_num]->hal_context, config->stop_bits);
-    if (res != OMNI_OK) {
-        return res;
-    }
-
-    res = uart_hal.set_data_bits(&p_uart_obj[uart_num]->hal_context, config->data_bits);
-    if (res != OMNI_OK) {
-        return res;
-    }
-
-    res = uart_hal.set_parity(&p_uart_obj[uart_num]->hal_context, config->parity);
-    if (res != OMNI_OK) {
-        return res;
-    }
-
-    res = uart_hal.set_flow_ctrl(&p_uart_obj[uart_num]->hal_context, config->flow_ctrl);
-    if (res != OMNI_OK) {
-        return res;
-    }
-
-    res = uart_hal.set_baud_rate(&p_uart_obj[uart_num]->hal_context, config->baudrate);
-    if (res != OMNI_OK) {
-        return res;
-    }
-
-    res = uart_hal.start(&p_uart_obj[uart_num]->hal_context);
-    if (res != OMNI_OK) {
+    if ((res = uart_hal.disable(&p_uart_obj[uart_num]->hal_context)) != OMNI_OK ||
+        (res = uart_hal.set_stop_bits(&p_uart_obj[uart_num]->hal_context, config->stop_bits)) != OMNI_OK ||
+        (res = uart_hal.set_data_bits(&p_uart_obj[uart_num]->hal_context, config->data_bits)) != OMNI_OK ||
+        (res = uart_hal.set_parity(&p_uart_obj[uart_num]->hal_context, config->parity)) != OMNI_OK ||
+        (res = uart_hal.set_flow_ctrl(&p_uart_obj[uart_num]->hal_context, config->flow_ctrl)) != OMNI_OK ||
+        (res = uart_hal.set_baud_rate(&p_uart_obj[uart_num]->hal_context, config->baudrate)) != OMNI_OK ||
+        (res = uart_hal.enable(&p_uart_obj[uart_num]->hal_context)) != OMNI_OK) {
+        // Close GPIO
+        gpio_driver.close(p_uart_obj[uart_num]->hal_context.dev.tx_pin.index);
+        gpio_driver.close(p_uart_obj[uart_num]->hal_context.dev.rx_pin.index);
+        // Free UART object
+        OMNI_FREE(p_uart_obj[uart_num]);
+        p_uart_obj[uart_num] = NULL;
         return res;
     }
 
@@ -143,12 +136,12 @@ static int uart_init(uart_num_t uart_num, uart_driver_config_t *config) {
 }
 
 /**
- * @brief Deinitialize the UART port
+ * @brief Close the UART port
  * 
  * @param uart_num UART port number
  * @return Operation status
  */
-static int uart_deinit(uart_num_t uart_num) {
+static int uart_close(uart_num_t uart_num) {
     int res;
 
     res = uart_hal.deinit(&p_uart_obj[uart_num]->hal_context);
@@ -158,6 +151,41 @@ static int uart_deinit(uart_num_t uart_num) {
 
     if (p_uart_obj[uart_num] != NULL) {
         OMNI_FREE(p_uart_obj[uart_num]);
+        p_uart_obj[uart_num] = NULL;
+    }
+
+    return OMNI_OK;
+}
+
+/**
+ * @brief Start UART port
+ * 
+ * @param uart_num UART port number
+ * @return Operation status
+ */
+static int uart_start(uart_num_t uart_num) {
+    int res;
+
+    res = uart_hal.enable(&p_uart_obj[uart_num]->hal_context);
+    if (res != OMNI_OK) {
+        return res;
+    }
+
+    return OMNI_OK;
+}
+
+/**
+ * @brief Stop UART port
+ * 
+ * @param uart_num UART port number
+ * @return Operation status
+ */
+static int uart_stop(uart_num_t uart_num) {
+    int res;
+
+    res = uart_hal.disable(&p_uart_obj[uart_num]->hal_context);
+    if (res != OMNI_OK) {
+        return res;
     }
 
     return OMNI_OK;

@@ -15,10 +15,6 @@
 
 add_library(omni-stm32f405xx-f405rg INTERFACE)
 
-target_sources(omni-stm32f405xx-f405rg INTERFACE
-    omni_board.c
-)
-
 target_include_directories(omni-stm32f405xx-f405rg INTERFACE
     .
 )

@@ -13,27 +13,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_subdirectory(target_f405rg)
+add_subdirectory(target_f407ig)
 
 include(../../../../tools/cmake/omni_set_linker_script.cmake)
 include(../../../../tools/cmake/omni_get_subdirectories.cmake)
 
-set(STARTUP_FILE toolchain/gcc/startup_apm32f405xx.s)
-set(LINKER_FILE toolchain/gcc/apm32f405xg_flash.ld)
+set(STARTUP_FILE toolchain/gcc/startup_apm32f407xx.s)
+set(LINKER_FILE toolchain/gcc/apm32f407xg_flash.ld)
 
-add_library(omni-apm32f405xx INTERFACE)
+add_library(omni-apm32f407xx INTERFACE)
 
-target_include_directories(omni-apm32f405xx INTERFACE
-    .
+target_include_directories(omni-apm32f407xx INTERFACE
+        .
 )
 
-target_sources(omni-apm32f405xx INTERFACE
-    ${STARTUP_FILE}
+target_sources(omni-apm32f407xx INTERFACE
+        ${STARTUP_FILE}
 )
 
-if(${OMNI_TARGET} STREQUAL "apm32f405xx")
+if(${OMNI_TARGET} STREQUAL "apm32f407xx")
     if(NOT ${OMNI_LINKER_SCRIPT} STREQUAL "custom")
-        omni_set_linker_script(omni-apm32f405xx ${CMAKE_CURRENT_SOURCE_DIR}/${LINKER_FILE})
+        omni_set_linker_script(omni-apm32f407xx ${CMAKE_CURRENT_SOURCE_DIR}/${LINKER_FILE})
     endif()
 
     # Get all subdirectories
@@ -43,8 +43,8 @@ if(${OMNI_TARGET} STREQUAL "apm32f405xx")
     list(FIND OMNI_BOARDS ${OMNI_BOARD} BOARD_INDEX)
 
     if(${BOARD_INDEX} GREATER -1)
-        # message(STATUS "${OMNI_BOARD} is in the list.")
-        set(BOARD_TYPE "omni-apm32f405xx-${OMNI_BOARD}")
+        #    message(STATUS "${OMNI_BOARD} is in the list.")
+        set(BOARD_TYPE "omni-apm32f407xx-${OMNI_BOARD}")
     else()
         # Output all supported boards
         message("---------- Supported Board ----------")
@@ -54,7 +54,7 @@ if(${OMNI_TARGET} STREQUAL "apm32f405xx")
         message(FATAL_ERROR "Board ${OMNI_BOARD} is not supported.")
     endif()
 
-    target_link_libraries(omni-apm32f405xx INTERFACE
-        ${BOARD_TYPE}
+    target_link_libraries(omni-apm32f407xx INTERFACE
+            ${BOARD_TYPE}
     )
 endif()

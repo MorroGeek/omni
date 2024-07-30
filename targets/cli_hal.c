@@ -25,14 +25,14 @@
 
 static int cli_hal_shell_init(cli_hal_context_t *context);
 static int cli_hal_shell_deinit(cli_hal_context_t *context);
-static int cli_hal_shell_start(cli_hal_context_t *context);
+static int cli_hal_shell_enable(cli_hal_context_t *context);
 static int cli_hal_log_init(cli_hal_context_t *context);
 static int cli_hal_log_deinit(cli_hal_context_t *context);
 
 const struct cli_hal_api cli_hal = {
     .shell_init = cli_hal_shell_init,
     .shell_deinit = cli_hal_shell_deinit,
-    .shell_start = cli_hal_shell_start,
+    .shell_enable = cli_hal_shell_enable,
     .log_init = cli_hal_log_init,
     .log_deinit = cli_hal_log_deinit,
 };
@@ -62,12 +62,12 @@ static int cli_hal_shell_deinit(cli_hal_context_t *context) {
 }
 
 /**
- * @brief Start shell
+ * @brief Enable shell
  * 
  * @param context Pointer to CLI HAL context
  * @return Operation status
  */
-static int cli_hal_shell_start(cli_hal_context_t *context) {
+static int cli_hal_shell_enable(cli_hal_context_t *context) {
     // Run shell
     shellTask(context->dev.shell);
 

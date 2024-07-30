@@ -2,66 +2,17 @@ menu "Omni Configuration"
 
 menu "System Options"
 
-choice OMNI_PLATFORM
-    prompt "Platform Selection"
-    default OMNI_PLATFORM_SECTION_STM
+choice OMNI_LINKER_SCRIPT
+    prompt "Linker Script Selection"
+    default OMNI_LINKER_SCRIPT_SECTION_DEFAULT
 
-    config OMNI_PLATFORM_SECTION_STM
-        bool "stm"
+    config OMNI_LINKER_SCRIPT_SECTION_DEFAULT
+        bool "default"
 
-    config OMNI_PLATFORM_SECTION_APM
-        bool "apm"
+    config OMNI_LINKER_SCRIPT_SECTION_CUSTOM
+        bool "custom"
 
-endchoice # OMNI_PLATFORM
-
-choice OMNI_CPU_STM32
-    prompt "CPU Selection"
-    depends on OMNI_PLATFORM_SECTION_STM
-    default OMNI_CPU_SECTION_STM32F405XX
-
-    config OMNI_CPU_SECTION_STM32F405XX
-        bool "stm32f405xx"
-
-    config OMNI_CPU_SECTION_STM32F407XX
-        bool "stm32f407xx"
-
-endchoice # OMNI_CPU_STM32
-
-choice OMNI_CPU_APM32
-    prompt "CPU Selection"
-    depends on OMNI_PLATFORM_SECTION_APM
-    default OMNI_CPU_SECTION_APM32F405XX
-
-    config OMNI_CPU_SECTION_APM32F405XX
-        bool "apm32f405xx"
-
-    config OMNI_CPU_SECTION_APM32F407XX
-        bool "apm32f407xx"
-
-endchoice # OMNI_CPU_APM32
-
-choice OMNI_BOARD_STM32F405XX
-    prompt "Board Selection"
-    depends on OMNI_CPU_SECTION_STM32F405XX
-    default OMNI_BOARD_SECTION_STM32F405RG
-
-    config OMNI_BOARD_SECTION_STM32F405RG
-        bool "stm32f405rg"
-
-    config OMNI_BOARD_SECTION_MCSTOOLS
-        bool "mcstools"
-
-endchoice # OMNI_BOARD_STM32F405XX
-
-choice OMNI_BOARD_STM32F407XX
-    prompt "Board Selection"
-    depends on OMNI_CPU_SECTION_STM32F407XX
-    default OMNI_BOARD_SECTION_STM32F407IG
-
-    config OMNI_BOARD_SECTION_STM32F407IG
-        bool "stm32f407ig"
-
-endchoice # OMNI_BOARD_STM32F407XX
+endchoice # OMNI_LINKER_SCRIPT
 
 choice OMNI_RTOS
     prompt "RTOS Selection"
@@ -99,20 +50,9 @@ choice OMNI_SHELL
 
 endchoice # OMNI_SHELL
 
-choice OMNI_LINKER_SCRIPT
-    prompt "Linker Script Selection"
-    default OMNI_LINKER_SCRIPT_SECTION_DEFAULT
-
-    config OMNI_LINKER_SCRIPT_SECTION_DEFAULT
-        bool "default"
-
-    config OMNI_LINKER_SCRIPT_SECTION_CUSTOM
-        bool "custom"
-
-endchoice # OMNI_LINKER_SCRIPT
-
 endmenu # System Options
 
+    rsource "targets/Kconfig"
     rsource "boards/Kconfig"
     rsource "components/Kconfig"
     rsource "drivers/Kconfig"

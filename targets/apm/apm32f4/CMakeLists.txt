@@ -18,26 +18,26 @@ add_library(omni-apm32f4 INTERFACE)
 add_subdirectory(apm32dalf4_fw)
 
 add_subdirectory(apm32f405xx EXCLUDE_FROM_ALL)
-# add_subdirectory(stm32f407xx EXCLUDE_FROM_ALL)
+add_subdirectory(apm32f407xx EXCLUDE_FROM_ALL)
 
 target_include_directories(omni-apm32f4 INTERFACE
     .
 )
 
-# Set CPU defined according to OMNI_CPU
-string(SUBSTRING ${OMNI_CPU} 0 9 PREFIX)
-string(SUBSTRING ${OMNI_CPU} 9 -1 SUFFIX)
+# Set CPU defined according to OMNI_TARGET
+string(SUBSTRING ${OMNI_TARGET} 0 9 PREFIX)
+string(SUBSTRING ${OMNI_TARGET} 9 -1 SUFFIX)
 string(TOUPPER ${PREFIX} PREFIX_UPPER)
 string(CONCAT CPU_DEFINED ${PREFIX_UPPER} ${SUFFIX})
 
-target_compile_definitions(omni-stm32f4 INTERFACE
+target_compile_definitions(omni-apm32f4 INTERFACE
     ${CPU_DEFINED}
 )
 
-if(NOT ${OMNI_CPU} STREQUAL "")
-    set(CPU_TYPE "omni-${OMNI_CPU}")
+if(NOT ${OMNI_TARGET} STREQUAL "")
+    set(CPU_TYPE "omni-${OMNI_TARGET}")
 else()
-    message(FATAL_ERROR "OMNI_CPU is not set")
+    message(FATAL_ERROR "OMNI_TARGET is not set")
 endif()
 
 target_link_libraries(omni-apm32f4 INTERFACE

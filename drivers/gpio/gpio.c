@@ -1,7 +1,7 @@
 /**
   * @file    gpio.c
   * @author  MorroMaker
-  * @brief   GPIO driver for Omni
+  * @brief   GPIO driver for omni
   * @attention
   *
   * Copyright (c) 2024 MorroMaker
@@ -47,7 +47,34 @@ typedef struct {
 
 static gpio_obj_t p_gpio_obj;
 
-static int gpio_init(gpio_num_t gpio_num, gpio_driver_config_t *config) {
+static int gpio_open(gpio_num_t gpio_num, gpio_driver_config_t *config);
+static int gpio_close(gpio_num_t gpio_num);
+static int gpio_set_mode(gpio_num_t gpio_num, gpio_mode_t mode);
+static int gpio_set_pull(gpio_num_t gpio_num, gpio_pull_t pull);
+static int gpio_set_speed(gpio_num_t gpio_num, gpio_speed_t speed);
+static int gpio_set_level(gpio_num_t gpio_num, uint32_t level);
+static int gpio_get_level(gpio_num_t gpio_num, uint32_t *level);
+static int gpio_toggle(gpio_num_t gpio_num);
+
+struct gpio_driver_api gpio_driver = {
+    .open = gpio_open,
+    .close = gpio_close,
+    .set_mode = gpio_set_mode,
+    .set_pull = gpio_set_pull,
+    .set_speed = gpio_set_speed,
+    .set_level = gpio_set_level,
+    .get_level = gpio_get_level,
+    .toggle = gpio_toggle,
+};
+
+/**
+ * @brief Open GPIO
+ * 
+ * @param gpio_num GPIO number
+ * @param config Pointer to UART driver configuration structure
+ * @return Operation status
+ */
+static int gpio_open(gpio_num_t gpio_num, gpio_driver_config_t *config) {
     int res;
     // p_gpio_obj[gpio_num] = (gpio_obj_t *)malloc(sizeof(gpio_obj_t));
     // uint32_t size = sizeof(gpio_obj_t);
@@ -91,7 +118,13 @@ static int gpio_init(gpio_num_t gpio_num, gpio_driver_config_t *config) {
     return OMNI_OK;
 }
 
-static int gpio_deinit(gpio_num_t gpio_num) {
+/**
+ * @brief Close GPIO
+ * 
+ * @param gpio_num GPIO number
+ * @return Operation status
+ */
+static int gpio_close(gpio_num_t gpio_num) {
     int res;
 
     p_gpio_obj.hal_context.gpio_num = gpio_num;
@@ -104,6 +137,13 @@ static int gpio_deinit(gpio_num_t gpio_num) {
     return OMNI_OK;
 }
 
+/**
+ * @brief Set GPIO mode
+ * 
+ * @param gpio_num GPIO number
+ * @param mode GPIO mode
+ * @return Operation status
+ */
 static int gpio_set_mode(gpio_num_t gpio_num, gpio_mode_t mode) {
     int res;
 
@@ -117,6 +157,13 @@ static int gpio_set_mode(gpio_num_t gpio_num, gpio_mode_t mode) {
     return OMNI_OK;
 }
 
+/**
+ * @brief Set GPIO pull
+ * 
+ * @param gpio_num GPIO number
+ * @param pull GPIO pull
+ * @return Operation status
+ */
 static int gpio_set_pull(gpio_num_t gpio_num, gpio_pull_t pull) {
     int res;
 
@@ -130,6 +177,13 @@ static int gpio_set_pull(gpio_num_t gpio_num, gpio_pull_t pull) {
     return OMNI_OK;
 }
 
+/**
+ * @brief Set GPIO speed
+ * 
+ * @param gpio_num GPIO number
+ * @param speed GPIO speed
+ * @return Operation status
+ */
 static int gpio_set_speed(gpio_num_t gpio_num, gpio_speed_t speed) {
     int res;
 
@@ -143,6 +197,13 @@ static int gpio_set_speed(gpio_num_t gpio_num, gpio_speed_t speed) {
     return OMNI_OK;
 }
 
+/**
+ * @brief Set GPIO level
+ * 
+ * @param gpio_num GPIO number
+ * @param level GPIO level
+ * @return Operation status
+ */
 static int gpio_set_level(gpio_num_t gpio_num, uint32_t level) {
     int res;
 
@@ -156,6 +217,13 @@ static int gpio_set_level(gpio_num_t gpio_num, uint32_t level) {
     return OMNI_OK;
 }
 
+/**
+ * @brief Get GPIO level
+ * 
+ * @param gpio_num GPIO number
+ * @param level Pointer to GPIO level
+ * @return Operation status
+ */
 static int gpio_get_level(gpio_num_t gpio_num, uint32_t *level) {
     int res;
 
@@ -169,6 +237,12 @@ static int gpio_get_level(gpio_num_t gpio_num, uint32_t *level) {
     return OMNI_OK;
 }
 
+/**
+ * @brief Toggle GPIO level
+ * 
+ * @param gpio_num GPIO number
+ * @return Operation status
+ */
 static int gpio_toggle(gpio_num_t gpio_num) {
     int res;
 
@@ -181,16 +255,5 @@ static int gpio_toggle(gpio_num_t gpio_num) {
 
     return OMNI_OK;
 }
-
-struct gpio_driver_api gpio_driver = {
-    .init = gpio_init,
-    .deinit = gpio_deinit,
-    .set_mode = gpio_set_mode,
-    .set_pull = gpio_set_pull,
-    .set_speed = gpio_set_speed,
-    .set_level = gpio_set_level,
-    .get_level = gpio_get_level,
-    .toggle = gpio_toggle,
-};
 
 #endif /* CONFIG_OMNI_DRIVERS_GPIO */

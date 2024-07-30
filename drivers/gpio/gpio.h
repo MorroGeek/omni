@@ -45,14 +45,14 @@ typedef struct gpio_driver_config {
 } gpio_driver_config_t;
 
 /**
- * @brief Callback function upon initialing GPIO
+ * @brief Callback function upon opening GPIO
  */
-typedef int (*gpio_init_t)(gpio_num_t gpio_num, gpio_driver_config_t *config);
+typedef int (*gpio_open_t)(gpio_num_t gpio_num, gpio_driver_config_t *config);
 
 /**
- * @brief Callback function upon deinitialing GPIO
+ * @brief Callback function upon closing GPIO
  */
-typedef int (*gpio_deinit_t)(gpio_num_t gpio_num);
+typedef int (*gpio_close_t)(gpio_num_t gpio_num);
 
 /**
  * @brief Callback function upon setting GPIO mode
@@ -88,8 +88,8 @@ typedef int (*gpio_toggle_t)(gpio_num_t gpio_num);
  * @brief GPIO driver API
  */
 struct gpio_driver_api {
-    gpio_init_t init;
-    gpio_deinit_t deinit;
+    gpio_open_t open;
+    gpio_close_t close;
     gpio_set_mode_t set_mode;
     gpio_set_pull_t set_pull;
     gpio_set_speed_t set_speed;

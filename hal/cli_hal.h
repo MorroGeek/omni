@@ -52,7 +52,7 @@ struct cli_hal_api {
     int (*shell_deinit)(cli_hal_context_t *context);
     // int (*register_command)(cli_hal_context_t *context, const char *command, ShellCommandFunction function, const char *description);
     // int (*unregister_command)(cli_hal_context_t *context, const char *command);
-    int (*shell_start)(cli_hal_context_t *context);
+    int (*shell_enable)(cli_hal_context_t *context);
     int (*log_init)(cli_hal_context_t *context);
     int (*log_deinit)(cli_hal_context_t *context);
     int (*log_set_level)(cli_hal_context_t *context, cli_log_level_t level);

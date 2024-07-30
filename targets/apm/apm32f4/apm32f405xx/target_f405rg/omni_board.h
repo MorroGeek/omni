@@ -1,7 +1,7 @@
 /**
   * @file    omni_board.h
   * @author  MorroMaker
-  * @brief   Header for omni_board.c file
+  * @brief   Target board definitions for omni
   * @attention
   *
   * Copyright (c) 2024 MorroMaker
@@ -25,82 +25,83 @@
 #define OMNI_BOARD_H
 
 /* Includes ------------------------------------------------------------------*/
-#include "targets.h"
-/* Exported defines ----------------------------------------------------------*/
-/* Exported typedef ----------------------------------------------------------*/
+#include "omni_target.h"
 
 /**
- * @brief  Pin name type definition
+ * @brief GPIO number
  */
 typedef enum {
-    PA0 = 0x00,
-    PA1 = 0x01,
-    PA2 = 0x02,
-    PA3 = 0x03,
-    PA4 = 0x04,
-    PA5 = 0x05,
-    PA6 = 0x06,
-    PA7 = 0x07,
-    PA8 = 0x08,
-    PA9 = 0x09,
-    PA10 = 0x0A,
-    PA11 = 0x0B,
-    PA12 = 0x0C,
-    PA13 = 0x0D,
-    PA14 = 0x0E,
-    PA15 = 0x0F,
+    GPIO_NUM_PA0 = 0x00,
+    GPIO_NUM_PA1 = 0x01,
+    GPIO_NUM_PA2 = 0x02,
+    GPIO_NUM_PA3 = 0x03,
+    GPIO_NUM_PA4 = 0x04,
+    GPIO_NUM_PA5 = 0x05,
+    GPIO_NUM_PA6 = 0x06,
+    GPIO_NUM_PA7 = 0x07,
+    GPIO_NUM_PA8 = 0x08,
+    GPIO_NUM_PA9 = 0x09,
+    GPIO_NUM_PA10 = 0x0A,
+    GPIO_NUM_PA11 = 0x0B,
+    GPIO_NUM_PA12 = 0x0C,
+    GPIO_NUM_PA13 = 0x0D,
+    GPIO_NUM_PA14 = 0x0E,
+    GPIO_NUM_PA15 = 0x0F,
 
-    PB0 = 0x10,
-    PB1 = 0x11,
-    PB2 = 0x12,
-    PB3 = 0x13,
-    PB4 = 0x14,
-    PB5 = 0x15,
-    PB6 = 0x16,
-    PB7 = 0x17,
-    PB8 = 0x18,
-    PB9 = 0x19,
-    PB10 = 0x1A,
-    PB11 = 0x1B,
-    PB12 = 0x1C,
-    PB13 = 0x1D,
-    PB14 = 0x1E,
-    PB15 = 0x1F,
+    GPIO_NUM_PB0 = 0x10,
+    GPIO_NUM_PB1 = 0x11,
+    GPIO_NUM_PB2 = 0x12,
+    GPIO_NUM_PB3 = 0x13,
+    GPIO_NUM_PB4 = 0x14,
+    GPIO_NUM_PB5 = 0x15,
+    GPIO_NUM_PB6 = 0x16,
+    GPIO_NUM_PB7 = 0x17,
+    GPIO_NUM_PB8 = 0x18,
+    GPIO_NUM_PB9 = 0x19,
+    GPIO_NUM_PB10 = 0x1A,
+    GPIO_NUM_PB11 = 0x1B,
+    GPIO_NUM_PB12 = 0x1C,
+    GPIO_NUM_PB13 = 0x1D,
+    GPIO_NUM_PB14 = 0x1E,
+    GPIO_NUM_PB15 = 0x1F,
 
-    PC0 = 0x20,
-    PC1 = 0x21,
-    PC2 = 0x22,
-    PC3 = 0x23,
-    PC4 = 0x24,
-    PC5 = 0x25,
-    PC6 = 0x26,
-    PC7 = 0x27,
-    PC8 = 0x28,
-    PC9 = 0x29,
-    PC10 = 0x2A,
-    PC11 = 0x2B,
-    PC12 = 0x2C,
-    PC13 = 0x2D,
-    PC14 = 0x2E,
-    PC15 = 0x2F,
+    GPIO_NUM_PC0 = 0x20,
+    GPIO_NUM_PC1 = 0x21,
+    GPIO_NUM_PC2 = 0x22,
+    GPIO_NUM_PC3 = 0x23,
+    GPIO_NUM_PC4 = 0x24,
+    GPIO_NUM_PC5 = 0x25,
+    GPIO_NUM_PC6 = 0x26,
+    GPIO_NUM_PC7 = 0x27,
+    GPIO_NUM_PC8 = 0x28,
+    GPIO_NUM_PC9 = 0x29,
+    GPIO_NUM_PC10 = 0x2A,
+    GPIO_NUM_PC11 = 0x2B,
+    GPIO_NUM_PC12 = 0x2C,
+    GPIO_NUM_PC13 = 0x2D,
+    GPIO_NUM_PC14 = 0x2E,
+    GPIO_NUM_PC15 = 0x2F,
 
-    PD2 = 0x32,
-    PH0 = 0x70,
-    PH1 = 0x71,
+    GPIO_NUM_PD2 = 0x32,
+
+    GPIO_NUM_PH0 = 0x70,
+    GPIO_NUM_PH1 = 0x71,
+
+    GPIO_NUM_MAX,
 
     /* Debug pins */
-    SYS_JTCK_SWCLK = PA14,
-    SYS_JTDI = PA15,
-    SYS_JTDO_SWO = PB3,
-    SYS_JTMS_SWDIO = PA13,
-    SYS_JTRST = PB4,
-    SYS_WKUP1 = PA0,
+    SYS_JTCK_SWCLK = GPIO_NUM_PA14,
+    SYS_JTDI = GPIO_NUM_PA15,
+    SYS_JTDO_SWO = GPIO_NUM_PB3,
+    SYS_JTMS_SWDIO = GPIO_NUM_PA13,
+    SYS_JTRST = GPIO_NUM_PB4,
+    SYS_WKUP1 = GPIO_NUM_PA0,
 
     /* OSC clock */
-    RCC_OSC_IN = PH0,
-    RCC_OSC_OUT = PH1,
-    RCC_OSC32_IN = PC14,
-    RCC_OSC32_OUT = PC15,
+    RCC_OSC_IN = GPIO_NUM_PH0,
+    RCC_OSC_OUT = GPIO_NUM_PH1,
+    RCC_OSC32_IN = GPIO_NUM_PC14,
+    RCC_OSC32_OUT = GPIO_NUM_PC15,
 
     /* ADC internal channels */
     ADC_TEMP = 0xF0,
@@ -108,136 +109,20 @@ typedef enum {
     ADC_VBAT = 0xF2,
 
     /* USB FS */
-    USB_OTG_FS_DP = PA12,
-    USB_OTG_FS_DM = PA11,
-    USB_OTG_FS_ID = PA10,
-    USB_OTG_FS_VBUS = PA9,
-    USB_OTG_FS_SOF = PA8,
+    USB_OTG_FS_DP = GPIO_NUM_PA12,
+    USB_OTG_FS_DM = GPIO_NUM_PA11,
+    USB_OTG_FS_ID = GPIO_NUM_PA10,
+    USB_OTG_FS_VBUS = GPIO_NUM_PA9,
+    USB_OTG_FS_SOF = GPIO_NUM_PA8,
 
     /* USB HS */
-    USB_OTG_HS_DP = PB15,
-    USB_OTG_HS_DM = PB14,
-    USB_OTG_HS_ID = PB12,
-    USB_OTG_HS_VBUS = PB13,
-    USB_OTG_HS_SOF = PB11,
+    USB_OTG_HS_DP = GPIO_NUM_PB15,
+    USB_OTG_HS_DM = GPIO_NUM_PB14,
+    USB_OTG_HS_ID = GPIO_NUM_PB12,
+    USB_OTG_HS_VBUS = GPIO_NUM_PB13,
+    USB_OTG_HS_SOF = GPIO_NUM_PB11,
 
-    NC = (int)0xFFFFFFFF
-} pin_name_t;
-
-/**
- * @brief  ADC name type definition
- */
-typedef enum
-{
-    OMNI_ADC1 = ADC1_BASE,
-    OMNI_ADC2 = ADC2_BASE,
-    OMNI_ADC3 = ADC3_BASE,
-} adc_name_t;
-
-/**
- * @brief  CAN name type definition
- */
-typedef enum
-{
-    OMNI_CAN1 = CAN1_BASE,
-    OMNI_CAN2 = CAN2_BASE,
-} can_name_t;
-
-/**
- * @brief  DAC name type definition
- */
-typedef enum
-{
-    OMNI_DAC1 = DAC_BASE,
-} dac_name_t;
-
-/**
- * @brief  I2C name type definition
- */
-typedef enum
-{
-    OMNI_I2C1 = I2C1_BASE,
-    OMNI_I2C2 = I2C2_BASE,
-    OMNI_I2C3 = I2C3_BASE,
-} i2c_name_t;
-
-/**
- * @brief  I2S name type definition
- */
-typedef enum
-{
-    OMNI_I2S2 = I2S2ext_BASE,
-    OMNI_I2S3 = I2S3ext_BASE,
-} i2s_name_t;
-
-/**
- * @brief  SDIO name type definition
- */
-typedef enum
-{
-    OMNI_SDIO1 = SDIO_BASE,
-} sdio_name_t;
-
-/**
- * @brief  SPI name type definition
- */
-typedef enum
-{
-    OMNI_SPI1 = SPI1_BASE,
-    OMNI_SPI2 = SPI2_BASE,
-    OMNI_SPI3 = SPI3_BASE,
-} spi_name_t;
-
-/**
- * @brief  PWM name type definition
- */
-typedef enum
-{
-    OMNI_PWM1 = TMR1_BASE,
-    OMNI_PWM2 = TMR2_BASE,
-    OMNI_PWM3 = TMR3_BASE,
-    OMNI_PWM4 = TMR4_BASE,
-    OMNI_PWM5 = TMR5_BASE,
-    OMNI_PWM6 = TMR6_BASE,
-    OMNI_PWM7 = TMR7_BASE,
-    OMNI_PWM8 = TMR8_BASE,
-    OMNI_PWM9 = TMR9_BASE,
-    OMNI_PWM10 = TMR10_BASE,
-    OMNI_PWM11 = TMR11_BASE,
-    OMNI_PWM12 = TMR12_BASE,
-    OMNI_PWM13 = TMR13_BASE,
-    OMNI_PWM14 = TMR14_BASE,
-} pwm_name_t;
-
-/**
- * @brief  UART name type definition
- */
-typedef enum
-{
-    OMNI_UART1 = USART1_BASE,
-    OMNI_UART2 = USART2_BASE,
-    OMNI_UART3 = USART3_BASE,
-    OMNI_UART4 = UART4_BASE,
-    OMNI_UART5 = UART5_BASE,
-    OMNI_UART6 = USART6_BASE,
-} uart_name_t;
-
-/**
- * @brief  USB name type definition
- */
-typedef enum
-{
-    OMNI_USB_FS = USB_OTG_FS_PERIPH_BASE,
-    OMNI_USB_HS = USB_OTG_HS_PERIPH_BASE,
-    OMNI_USB_HS2 = USB_OTG_HS2_PERIPH_BASE,
-} usb_name_t;
-
-/**
- * @brief GPIO handle structure
- */
-typedef struct {
-    GPIO_TypeDef *ins;
-    uint32_t pin;
-} gpio_t;
+    GPIO_NUM_NC = 0xFFFFFFFF
+} gpio_num_t;
 
 #endif /* OMNI_BOARD_H */
