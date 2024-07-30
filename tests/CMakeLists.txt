@@ -54,13 +54,6 @@ add_custom_target(omni-test-clean
     COMMENT "Removing all build artifacts"
 )
 
-# ceedling release and test:all
-add_custom_target(omni-test-release
-    COMMAND ceedling verbosity[4] test:all release
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/omni/test
-    COMMENT "Running all unit tests and building release image"
-)
-
 # ceedling test:all
 add_custom_target(omni-test-all
     COMMAND ceedling test:all
@@ -68,16 +61,10 @@ add_custom_target(omni-test-all
     COMMENT "Running all unit tests"
 )
 
-# ceedling release
-add_custom_target(omni-test-build
-    COMMAND ceedling release
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/omni/test
-    COMMENT "Building release image only"
-)
-
 # ceedling gcov:all
-add_custom_target(omni-test-coverage-report
-    COMMAND ceedling gcov:all utils:gcov
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/omni/test
-    COMMENT "Generating coverage report"
+add_custom_target(test-coverage-report-html
+    COMMAND ceedling gcov:all
+    COMMAND gcovr -r ${CMAKE_CURRENT_SOURCE_DIR} --html --html-details -o ${CMAKE_CURRENT_SOURCE_DIR}/build/artifacts/gcov/coverage.html
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    COMMENT "Generating HTML coverage report"
 )
